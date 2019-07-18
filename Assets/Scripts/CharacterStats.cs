@@ -82,7 +82,7 @@ public class CharacterStats : MonoBehaviour
     Animator animGun;
 
     // Sprite Animator
-   
+
     // Muzzleflash Animator
     public Animator[] animMuzzle;
 
@@ -108,7 +108,8 @@ public class CharacterStats : MonoBehaviour
         MachineGun,
         Shotgun,
         Sniper,
-        Minigun}
+        Minigun
+    }
     ;
     //set the original weapon ( can be set in the inspector )
     public Weapon TypeofWeapon;
@@ -145,7 +146,8 @@ public class CharacterStats : MonoBehaviour
         White,
         Hispanic,
         Brown,
-        DarkerBrown}
+        DarkerBrown
+    }
     ;
     //set the original weapon ( can be set in the inspector )
     public Ethnic EthnicCharacter;
@@ -248,7 +250,9 @@ public class CharacterStats : MonoBehaviour
         if (PlayerPrefs.HasKey("Controls"))
         {
             ControlType = PlayerPrefs.GetInt("Controls");
-        }else{
+        }
+        else
+        {
             ControlType = 1;
         }
         if (ControlType == 0)
@@ -290,8 +294,8 @@ public class CharacterStats : MonoBehaviour
         playermodel.timePlayed = 0;
         playermodel.Health = 100;
         Dead = false;
-//        bossAlreadySpawned = false;
-//		EnemyManager.EnemySpawnPositionID = 0;
+        //        bossAlreadySpawned = false;
+        //		EnemyManager.EnemySpawnPositionID = 0;
         //		EnemyManager.spawn = true;
         playermodel.FindPlayer();
         playermodel.EnemySpawnAmount = PlayerPrefs.GetInt("SpawnAmount");
@@ -326,12 +330,12 @@ public class CharacterStats : MonoBehaviour
 
         if (EnemyDelayTimer > 1)
             EnemyDelayTimer = 0;
-        else 
+        else
             EnemyDelayTimer += Time.deltaTime;
 
         ScoringSceneLevelToLoad = ScoringSceneLevelToLoadForLoadingScreen;
 
-//        if (WaveManager.WM.ZombieMode)
+        //        if (WaveManager.WM.ZombieMode)
         CashText.text = Cash.ToString("000000");
 
         if (ControlType == 0)
@@ -378,7 +382,7 @@ public class CharacterStats : MonoBehaviour
 
             SpriteGORenderer.sprite = CharacterSprites[CharacterSpriteID];
             SpriteGORenderer.material.SetFloat("_GrayScale", greyAmount);
-          
+
             if (showgrey)
             {
                 if (greyAmount > 0)
@@ -391,7 +395,7 @@ public class CharacterStats : MonoBehaviour
             }
 
             CheckDead();
-           
+
             EnemyCanvas.SetActive(!Dead);
 
             DyingGO.transform.rotation = Quaternion.AngleAxis(CharacterAngle - 90, Vector3.forward);
@@ -404,12 +408,12 @@ public class CharacterStats : MonoBehaviour
 
             if (!bulletSpawn)
                 bulletSpawn = GameObject.FindGameObjectWithTag("bulletSpawn");
-           
+
             WeaponChange();
 
             PlayerModelHandler();
 
-            LivesGOEB.valueCurrent= Lives * 33;
+            LivesGOEB.valueCurrent = Lives * 33;
 
 
             // Respawning function
@@ -749,9 +753,9 @@ public class CharacterStats : MonoBehaviour
 
             if (i != WeaponID)
             {
-                if(Weapons[i].activeInHierarchy)
+                if (Weapons[i].activeInHierarchy)
                     Weapons[i].SetActive(false);
-                if(!Weapons[WeaponID].activeInHierarchy)
+                if (!Weapons[WeaponID].activeInHierarchy)
                     Weapons[WeaponID].SetActive(true);
             }
         }
@@ -955,7 +959,7 @@ public class CharacterStats : MonoBehaviour
                 }
             }
 
-				
+
         }
 
 
@@ -969,7 +973,7 @@ public class CharacterStats : MonoBehaviour
             temp.GetComponentInChildren<Text>().text = "+ Knife";
             temp.SetParent(PlayerCanvas);
             temp.GetComponent<RectTransform>().localPosition = new Vector3(0, PickUpGUIy, 0);
-//            WeaponsPickedUp.Add(hitInfo.transform.gameObject);
+            //            WeaponsPickedUp.Add(hitInfo.transform.gameObject);
             TypeofWeapon = Weapon.Knife;
             ShowKnife = true;
             Weapons[2].GetComponent<PickedUpCheck>().pickedUp = true;
@@ -985,7 +989,7 @@ public class CharacterStats : MonoBehaviour
             temp.GetComponentInChildren<Text>().text = "+ Pipe";
             temp.SetParent(PlayerCanvas);
             temp.GetComponent<RectTransform>().localPosition = new Vector3(0, PickUpGUIy, 0);
-//            WeaponsPickedUp.Add(hitInfo.transform.gameObject);
+            //            WeaponsPickedUp.Add(hitInfo.transform.gameObject);
             TypeofWeapon = Weapon.Pipe;
             ShowPipe = true;
             Weapons[1].GetComponent<PickedUpCheck>().pickedUp = true;
@@ -1063,13 +1067,13 @@ public class CharacterStats : MonoBehaviour
             temp.GetComponentInChildren<Text>().text = "+ Assault Rifle";
             temp.SetParent(PlayerCanvas);
             temp.GetComponent<RectTransform>().localPosition = new Vector3(0, PickUpGUIy, 0);
-//            WeaponsPickedUp.Add(hitInfo.transform.gameObject);
+            //            WeaponsPickedUp.Add(hitInfo.transform.gameObject);
             Weapons[4].GetComponent<PickedUpCheck>().pickedUp = true;
             ShowMachineGun = true;
         }
         else
         {
-           
+
             Transform temp = AmmoCollectedText.Spawn(new Vector2(transform.position.x, transform.position.y - 6), transform.rotation * Quaternion.AngleAxis(90, Vector3.forward)) as Transform;
             temp.GetComponentInChildren<Text>().text = "+" + tempAmmoCount;
             Destroy(temp.gameObject, 1);
@@ -1106,13 +1110,13 @@ public class CharacterStats : MonoBehaviour
             temp.GetComponentInChildren<Text>().text = "+ Shotgun";
             temp.SetParent(PlayerCanvas);
             temp.GetComponent<RectTransform>().localPosition = new Vector3(0, PickUpGUIy, 0);
-//            WeaponsPickedUp.Add(hitInfo.transform.gameObject);
+            //            WeaponsPickedUp.Add(hitInfo.transform.gameObject);
             Weapons[5].GetComponent<PickedUpCheck>().pickedUp = true;
             ShowShotgun = true;
         }
         else
         {
-            
+
             Transform temp = AmmoCollectedText.Spawn(new Vector2(transform.position.x, transform.position.y - 6), transform.rotation * Quaternion.AngleAxis(90, Vector3.forward)) as Transform;
             temp.GetComponentInChildren<Text>().text = "+" + tempAmmoCount;
             Destroy(temp.gameObject, 1);
@@ -1149,13 +1153,13 @@ public class CharacterStats : MonoBehaviour
             temp.GetComponentInChildren<Text>().text = "+ Sniper Rifle";
             temp.SetParent(PlayerCanvas);
             temp.GetComponent<RectTransform>().localPosition = new Vector3(0, PickUpGUIy, 0);
-//            WeaponsPickedUp.Add(hitInfo.transform.gameObject);
+            //            WeaponsPickedUp.Add(hitInfo.transform.gameObject);
             Weapons[6].GetComponent<PickedUpCheck>().pickedUp = true;
             ShowSniper = true;
         }
         else
         {
-           
+
             Transform temp = AmmoCollectedText.Spawn(new Vector2(transform.position.x, transform.position.y - 6), transform.rotation * Quaternion.AngleAxis(90, Vector3.forward)) as Transform;
             temp.GetComponentInChildren<Text>().text = "+" + tempAmmoCount;
             Destroy(temp.gameObject, 1);
@@ -1202,11 +1206,11 @@ public class CharacterStats : MonoBehaviour
             Transform temp = AmmoCollectedText.Spawn(new Vector2(transform.position.x, transform.position.y - 6), transform.rotation * Quaternion.AngleAxis(90, Vector3.forward)) as Transform;
             temp.GetComponentInChildren<Text>().text = "+" + tempAmmoCount;
             Destroy(temp.gameObject, 1);
-//            Transform temp2 = PickUpGUI[3].Spawn(transform.position, transform.rotation * Quaternion.AngleAxis(90, Vector3.forward)) as Transform;
-//            temp2.SetParent(PlayerCanvas);
-//            temp.SetParent(PlayerCanvas);
-//            temp2.localScale = new Vector2(1, 1);
-//            temp.GetComponent<RectTransform>().localPosition = new Vector3(0, PickUpGUIy, 0);
+            //            Transform temp2 = PickUpGUI[3].Spawn(transform.position, transform.rotation * Quaternion.AngleAxis(90, Vector3.forward)) as Transform;
+            //            temp2.SetParent(PlayerCanvas);
+            //            temp.SetParent(PlayerCanvas);
+            //            temp2.localScale = new Vector2(1, 1);
+            //            temp.GetComponent<RectTransform>().localPosition = new Vector3(0, PickUpGUIy, 0);
         }
     }
 
@@ -1217,8 +1221,8 @@ public class CharacterStats : MonoBehaviour
 
             if (!stunned)
             {
-                
-                    
+
+
                 // if can shoot
 
                 if (CanShoot)
@@ -1232,8 +1236,8 @@ public class CharacterStats : MonoBehaviour
                             {
                                 if (ammo.PistolClipLeft > 0)
                                 {
-                                        
-//                                        Debug.Log(bulletSpawn.transform.rotation);
+
+                                    //                                        Debug.Log(bulletSpawn.transform.rotation);
                                     bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation);
 
                                     if (StaticVariables.MovementMultiply == 1)
@@ -1280,7 +1284,7 @@ public class CharacterStats : MonoBehaviour
                             {
                                 if (ammo.ShotgunClipLeft > 0)
                                 {
-                                        
+
                                     bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(-16, Vector3.forward)); // -30 on z
                                     bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(-7, Vector3.forward)); // -30 on z
                                     bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(1, Vector3.forward)); // 0 on z
@@ -1316,7 +1320,7 @@ public class CharacterStats : MonoBehaviour
                             {
                                 if (ammo.SniperClipLeft > 0)
                                 {
-                                        
+
                                     Transform tempBullet = bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(1, Vector3.forward)); // 0 on z
 
                                     tempBullet.GetComponent<bullet>().SniperBullet = true;
@@ -1348,7 +1352,7 @@ public class CharacterStats : MonoBehaviour
                             }
                             if (TypeofWeapon == Weapon.Minigun)
                             {
-                                    
+
                                 if (ammo.MinigunClipLeft > 0)
                                 {
                                     bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation);
@@ -1406,13 +1410,13 @@ public class CharacterStats : MonoBehaviour
 
                     if (Stamina == 33)
                     {
-//                        Debug.Log("First Stamina Filled");
+                        //                        Debug.Log("First Stamina Filled");
                         yield return new WaitForSeconds(2f);
 
                     }
                     if (Stamina == 66)
                     {
-//                        Debug.Log("Second Stamina Filled");
+                        //                        Debug.Log("Second Stamina Filled");
                         yield return new WaitForSeconds(2f);
 
                     }
@@ -1442,7 +1446,7 @@ public class CharacterStats : MonoBehaviour
         if (!PauseMenu.isPaused)
         {
             GetComponent<Collider2D>().enabled = false;
-//            GOEnemyShoots.GetComponent<Collider2D>().enabled = false;
+            //            GOEnemyShoots.GetComponent<Collider2D>().enabled = false;
             Dead = true;
             BloodSplat.SetActive(true);
             Health = startingHealth;
@@ -1498,7 +1502,8 @@ public class CharacterStats : MonoBehaviour
         Application.LoadLevelAdditive("DeathScreen");
         GamesPlayed += 1;
 
-        if(GamesPlayed ==5){
+        if (GamesPlayed == 5)
+        {
             Application.LoadLevelAdditive("RateMe");
             GamesPlayed++;
         }
@@ -1588,7 +1593,7 @@ public class CharacterStats : MonoBehaviour
             {
                 cooldownTimer -= Time.deltaTime;
             }
-			
+
             if (StaticVariables.MovementMultiply == 1)
             {
                 anim.SetBool("FastWalk", false);
@@ -1596,7 +1601,7 @@ public class CharacterStats : MonoBehaviour
             }
 
             // Stamina
-            StaminaGO.GetComponent<EnergyBar>().valueCurrent= Stamina;
+            StaminaGO.GetComponent<EnergyBar>().valueCurrent = Stamina;
             if (StaticVariables.infStamina)
             {
                 Stamina = 99;
@@ -1629,17 +1634,20 @@ public class CharacterStats : MonoBehaviour
     public float MoveForce;
     public Vector2 vel;
     public float maxVel;
+
+    float smokeTimer;
     void TestAnalogs()
     {
         vel = r.velocity;
-        if(r.velocity.magnitude > maxVel){
+        if (r.velocity.magnitude > maxVel)
+        {
             r.velocity = Vector3.ClampMagnitude(r.velocity, maxVel);
             vel = Vector3.ClampMagnitude(vel, maxVel);
         }
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         moveSpeed = 3;
-        #endif
+#endif
 
         leftJoystickInput = leftJoystick.GetInputDirection();
         rightJoystickInput = rightJoystick.GetInputDirection();
@@ -1651,6 +1659,20 @@ public class CharacterStats : MonoBehaviour
         float zMovementRightJoystick = rightJoystickInput.y; // The vertical movement from joystick 02
 
         xAmount = xMovementRightJoystick;
+
+        if (leftJoystickInput != Vector3.zero)
+        {
+            smokeTimer += Time.deltaTime;
+            if (smokeTimer > 0.1f)
+            {
+                Transform temp = DodgeHorizontal.Spawn(new Vector2(transform.position.x, transform.position.y - 0.4f), transform.rotation) as Transform;
+                smokeTimer = 0;
+            }
+        }
+        else
+        {
+            smokeTimer = 0;
+        }
 
 
         // if there is only input from the left joystick
@@ -1679,19 +1701,20 @@ public class CharacterStats : MonoBehaviour
                     animGun.SetBool("FastWalk", true);
                 }
             }
-       
-            if(WeaponID != 0 && WeaponID != 1 && WeaponID != 2)
+
+            if (WeaponID != 0 && WeaponID != 1 && WeaponID != 2)
                 AimingGO.transform.rotation = Quaternion.AngleAxis(90.0f, Vector3.forward);
-            else{
+            else
+            {
                 AimingGO.transform.rotation = Quaternion.AngleAxis(-180.0f, Vector3.forward);
             }
 
             // move the player
 
-            r.AddForce(leftJoystickInput * Time.deltaTime * (MoveForce*1000));
-//            r.velocity = new Vector2(Mathf.Clamp(r.velocity.x, -10, 10), Mathf.Clamp(r.velocity.y, -10, 10));
-//            print(r.velocity);
-//            transform.Translate(leftJoystickInput * Time.deltaTime  * MoveForce);
+            r.AddForce(leftJoystickInput * Time.deltaTime * (MoveForce * 1000));
+            //            r.velocity = new Vector2(Mathf.Clamp(r.velocity.x, -10, 10), Mathf.Clamp(r.velocity.y, -10, 10));
+            //            print(r.velocity);
+            //            transform.Translate(leftJoystickInput * Time.deltaTime  * MoveForce);
         }
 
         // if there is only input from the right joystick
@@ -1699,7 +1722,7 @@ public class CharacterStats : MonoBehaviour
         {
             if (ControlType == 1)
             {
-//            CanShoot = true;
+                //            CanShoot = true;
                 // calculate the player's direction based on angle
                 float tempAngle = Mathf.Atan2(zMovementRightJoystick, xMovementRightJoystick);
                 xMovementRightJoystick *= Mathf.Abs(Mathf.Cos(tempAngle));
@@ -1711,21 +1734,21 @@ public class CharacterStats : MonoBehaviour
                 var x = xMovementRightJoystick;
                 //          var y = Input.GetAxis("Xbox360ControllerRightY");
                 var y = zMovementRightJoystick;
-                    if (x != 0.0f || y != 0.0f)
-                    {
-                        var angle = Mathf.Atan2(y, x) * Mathf.Rad2Deg;
-                        AimingGO.transform.rotation = Quaternion.AngleAxis(-90.0f - angle, Vector3.forward);
-                    }
-                    else
-                    {
-                        AimingGO.transform.rotation = Quaternion.AngleAxis(-180.0f, Vector3.forward);
-                    }
+                if (x != 0.0f || y != 0.0f)
+                {
+                    var angle = Mathf.Atan2(y, x) * Mathf.Rad2Deg;
+                    AimingGO.transform.rotation = Quaternion.AngleAxis(-90.0f - angle, Vector3.forward);
+                }
+                else
+                {
+                    AimingGO.transform.rotation = Quaternion.AngleAxis(-180.0f, Vector3.forward);
+                }
 
             }
 
         }
 
-       
+
         // if there is input from both joysticks (Left And Right)
         if (leftJoystickInput != Vector3.zero && rightJoystickInput != Vector3.zero)
         {
@@ -1734,8 +1757,8 @@ public class CharacterStats : MonoBehaviour
             xMovementRightJoystick *= Mathf.Abs(Mathf.Cos(tempAngleInputRightJoystick));
             zMovementRightJoystick *= Mathf.Abs(Mathf.Sin(tempAngleInputRightJoystick));
             zMovementRightJoystick = -zMovementRightJoystick;
-         
-     
+
+
             //          var x = Input.GetAxis("Xbox360ControllerRightX");
             var x = xMovementRightJoystick;
             //          var y = Input.GetAxis("Xbox360ControllerRightY");
@@ -1778,17 +1801,18 @@ public class CharacterStats : MonoBehaviour
             }
 
             // move the player
-            r.AddForce(leftJoystickInput * Time.deltaTime * (MoveForce*1000));
-           
-//            print(r.velocity);
-//            transform.Translate(leftJoystickInput * Time.deltaTime * MoveForce);
+            r.AddForce(leftJoystickInput * Time.deltaTime * (MoveForce * 1000));
+
+            //            print(r.velocity);
+            //            transform.Translate(leftJoystickInput * Time.deltaTime * MoveForce);
         }
 
         if (leftJoystickInput == Vector3.zero && rightJoystickInput == Vector3.zero)
         {
-            if(WeaponID != 0 && WeaponID != 1 && WeaponID != 2)
-            AimingGO.transform.rotation = Quaternion.AngleAxis(90.0f, Vector3.forward);
-            else{
+            if (WeaponID != 0 && WeaponID != 1 && WeaponID != 2)
+                AimingGO.transform.rotation = Quaternion.AngleAxis(90.0f, Vector3.forward);
+            else
+            {
                 AimingGO.transform.rotation = Quaternion.AngleAxis(-180.0f, Vector3.forward);
             }
         }
@@ -1797,7 +1821,7 @@ public class CharacterStats : MonoBehaviour
         {
             if (rightJoystickInput == Vector3.zero)
             {
-//            Debug.Log("Cant Shoot " + rightJoystickInput);
+                //            Debug.Log("Cant Shoot " + rightJoystickInput);
                 Aiming.enabled = false;
                 CanShoot = false;
                 shootdelay = 0;
@@ -1857,7 +1881,7 @@ public class CharacterStats : MonoBehaviour
                     evading = true;
                     evadeTimer = 0.3f;
                 }
-            
+
                 if (!StaticVariables.infStamina)
                 {
                     Stamina -= 33;

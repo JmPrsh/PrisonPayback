@@ -3,23 +3,16 @@ using System.Collections;
 
 public class FollowObject : MonoBehaviour
 {
+ public Transform target;
+    public float smoothTime = 0.3F;
+    private Vector3 velocity = Vector3.zero;
 
-	public Transform Target;
-	public float speed;
+    void FixedUpdate()
+    {
+        // Define a target position above and behind the target transform
+        Vector3 targetPosition = target.TransformPoint(new Vector3(0, 0, -10));
 
-	// Use this for initialization
-	void Start ()
-	{
-	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-//		float step = speed * Time.deltaTime;
-//		if (Vector2.Distance (transform.position, Target.position) > 0.1f) {
-//			transform.position = Vector3.MoveTowards (transform.position, new Vector3 (Target.position.x, Target.position.y, this.transform.position.z), step);
-//		} 
-//		Vector3.Lerp (transform.position, new Vector3 (Target.position.x, Target.position.y + 0.8f, this.transform.position.z), step);
-		transform.position = new Vector3 (Target.position.x, Target.position.y, this.transform.position.z);
-	}
+        // Smoothly move the camera towards that target position
+        transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
+    }
 }
