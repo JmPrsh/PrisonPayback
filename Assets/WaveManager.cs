@@ -12,21 +12,22 @@ public class WaveManager : MonoBehaviour
     public bool WeaponStore;
     public GameObject WeaponStoreGO;
 
+    public Image[] ThumbAreaHelpers;
     public Transform[] ItemsToSpawn;
-	public int CurrentWave;
-	public int MaxEnemiesOnScreen;
-	List<Transform> EnemiesToSpawn;
+    public int CurrentWave;
+    public int MaxEnemiesOnScreen;
+    List<Transform> EnemiesToSpawn;
     public List<Transform> ZombieEnemies;
-	public List<Transform> set1Enemies;
-	public List<Transform> set2Enemies;
-	public List<Transform> set3Enemies;
-	public List<Transform> set4Enemies;
-	public List<Transform> set5Enemies;
-	public List<Transform> set6Enemies;
-	public List<Transform> set7Enemies;
-	public List<Transform> set8Enemies;
-	public List<Transform> set9Enemies;
-	public List<Transform> set10Enemies;
+    public List<Transform> set1Enemies;
+    public List<Transform> set2Enemies;
+    public List<Transform> set3Enemies;
+    public List<Transform> set4Enemies;
+    public List<Transform> set5Enemies;
+    public List<Transform> set6Enemies;
+    public List<Transform> set7Enemies;
+    public List<Transform> set8Enemies;
+    public List<Transform> set9Enemies;
+    public List<Transform> set10Enemies;
     public AudioSource CountDownTimer;
 
     Transform BruteEnemiesToSpawn;
@@ -34,30 +35,26 @@ public class WaveManager : MonoBehaviour
 
     public List<Transform> BossEnemies;
 
-	public List<Transform> EnemySpawnLocations;
-	public Transform GeneralSpawnPosition;
-	public Transform[] SectionLocationSpawns;
+    public List<Transform> EnemySpawnLocations;
+    public Transform GeneralSpawnPosition;
+    public Transform[] SectionLocationSpawns;
 
     public static int SpawnItemAmount;
-	public int spawnLimit;
-	int EnemiesLeft;
-	public int spawnCount;
-	public List<Transform> EnemiesSpawned;
-	public Animator[] WaveHUDAnims;
-	public Text WaveCounter;
-	public Text EnemiesToKill;
+    public int spawnLimit;
+    int EnemiesLeft;
+    public int spawnCount;
+    public List<Transform> EnemiesSpawned;
+    public Animator[] WaveHUDAnims;
+    public Text WaveCounter;
+    public Text EnemiesToKill;
 
-	public bool spawn;
-	public int PlayerCount = 1;
-	Transform Player;
-
-	public Image StageGO;
-	public Sprite[] Stages;
-
+    public bool spawn;
+    public int PlayerCount = 1;
+    Transform Player;
     public static bool SpawnBrute;
     public bool SpawnBoss;
 
-	Dictionary<float, GameObject> distDic = new Dictionary<float, GameObject> ();
+    Dictionary<float, GameObject> distDic = new Dictionary<float, GameObject>();
 
     public static float DamageMultiplier = 1;
     public static float HealthMultiplier = 1;
@@ -74,38 +71,38 @@ public class WaveManager : MonoBehaviour
 
     public int SpawnCount = 8;
 
-    public int WaveCount;
-
     public EnergyBar EnemyCountBar;
     public GameObject EnemiesLeftParent;
     bool allowOpen;
 
-    void Awake(){
+    void Awake()
+    {
         WM = this;
 
         ZombieMode = UIManager.ZombieMode;
 
     }
 
-	// Use this for initialization
-	void Start ()
-	{
-		StartingtheGame ();
-		Player = GameObject.FindGameObjectWithTag ("Player").transform;
-//		StageGO = GameObject.Find ("STAGE").GetComponent<Image> ();
+    // Use this for initialization
+    void Start()
+    {
+        StartingtheGame();
+        Player = GameObject.FindGameObjectWithTag("Player").transform;
+        //		StageGO = GameObject.Find ("STAGE").GetComponent<Image> ();
         CountdownText.enabled = true;
         CountdownText.text = "NEXT WAVE STARTS IN...";
         allowOpen = true;
-	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-        EnemyCountBar.valueCurrent= EnemiesLeft;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        EnemyCountBar.valueCurrent = EnemiesLeft;
         EnemyCountBar.valueMax = spawnLimit;
 
-       
-        if(Countdown){
+
+        if (Countdown)
+        {
             countdownTimer -= Time.deltaTime;
 
             CountdownText.text = Mathf.CeilToInt(countdownTimer).ToString();
@@ -118,44 +115,49 @@ public class WaveManager : MonoBehaviour
         }
         WaveCounter.text = "Wave " + CurrentWave;
 
-            if (EnemiesLeft <= 5)
-            {
-                EnemiesToKill.text = EnemiesLeft.ToString();
-                EnemiesToKill.gameObject.SetActive(true);
-                EnemyCountBar.gameObject.SetActive(false);
-            }
-            else
-            {
-                EnemyCountBar.gameObject.SetActive(true);
-                EnemiesToKill.gameObject.SetActive(false);
-            }
+        if (EnemiesLeft <= 5)
+        {
+            EnemiesToKill.text = EnemiesLeft.ToString();
+            EnemiesToKill.gameObject.SetActive(true);
+            EnemyCountBar.gameObject.SetActive(false);
+        }
+        else
+        {
+            EnemyCountBar.gameObject.SetActive(true);
+            EnemiesToKill.gameObject.SetActive(false);
+        }
 
 
-		if (spawn) {
-			if (EnemiesSpawned.Count < MaxEnemiesOnScreen && spawnCount < spawnLimit) {
-				FindFurthestSpawn ();
-				int randomEnemyFromList = Random.Range (0, EnemiesToSpawn.Count);
-				Transform temp = EnemiesToSpawn [randomEnemyFromList].Spawn (GeneralSpawnPosition.position, Quaternion.identity);
-				EnemiesSpawned.Add (temp);
-				// spawn from the enemytospawn list
-				// add to enemiesspawned list
-				spawnCount += 1;
-                if(SpawnBrute){
+        if (spawn)
+        {
+            if (EnemiesSpawned.Count < MaxEnemiesOnScreen && spawnCount < spawnLimit)
+            {
+                FindFurthestSpawn();
+                int randomEnemyFromList = Random.Range(0, EnemiesToSpawn.Count);
+                Transform temp = EnemiesToSpawn[randomEnemyFromList].Spawn(GeneralSpawnPosition.position, Quaternion.identity);
+                EnemiesSpawned.Add(temp);
+                // spawn from the enemytospawn list
+                // add to enemiesspawned list
+                spawnCount += 1;
+                if (SpawnBrute)
+                {
                     EnemiesLeft += 1;
-                    Transform tempBrute = BruteEnemiesToSpawn.Spawn (GeneralSpawnPosition.position, Quaternion.identity);
-                    EnemiesSpawned.Add (tempBrute);
+                    Transform tempBrute = BruteEnemiesToSpawn.Spawn(GeneralSpawnPosition.position, Quaternion.identity);
+                    EnemiesSpawned.Add(tempBrute);
                     SpawnBrute = false;
                 }
-                if(SpawnBoss){
+                if (SpawnBoss)
+                {
                     EnemiesLeft += 1;
-                    Transform tempBoss = BossEnemies [Random.Range(0,BossEnemies.Count)].Spawn (GeneralSpawnPosition.position, Quaternion.identity);
-                    EnemiesSpawned.Add (tempBoss);
+                    Transform tempBoss = BossEnemies[Random.Range(0, BossEnemies.Count)].Spawn(GeneralSpawnPosition.position, Quaternion.identity);
+                    EnemiesSpawned.Add(tempBoss);
                     SpawnBoss = false;
                 }
-			}
-		}
+            }
+        }
 
-		if (EnemiesLeft <= 0) {
+        if (EnemiesLeft <= 0)
+        {
             if (allowOpen)
             {
                 PlayerModel.PM.CheckState = true;
@@ -168,49 +170,53 @@ public class WaveManager : MonoBehaviour
                 spawn = false;
                 allowOpen = false;
             }
-		}
+        }
 
-        				
-	}
 
-    void OpenWeaponStore(){
+    }
+
+    void OpenWeaponStore()
+    {
         WeaponStore = true;
         WeaponStoreGO.SetActive(true);
     }
 
-    public void ClosedWeaponScreen(){
-        BreakthenNextWave ();
+    public void ClosedWeaponScreen()
+    {
+        BreakthenNextWave();
         WeaponStore = false;
         WeaponStoreGO.SetActive(false);
     }
 
-	void StartingtheGame ()
-	{
-		WaveCounter.enabled = false;
-		EnemiesToKill.enabled = false;
+    void StartingtheGame()
+    {
+        WaveCounter.enabled = false;
+        EnemiesToKill.enabled = false;
         AssignMultipliers();
-		CurrentWave++;
+        CurrentWave++;
 
-        WaveCheck ();
-        Invoke ("NextWave", 3);
-       
-		EnemiesSpawned.Clear ();
-	}
+        WaveCheck();
+        Invoke("NextWave", 3);
 
-	void BreakthenNextWave ()
-	{
+        EnemiesSpawned.Clear();
+    }
+
+    void BreakthenNextWave()
+    {
         if (!ZombieMode)
         {
             AssignMultipliers();
         }
-		CurrentWave++;
-		spawnCount = 0;
-		Invoke ("NextWave", 3);
-		WaveCheck ();
-	}
+        CurrentWave++;
+        spawnCount = 0;
+        Invoke("NextWave", 3);
+        WaveCheck();
+    }
 
-    void AssignMultipliers(){
-        switch(CurrentWave){
+    void AssignMultipliers()
+    {
+        switch (CurrentWave)
+        {
             case 0:
                 HealthMultiplier = 1f;
                 DamageMultiplier = 1f;
@@ -235,24 +241,21 @@ public class WaveManager : MonoBehaviour
         }
     }
 
-	void NextWave ()
-	{
+    void NextWave()
+    {
         if (ZombieMode)
         {
-            //WaveCount++;
-            //if (WaveCount > 5)
-            //{
-                HealthMultiplier += 0.01f;
-            //    WaveCount = 0;
-            //}
+            HealthMultiplier += 0.01f;
         }
-//		EnemiesSpawned.Clear ();
-        StartCoroutine(StartWave ());
-	}
+        //		EnemiesSpawned.Clear ();
+        StartCoroutine(StartWave());
+    }
 
-	IEnumerator StartWave ()
-	{
+    IEnumerator StartWave()
+    {
         CountdownText.text = "NEXT WAVE STARTS IN...";
+        ThumbAreaHelpers[0].enabled = true;
+        ThumbAreaHelpers[1].enabled = true;
         yield return new WaitForSeconds(2);
         ItemSpawner.i.Spawn();
         Countdown = true;
@@ -278,53 +281,58 @@ public class WaveManager : MonoBehaviour
         CountDownTimer.Play();
         yield return new WaitForSeconds(1);
         CountDownTimer.Play();
+        ThumbAreaHelpers[0].enabled = false;
+        ThumbAreaHelpers[1].enabled = false;
         EnemiesLeftParent.SetActive(true);
         Countdown = false;
         CountdownText.enabled = false;
         EnemiesToKill.gameObject.SetActive(true);
         EnemyCountBar.gameObject.SetActive(true);
-		WaveHUDAnims [1].SetTrigger ("ShowWave");
-		Invoke ("SpawnEnemies", 2);
+        WaveHUDAnims[1].SetTrigger("ShowWave");
+        Invoke("SpawnEnemies", 2);
         allowOpen = true;
-	}
+    }
 
-    void TurnOffEnemyStats(){
-        if(WaveStats.activeInHierarchy)
+    void TurnOffEnemyStats()
+    {
+        if (WaveStats.activeInHierarchy)
             WaveStats.SetActive(false);
     }
 
-	void SpawnEnemies ()
-	{
-		spawn = true;
-		WaveCounter.enabled = true;
-		EnemiesToKill.enabled = true;
-	}
+    void SpawnEnemies()
+    {
+        spawn = true;
+        WaveCounter.enabled = true;
+        EnemiesToKill.enabled = true;
+    }
 
-	public void RemoveEnemyFromList ()
-	{
-		EnemiesSpawned.RemoveAt (0);
-		EnemiesLeft -= 1;
-	}
+    public void RemoveEnemyFromList()
+    {
+        EnemiesSpawned.RemoveAt(0);
+        EnemiesLeft -= 1;
+    }
 
-	void FindFurthestSpawn(){
-		foreach (Transform spawnlocations in EnemySpawnLocations) {
-			float dist = Vector3.Distance (Player.position, spawnlocations.position);
+    void FindFurthestSpawn()
+    {
+        foreach (Transform spawnlocations in EnemySpawnLocations)
+        {
+            float dist = Vector3.Distance(Player.position, spawnlocations.position);
 
-			distDic.Add (dist, spawnlocations.gameObject);
-		}
+            distDic.Add(dist, spawnlocations.gameObject);
+        }
 
-		List<float> distances = distDic.Keys.ToList ();
+        List<float> distances = distDic.Keys.ToList();
 
-		distances.Sort ();
+        distances.Sort();
 
-		GameObject furthestObj = distDic [distances [distances.Count - 1]];
-		GeneralSpawnPosition = furthestObj.transform;
-		distDic.Clear ();
-		// Do something with furthestObj
-	}
+        GameObject furthestObj = distDic[distances[distances.Count - 1]];
+        GeneralSpawnPosition = furthestObj.transform;
+        distDic.Clear();
+        // Do something with furthestObj
+    }
 
-	void WaveCheck ()
-	{
+    void WaveCheck()
+    {
         if (!ZombieMode)
         {
             if (CurrentWave == 1 || CurrentWave == 11 || CurrentWave == 21 || CurrentWave == 31 || CurrentWave == 41)
@@ -390,33 +398,35 @@ public class WaveManager : MonoBehaviour
                 BruteEnemiesToSpawn = BruteEnemies[4];
                 SpawnBoss = true;
             }
-        }else{
+        }
+        else
+        {
             SpawnCount += 2;
             spawnLimit = SpawnCount * PlayerCount;
             EnemiesToSpawn = ZombieEnemies;
             BruteEnemiesToSpawn = BruteEnemies[0];
         }
-		EnemiesLeft = spawnLimit;
+        EnemiesLeft = spawnLimit;
 
-//		switch(CurrentWave){
-//		case 1:
-//			StageGO.sprite = Stages [0];
-//			break;
-//		case 11:
-//			StageGO.sprite = Stages [1];
-//			break;
-//		case 21:
-//			StageGO.sprite = Stages [2];
-//			break;
-//		case 31:
-//			StageGO.sprite = Stages [3];
-//			break;
-//		case 41:
-//			StageGO.sprite = Stages [4];
-//			break;
-//
-//		} // ADD HARDER CONDITIONS HERE /////////////////////////////////////
-//        WaveHUDAnims [0].SetTrigger ("ShowAreaStage");
-	}
+        //		switch(CurrentWave){
+        //		case 1:
+        //			StageGO.sprite = Stages [0];
+        //			break;
+        //		case 11:
+        //			StageGO.sprite = Stages [1];
+        //			break;
+        //		case 21:
+        //			StageGO.sprite = Stages [2];
+        //			break;
+        //		case 31:
+        //			StageGO.sprite = Stages [3];
+        //			break;
+        //		case 41:
+        //			StageGO.sprite = Stages [4];
+        //			break;
+        //
+        //		} // ADD HARDER CONDITIONS HERE /////////////////////////////////////
+        //        WaveHUDAnims [0].SetTrigger ("ShowAreaStage");
+    }
 
 }

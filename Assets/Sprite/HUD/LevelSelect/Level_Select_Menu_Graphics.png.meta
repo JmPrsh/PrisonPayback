@@ -1,16 +1,24 @@
 fileFormatVersion: 2
 guid: c2b1643c9f01d4d49a6502d97d217149
-timeCreated: 1517503194
-licenseType: Free
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: Level_Select_Menu_Graphics_0
-    21300002: Level_Select_Menu_Graphics_1
-    21300004: Level_Select_Menu_Graphics_2
-    21300006: Level_Select_Menu_Graphics_3
-    21300008: Level_Select_Menu_Graphics_4
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: Level_Select_Menu_Graphics_0
+  - first:
+      213: 21300002
+    second: Level_Select_Menu_Graphics_1
+  - first:
+      213: 21300004
+    second: Level_Select_Menu_Graphics_2
+  - first:
+      213: 21300006
+    second: Level_Select_Menu_Graphics_3
+  - first:
+      213: 21300008
+    second: Level_Select_Menu_Graphics_4
   externalObjects: {}
-  serializedVersion: 4
+  serializedVersion: 10
   mipmaps:
     mipMapMode: 0
     enableMipMap: 1
@@ -28,6 +36,8 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -38,7 +48,7 @@ TextureImporter:
     serializedVersion: 2
     filterMode: -1
     aniso: 16
-    mipBias: -1
+    mipBias: -100
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -50,18 +60,21 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
   textureType: 8
   textureShape: 1
+  singleChannelComponent: 0
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
   platformSettings:
-  - buildTarget: DefaultTexturePlatform
+  - serializedVersion: 2
+    buildTarget: DefaultTexturePlatform
     maxTextureSize: 4096
     resizeAlgorithm: 1
     textureFormat: -1
@@ -71,7 +84,8 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-  - buildTarget: Standalone
+  - serializedVersion: 2
+    buildTarget: Standalone
     maxTextureSize: 4096
     resizeAlgorithm: 1
     textureFormat: -1
@@ -81,7 +95,8 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-  - buildTarget: iPhone
+  - serializedVersion: 2
+    buildTarget: iPhone
     maxTextureSize: 4096
     resizeAlgorithm: 1
     textureFormat: -1
@@ -91,7 +106,8 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-  - buildTarget: Android
+  - serializedVersion: 2
+    buildTarget: Android
     maxTextureSize: 4096
     resizeAlgorithm: 1
     textureFormat: -1
@@ -101,7 +117,8 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-  - buildTarget: WebGL
+  - serializedVersion: 2
+    buildTarget: WebGL
     maxTextureSize: 4096
     resizeAlgorithm: 1
     textureFormat: -1
@@ -128,6 +145,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 0eb8c796ae6642b4faa4e8b2450571ae
+      internalID: 21300000
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Level_Select_Menu_Graphics_1
       rect:
@@ -142,6 +166,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: e83b5ce3c67a73d44b4cea2e9bde508b
+      internalID: 21300002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Level_Select_Menu_Graphics_2
       rect:
@@ -156,6 +187,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 694ba934e29e43945915ee07794a8ce4
+      internalID: 21300004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Level_Select_Menu_Graphics_3
       rect:
@@ -166,10 +204,17 @@ TextureImporter:
         height: 148
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 68, y: 70, z: 69, w: 65}
+      border: {x: 36, y: 33, z: 33, w: 36}
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 06ad0731920e3b54fb5c05fd18d67c46
+      internalID: 21300006
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Level_Select_Menu_Graphics_4
       rect:
@@ -184,9 +229,26 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 2f1b55be4754e8b4eaa1bd07552aec59
+      internalID: 21300008
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
+    bones: []
+    spriteID: 623072e474e844d52bbfc48a14740057
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
   spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

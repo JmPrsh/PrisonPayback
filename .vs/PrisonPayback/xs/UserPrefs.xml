@@ -1,8 +1,9 @@
 ﻿<Properties StartupConfiguration="{4EC7046D-CAEE-E3A5-DB0B-E8DD175A7D38}|">
   <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Unlocks.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Energy Bar Toolkit/Scripts/uGUI/EnergyBarUGUIBase.cs">
     <Files>
       <File FileName="Assets/Scripts/Unlocks.cs" Line="66" Column="1" />
+      <File FileName="Assets/Energy Bar Toolkit/Scripts/uGUI/EnergyBarUGUIBase.cs" Line="213" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
