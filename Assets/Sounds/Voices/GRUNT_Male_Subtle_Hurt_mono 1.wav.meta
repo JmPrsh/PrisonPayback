@@ -1,0 +1,33 @@
+fileFormatVersion: 2
+guid: e85f82738fe7e9f4ca24f2ea6f5ddccc
+labels:
+- usfx
+- imphenzia
+- human
+- male
+- groan
+- hurt
+- mono
+- voice
+- pain
+timeCreated: 1444237598
+licenseType: Pro
+AudioImporter:
+  serializedVersion: 6
+  defaultSettings:
+    loadType: 1
+    sampleRateSetting: 0
+    sampleRateOverride: 0
+    compressionFormat: 0
+    quality: 0
+    conversionMode: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  normalize: 1
+  preloadAudioData: 1
+  loadInBackground: 0
+  ambisonic: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
