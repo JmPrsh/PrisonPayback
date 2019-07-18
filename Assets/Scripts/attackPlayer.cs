@@ -6,8 +6,8 @@ using System.Linq;
 
 public class attackPlayer : MonoBehaviour
 {
+    public Enemy EnemyType;
     public float MoveSpeed;
-    public Enemy EnemyProperties;
     public enum EnemyClass
     {
         StandardGuard,
@@ -24,17 +24,18 @@ public class attackPlayer : MonoBehaviour
         SwatDemolition,
         RiotStun,
         Zombie,
-        ZombieBrute}
+        ZombieBrute
+    }
     ;
 
     public EnemyClass enemyclass;
     Vector3 targetPosition = new Vector3();
     public Animator anim;
     public bool seenPlayer;
-    int randomIntMove;
+
+    [HideInInspector]
     public float health = 100;
     public EnemyBullet bulletPrefab;
-    public float shotInterval = 1.0f;
     public float shootTime = 0.0f;
     public Transform[] ShootFrom;
     public int SpawnWeapon;
@@ -60,15 +61,12 @@ public class attackPlayer : MonoBehaviour
     public int chooseEnemyAtStartUp;
     public Transform childRandom;
     public Transform ChildSprite;
-    public Transform[] DeadGuard;
     public Sprite[] EnemySprite;
-    public Sprite[] InmateSprite;
     public float Damage;
     public List<GameObject> WeaponInt;
     public Sprite[] EnemyBullets;
     public Transform[] EnemyBulletCasing;
     public bool reload;
-    float reloadtime;
     public int bulletsused;
     int bulletsinclip;
     public float bursttimer = 0.2f;
@@ -95,8 +93,6 @@ public class attackPlayer : MonoBehaviour
     public GameObject Target;
     AudioSource audiosource;
     public GameObject BossIcon;
-    float EnemyDistance;
-    public bool CanSwing;
     public GameObject WorldCanvas;
     Text ScoreGO;
     Animator ScoreGOAnim;
@@ -109,7 +105,6 @@ public class attackPlayer : MonoBehaviour
     SpriteRenderer ChildSpriteRenderer;
     bool isBrute;
     bool isBoss;
-//    qpFollowMouseObject
 
 
     void Awake()
@@ -124,33 +119,18 @@ public class attackPlayer : MonoBehaviour
         ChildAnimator = ChildSprite.GetComponent<Animator>();
         ScoreGO = CharacterStats.CS.ScoreGO.GetComponent<Text>();
         ScoreGOAnim = CharacterStats.CS.ScoreGO.GetComponent<Animator>();
-
-        foreach (Transform EBC in EnemyBulletCasing)
-        {
-            EBC.CreatePool();
-        }
-        foreach (Transform W in WeaponToSpawn)
-        {
-            W.CreatePool();
-        }
-
-//        chooseEnemyAtStartUp = Random.Range(0, 2);
-
-
-
     }
 
     void OnEnable()
     {
-        isBrute = false;
-        isBoss = false;
+        BossIcon.SetActive(EnemyType.Boss);
+
+
         FindClosestPlayer();
         RandomSwingTime = Random.Range(1.6f, 2.5f);
         Dead = false;
         transform.SetParent(GameObject.Find("EnemiesParent").transform);
-//		Target = GameObject.FindGameObjectWithTag ("Player");
-		
-		
+
         if (Target != null)
         {
             targetPosition = Target.transform.position;
@@ -160,46 +140,53 @@ public class attackPlayer : MonoBehaviour
 
         Quaternion randomRot = Quaternion.Euler(0, 0, Random.Range(0, 360));
         childRandom.transform.rotation = randomRot;
+
+        ChooseEnemyType();
+
+
+
+        for (var i = 0; i < WeaponInt.Count; i++)
+        {
+            WeaponInt[i].SetActive(true);
+        }
+
+        AimingGO.GetComponent<LookTowardsPlayer>().Target = Target;
+
+    }
+
+    void ChooseEnemyType()
+    {
+        health = EnemyType.Health * WaveManager.HealthMultiplier;
         if (enemyclass == EnemyClass.StandardGuard)
         {
-            MoveSpeed = 6;
-            health = 100 * WaveManager.HealthMultiplier;
+
             ChildSprite.GetComponent<SpriteRenderer>().sprite = EnemySprite[Random.Range(0, 3)];
             if (typeofenemy == TypeOfEnemy.Melee)
             {
                 this.name = "Standard Guard Melee";
                 Damage = Random.Range(15, 25) * WaveManager.DamageMultiplier;
-                shotInterval = 1f;
                 foreach (GameObject weapons in WeaponOfChoice)
                 {
                     WeaponInt.Add(WeaponOfChoice[0]);
                     weapons.SetActive(false);
                 }
-                EnemyDistance = 1.5f;
             }
             if (typeofenemy == TypeOfEnemy.Pistol)
             {
                 this.name = "Standard Guard Pistol";
                 Damage = Random.Range(35, 45) * WaveManager.DamageMultiplier;
-                shotInterval = 3f;
                 foreach (GameObject weapons in WeaponOfChoice)
                 {
                     WeaponInt.Add(WeaponOfChoice[1]);
                     weapons.SetActive(false);
                 }
-                bulletsinclip = 7;
-                reloadtime = 5;
                 WSanim = WeaponShoot[0];
                 WMFanim = WeaponMuzzleFlash[0];
-                EnemyDistance = 7f;
             }
         }
-        if (enemyclass == EnemyClass.StandardGuardBoss)
+        else if (enemyclass == EnemyClass.StandardGuardBoss)
         {
-            MoveSpeed = 3;
-            isBrute = true;
-            BossIcon.SetActive(true);
-            health = 2000 * WaveManager.HealthMultiplier;
+
             ChildSprite.GetComponent<SpriteRenderer>().sprite = EnemySprite[Random.Range(0, 3)];
             ChildSprite.transform.localScale = ChildSprite.transform.localScale * 1.3f;
             ChildSprite.transform.position = new Vector2(ChildSprite.transform.position.x, ChildSprite.transform.position.y + 0.2f);
@@ -212,235 +199,164 @@ public class attackPlayer : MonoBehaviour
                 case 1:
                     typeofenemy = TypeOfEnemy.Pistol;
                     break;
-            
+
             }
             if (typeofenemy == TypeOfEnemy.Melee)
             {
                 this.name = "Standard Boss Guard Melee";
                 Damage = Random.Range(15, 25) * WaveManager.DamageMultiplier;
-                shotInterval = 1f;
                 foreach (GameObject weapons in WeaponOfChoice)
                 {
                     WeaponInt.Add(WeaponOfChoice[0]);
                     weapons.SetActive(false);
                 }
-                reloadtime = 1;
-                bulletsinclip = 1;
-                EnemyDistance = 1.5f;
             }
             if (typeofenemy == TypeOfEnemy.Pistol)
             {
                 this.name = "Standard Boss Guard Pistol";
                 Damage = Random.Range(35, 45) * WaveManager.DamageMultiplier;
-                ;
-                shotInterval = 3f;
                 foreach (GameObject weapons in WeaponOfChoice)
                 {
                     WeaponInt.Add(WeaponOfChoice[1]);
                     weapons.SetActive(false);
                 }
-                bulletsinclip = 7;
-                reloadtime = 5;
                 WSanim = WeaponShoot[0];
                 WMFanim = WeaponMuzzleFlash[0];
-                EnemyDistance = 6f;
             }
         }
-        if (enemyclass == EnemyClass.Captain)
+        else if (enemyclass == EnemyClass.Captain)
         {
-            MoveSpeed = 5;
             this.name = "Captain";
-            health = 200 * WaveManager.HealthMultiplier;
             ChildSprite.GetComponent<SpriteRenderer>().sprite = EnemySprite[3];
             typeofenemy = TypeOfEnemy.Shotgun;
             Damage = Random.Range(45, 55) * WaveManager.DamageMultiplier;
-            shotInterval = 5f;
             foreach (GameObject weapons in WeaponOfChoice)
             {
                 WeaponInt.Add(WeaponOfChoice[3]);
                 weapons.SetActive(false);
             }
-            bulletsinclip = 5;
-            reloadtime = 6;
             WSanim = WeaponShoot[1];
             WMFanim = WeaponMuzzleFlash[1];
-            EnemyDistance = 6f;
         }
-        if (enemyclass == EnemyClass.CaptainBoss)
+        else if (enemyclass == EnemyClass.CaptainBoss)
         {
-            MoveSpeed = 3;
-            isBrute = true;
             this.name = "Captain Boss";
             BossIcon.SetActive(true);
-            health = 2500 * WaveManager.HealthMultiplier;
             ChildSprite.GetComponent<SpriteRenderer>().sprite = EnemySprite[3];
             ChildSprite.transform.localScale = ChildSprite.transform.localScale * 1.3f;
             typeofenemy = TypeOfEnemy.Shotgun;
             Damage = Random.Range(45, 55) * WaveManager.DamageMultiplier;
-            shotInterval = 5f;
             foreach (GameObject weapons in WeaponOfChoice)
             {
                 WeaponInt.Add(WeaponOfChoice[3]);
                 weapons.SetActive(false);
             }
-            bulletsinclip = 5;
-            reloadtime = 6;
             WSanim = WeaponShoot[1];
             WMFanim = WeaponMuzzleFlash[1];
-            EnemyDistance = 6f;
         }
-        if (enemyclass == EnemyClass.Riot)
+        else if (enemyclass == EnemyClass.Riot)
         {
-            MoveSpeed = 4;
             this.name = "Riot Guard";
-            health = 600 * WaveManager.HealthMultiplier;
             ChildSprite.GetComponent<SpriteRenderer>().sprite = EnemySprite[4];
             typeofenemy = TypeOfEnemy.Melee;
             Damage = Random.Range(15, 25) * WaveManager.DamageMultiplier;
-            shotInterval = 2;
             foreach (GameObject weapons in WeaponOfChoice)
             {
                 WeaponInt.Add(WeaponOfChoice[0]);
                 WeaponInt.Add(WeaponOfChoice[6]);
                 weapons.SetActive(false);
             }
-            bulletsinclip = 1;
-            reloadtime = 1;
-            EnemyDistance = 3f;
         }
-        if (enemyclass == EnemyClass.RiotStun)
+        else if (enemyclass == EnemyClass.RiotStun)
         {
-            MoveSpeed = 4;
             this.name = "Riot Guard Stun";
-            health = 450 * WaveManager.HealthMultiplier;
             ChildSprite.GetComponent<SpriteRenderer>().sprite = EnemySprite[4];
             typeofenemy = TypeOfEnemy.Melee;
             Damage = Random.Range(15, 25) * WaveManager.DamageMultiplier;
-            shotInterval = 8;
             foreach (GameObject weapons in WeaponOfChoice)
             {
-
-                //				WeaponInt.Add (WeaponOfChoice [6]);
                 WeaponInt.Add(WeaponOfChoice[7]);
                 weapons.SetActive(false);
             }
-            bulletsinclip = 1;
-            reloadtime = 1;
-            EnemyDistance = 3f;
         }
-        if (enemyclass == EnemyClass.RiotBoss)
+        else if (enemyclass == EnemyClass.RiotBoss)
         {
-            MoveSpeed = 3;
-            isBrute = true;
             this.name = "Riot Guard Boss";
             BossIcon.SetActive(true);
-            health = 3000 * WaveManager.HealthMultiplier;
             ChildSprite.GetComponent<SpriteRenderer>().sprite = EnemySprite[4];
             ChildSprite.transform.localScale = ChildSprite.transform.localScale * 1.3f;
             typeofenemy = TypeOfEnemy.Melee;
             Damage = Random.Range(15, 25) * WaveManager.DamageMultiplier;
-            shotInterval = 2;
             foreach (GameObject weapons in WeaponOfChoice)
             {
                 WeaponInt.Add(WeaponOfChoice[0]);
                 WeaponInt.Add(WeaponOfChoice[6]);
                 weapons.SetActive(false);
             }
-            reloadtime = 1;
-            bulletsinclip = 1;
-            EnemyDistance = 3f;
         }
-        if (enemyclass == EnemyClass.Swat)
+        else if (enemyclass == EnemyClass.Swat)
         {
-            MoveSpeed = 7;
             this.name = "Swat";
-            health = 400 * WaveManager.HealthMultiplier;
             ChildSprite.GetComponent<SpriteRenderer>().sprite = EnemySprite[5];
             typeofenemy = TypeOfEnemy.Machinegun;
             Damage = Random.Range(25, 35) * WaveManager.DamageMultiplier;
-            shotInterval = 3f;
             foreach (GameObject weapons in WeaponOfChoice)
             {
                 WeaponInt.Add(WeaponOfChoice[2]);
                 weapons.SetActive(false);
             }
-            bulletsinclip = 15;
-            reloadtime = 4;
             WSanim = WeaponShoot[2];
             WMFanim = WeaponMuzzleFlash[2];
-            EnemyDistance = 7f;
         }
-        if (enemyclass == EnemyClass.SwatDemolition)
+        else if (enemyclass == EnemyClass.SwatDemolition)
         {
-            MoveSpeed = 7;
             this.name = "Swat Demolition";
-            health = 350 * WaveManager.HealthMultiplier;
             ChildSprite.GetComponent<SpriteRenderer>().sprite = EnemySprite[10];
 
             typeofenemy = TypeOfEnemy.Demolition;
             Damage = Random.Range(75, 85) * WaveManager.DamageMultiplier;
-            shotInterval = 6f;
             foreach (GameObject weapons in WeaponOfChoice)
             {
                 weapons.SetActive(false);
             }
-            bulletsinclip = 1;
-            reloadtime = 0;
-            EnemyDistance = 6f;
         }
-        if (enemyclass == EnemyClass.SwatBoss)
+        else if (enemyclass == EnemyClass.SwatBoss)
         {
-            MoveSpeed = 5;
-            isBrute = true;
             this.name = "Swat Boss";
             BossIcon.SetActive(true);
-            health = 3500 * WaveManager.HealthMultiplier;
             ChildSprite.GetComponent<SpriteRenderer>().sprite = EnemySprite[5];
             ChildSprite.transform.localScale = ChildSprite.transform.localScale * 1.3f;
             typeofenemy = TypeOfEnemy.Machinegun;
             Damage = Random.Range(25, 35) * WaveManager.DamageMultiplier;
-            shotInterval = 3f;
             foreach (GameObject weapons in WeaponOfChoice)
             {
                 WeaponInt.Add(WeaponOfChoice[2]);
                 weapons.SetActive(false);
             }
-            bulletsinclip = 15;
-            reloadtime = 4;
             WSanim = WeaponShoot[2];
             WMFanim = WeaponMuzzleFlash[2];
-            EnemyDistance = 8f;
         }
-        if (enemyclass == EnemyClass.Sniper)
+        else if (enemyclass == EnemyClass.Sniper)
         {
-            MoveSpeed = 4;
             this.name = "Sniper Guard";
-            health = 1000 * WaveManager.HealthMultiplier;
             ChildSprite.GetComponent<SpriteRenderer>().sprite = EnemySprite[7];
             typeofenemy = TypeOfEnemy.Sniper;
             Damage = Random.Range(135, 145) * WaveManager.DamageMultiplier;
-            shotInterval = 4f;
             foreach (GameObject weapons in WeaponOfChoice)
             {
                 WeaponInt.Add(WeaponOfChoice[4]);
                 weapons.SetActive(false);
             }
-            bulletsinclip = 5;
-            reloadtime = 6;
             WSanim = WeaponShoot[3];
             WMFanim = WeaponMuzzleFlash[3];
-            EnemyDistance = 10f;
         }
-        if (enemyclass == EnemyClass.Warden)
+        else if (enemyclass == EnemyClass.Warden)
         {
-            MoveSpeed = 3;
             isBoss = true;
             this.name = "Warden";
-            health = 5000 * WaveManager.HealthMultiplier;
             ChildSprite.GetComponent<SpriteRenderer>().sprite = EnemySprite[6];
             typeofenemy = TypeOfEnemy.Minigun;
             Damage = Random.Range(5, 15) * WaveManager.DamageMultiplier;
-            shotInterval = 0.05f;
 
             // adds weapon of choice to list to be active and turns off other weapons
             foreach (GameObject weapons in WeaponOfChoice)
@@ -448,27 +364,18 @@ public class attackPlayer : MonoBehaviour
                 WeaponInt.Add(WeaponOfChoice[5]);
                 weapons.SetActive(false);
             }
-            bulletsinclip = 200;
-            reloadtime = 10;
             WSanim = WeaponShoot[4];
             WMFanim = WeaponMuzzleFlash[4];
-            EnemyDistance = 10f;
         }
-        if (enemyclass == EnemyClass.Dog)
+        else if (enemyclass == EnemyClass.Dog)
         {
-            MoveSpeed = 10;
             this.name = "Dog";
-            health = 50 * WaveManager.HealthMultiplier;
             ChildSprite.GetComponent<SpriteRenderer>().sprite = EnemySprite[8];
             typeofenemy = TypeOfEnemy.Melee;
             Damage = Random.Range(10, 20) * WaveManager.DamageMultiplier;
-            shotInterval = 3f;
-            reloadtime = 1;
-            bulletsinclip = 1;
-            EnemyDistance = 1.4f;
         }
 
-        if (enemyclass == EnemyClass.StandardGuard || enemyclass == EnemyClass.StandardGuardBoss)
+        else if (enemyclass == EnemyClass.StandardGuard || enemyclass == EnemyClass.StandardGuardBoss)
         {
             switch (chooseEnemyAtStartUp)
             {
@@ -481,50 +388,31 @@ public class attackPlayer : MonoBehaviour
 
             }
         }
-        if (enemyclass == EnemyClass.Zombie)
+        else if (enemyclass == EnemyClass.Zombie)
         {
-            MoveSpeed = 6;
-            health = 100 * WaveManager.HealthMultiplier;
-//            ChildSprite.GetComponent<SpriteRenderer>().sprite = EnemySprite[Random.Range(0, 3)];
-           
             this.name = "Zombie";
             Damage = Random.Range(50, 100) * WaveManager.DamageMultiplier;
-            shotInterval = 1f;
             foreach (GameObject weapons in WeaponOfChoice)
             {
                 WeaponInt.Add(WeaponOfChoice[0]);
                 weapons.SetActive(false);
             }
-            EnemyDistance = 1.5f;
         }
-        if (enemyclass == EnemyClass.ZombieBrute)
+        else if (enemyclass == EnemyClass.ZombieBrute)
         {
-            MoveSpeed = 3;
-            isBrute = true;
             BossIcon.SetActive(true);
-            health = 500 * WaveManager.HealthMultiplier;
             ChildSprite.transform.localScale = ChildSprite.transform.localScale * 1.3f;
             ChildSprite.transform.position = new Vector2(ChildSprite.transform.position.x, ChildSprite.transform.position.y + 0.2f);
 
-          
+
             this.name = "Zombie Brute";
             Damage = Random.Range(100, 150) * WaveManager.DamageMultiplier;
-            shotInterval = 1f;
             foreach (GameObject weapons in WeaponOfChoice)
             {
                 WeaponInt.Add(WeaponOfChoice[0]);
                 weapons.SetActive(false);
             }
-            EnemyDistance = 1.5f;
         }
-
-        for (var i = 0; i < WeaponInt.Count; i++)
-        {
-            WeaponInt[i].SetActive(true);
-        }
-
-        AimingGO.GetComponent<LookTowardsPlayer>().Target = Target;
-
     }
 
     // Use this for initialization
@@ -553,7 +441,9 @@ public class attackPlayer : MonoBehaviour
                     {
                         greyAmount -= 1 * Time.deltaTime * 2;
                     }
-                }else{
+                }
+                else
+                {
                     if (greyAmount < 1)
                     {
                         greyAmount += 1 * Time.deltaTime * 2;
@@ -562,10 +452,10 @@ public class attackPlayer : MonoBehaviour
 
                 if (Target != null)
                 {
-					
+
                     DyingGO.transform.rotation = Quaternion.AngleAxis(CharacterAngle, Vector3.forward);
 
-                    if (bulletsused >= bulletsinclip)
+                    if (bulletsused >= EnemyType.bulletsinclip)
                     {
                         bulletsused = 0;
                         StartCoroutine(Reload());
@@ -586,7 +476,7 @@ public class attackPlayer : MonoBehaviour
 
                 }
 
-               
+
             }
         }
         else
@@ -596,6 +486,10 @@ public class attackPlayer : MonoBehaviour
         }
     }
 
+    void dmg(int amt)
+    {
+        health -= amt;
+    }
 
 
     void Reset()
@@ -616,37 +510,30 @@ public class attackPlayer : MonoBehaviour
         }
     }
     public float MoveTimer;
-//    public List<Vector2> path;
+    //    public List<Vector2> path;
     float timer;
 
     void CheckDistance()
     {
-        if (Vector2.Distance(transform.position, Target.transform.position) > EnemyDistance)
+        anim.SetBool("Walk", Vector2.Distance(transform.position, Target.transform.position) > EnemyType.AttackDistance);
+
+        if (Vector2.Distance(transform.position, Target.transform.position) > EnemyType.AttackDistance)
         {
-            transform.position = Vector3.MoveTowards( transform.position, Target.transform.position, MoveSpeed*Time.deltaTime);
-            anim.SetBool("Walk", true);
+            transform.position = Vector3.MoveTowards(transform.position, Target.transform.position, EnemyType.MoveSpeed * Time.deltaTime);
         }
         else
         {
-            anim.SetBool("Walk", false);
-            if (typeofenemy == TypeOfEnemy.Melee)
+            if (EnemyType.enemyType == Enemy.TypeOfEnemy.Melee)
             {
-
+                shootTime += 1 * Time.deltaTime;
                 if (shootTime >= RandomSwingTime)
                 {
-                    CanSwing = true;
-                    shootTime = 0;
-                }
-                else
-                {
-                    CanSwing = false;
-                    shootTime += 1 * Time.deltaTime;
-                    // play melee animation
+                    MeleeAttack();
                 }
             }
             else
             {
-                if (shootTime >= shotInterval && !reload)
+                if (shootTime >= EnemyType.ShootRate && !reload)
                 {
 
                     if (enemyclass == EnemyClass.StandardGuard || enemyclass == EnemyClass.StandardGuardBoss)
@@ -654,7 +541,7 @@ public class attackPlayer : MonoBehaviour
                         if (typeofenemy != TypeOfEnemy.Melee)
                         {
                             EnemyBullet temp = bulletPrefab.Spawn(ShootFrom[0].transform.position, ShootFrom[0].transform.rotation * Quaternion.AngleAxis(-90, Vector3.forward));
-//                    temp.name = "BulletToCheck";
+                            //                    temp.name = "BulletToCheck";
                             temp.transform.SetParent(null);
                             temp.gameObject.SetActive(true);
                             temp.Damage = Damage;
@@ -743,12 +630,12 @@ public class attackPlayer : MonoBehaviour
                 }
 
             }
-        }				
+        }
     }
 
     void UpdatePathFinding()
     {
-//        path = NavMesh2D.GetSmoothedPath(transform.position, Target.transform.position);
+        //        path = NavMesh2D.GetSmoothedPath(transform.position, Target.transform.position);
     }
 
     public float RandomSwingTime;
@@ -785,6 +672,15 @@ public class attackPlayer : MonoBehaviour
                 }
             }
         }
+
+    }
+
+    void MeleeAttack()
+    {
+
+        // do melee function here;
+
+        shootTime = 0;
 
     }
 
@@ -862,7 +758,6 @@ public class attackPlayer : MonoBehaviour
         {
             weapons.SetActive(false);
         }
-        //		health = 0;
         AimingGO.SetActive(false);
         Warning.SetActive(false);
         SpawnWeapon = Random.Range(0, WeaponChanceMax);
@@ -920,7 +815,7 @@ public class attackPlayer : MonoBehaviour
         reload = true;
         // play animation here
         //		Debug.Log (this.name + " is reloading");
-        yield return new WaitForSeconds(reloadtime);
+        yield return new WaitForSeconds(EnemyType.reloadtime);
         //		Debug.Log (this.name + " has finished reloading");
         //stop animation here
         reload = false;
@@ -964,7 +859,7 @@ public class attackPlayer : MonoBehaviour
             Target = gos;
             distance = curDistance;
         }
-				
+
         return Target;
 
     }
@@ -976,7 +871,7 @@ public class attackPlayer : MonoBehaviour
         ChildAnimator.SetTrigger("GetHurt");
 
         Transform temp = CharacterStats.CS.hittext.Spawn(new Vector3(transform.position.x + Random.Range(-0.2f, 0.2f), transform.position.y + 0.8f, transform.position.z), transform.rotation);
-        temp.SetParent(WorldCanvas.transform,false);
+        temp.SetParent(WorldCanvas.transform, false);
 
         if (!crit)
         {
@@ -996,21 +891,21 @@ public class attackPlayer : MonoBehaviour
             hitSpawnText.color = Color.red;
         }
 
-//        if (health < 0)
-//        {
-//            if (Tutorial.AllowCombo)
-//            {
-//                CharacterStats.CS.ComboTimer = 40;
-//                CharacterStats.Combo += 1;
-//                int ScoreGiven = 10 * CharacterStats.Combo;
-////				Transform Scoretemp = CS.ScoreCollectedText.Spawn (new Vector3 (transform.position.x + Random.Range (-0.2f, 0.2f), transform.position.y + 0.4f, transform.position.z), transform.rotation) as Transform;
-//                ScoreGOAnim.SetTrigger("Score");
-//                ScoreGO.text = ScoreGiven.ToString();
-//                ScoreGO.color = Color.white;
-////				Scoretemp.SetParent (GameObject.Find ("PlayersHUD").transform);
-////				Scoretemp.transform.localScale = new Vector2 (1f, 1f);
-//                CharacterStats.Score += ScoreGiven;
-//            }
-//        }
+        //        if (health < 0)
+        //        {
+        //            if (Tutorial.AllowCombo)
+        //            {
+        //                CharacterStats.CS.ComboTimer = 40;
+        //                CharacterStats.Combo += 1;
+        //                int ScoreGiven = 10 * CharacterStats.Combo;
+        ////				Transform Scoretemp = CS.ScoreCollectedText.Spawn (new Vector3 (transform.position.x + Random.Range (-0.2f, 0.2f), transform.position.y + 0.4f, transform.position.z), transform.rotation) as Transform;
+        //                ScoreGOAnim.SetTrigger("Score");
+        //                ScoreGO.text = ScoreGiven.ToString();
+        //                ScoreGO.color = Color.white;
+        ////				Scoretemp.SetParent (GameObject.Find ("PlayersHUD").transform);
+        ////				Scoretemp.transform.localScale = new Vector2 (1f, 1f);
+        //                CharacterStats.Score += ScoreGiven;
+        //            }
+        //        }
     }
 }
