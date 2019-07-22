@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class MeleeWeapon : MonoBehaviour
 {
-
+    public int Damage;
     public Transform Hit;
     public Transform KnifeHit;
 
@@ -20,7 +20,8 @@ public class MeleeWeapon : MonoBehaviour
     public enum WhichHolder
     {
         Enemy,
-        Player}
+        Player
+    }
     ;
 
     public WhichHolder whichholder;
@@ -65,7 +66,7 @@ public class MeleeWeapon : MonoBehaviour
         {
             ParentCollider = ParentGO.GetComponent<Collider2D>();
             ParentGOScript = ParentGO.GetComponent<attackPlayer>();
-            if (ParentGOScript.enemyclass == attackPlayer.EnemyClass.RiotStun)
+            if (ParentGOScript.EnemyType.enemyType == Enemy.EnemyType.StunWand)
             {
                 isStunWand = true;
             }
@@ -78,116 +79,91 @@ public class MeleeWeapon : MonoBehaviour
     {
         if (!PauseMenu.isPaused)
         {
+            if (CharacterStats.CS.Dead)
+                return;
 
             if (selfCollider.enabled)
             {
                 Invoke("turnoffcollider", 0.5f);
+                return;
             }
             switch (whichholder)
             {
                 case WhichHolder.Enemy:
-                    if (ParentGOScript.CanSwing == true)
+                    CollisionDetectionEnemy();
+                    animPipe.SetTrigger("Melee");
+                    selfCollider.enabled = true;
+                    audioSource.clip = MeleeSounds[Random.Range(4, 5)];
+                    audioSource.Play();
+                    if (!isStunWand)
                     {
-                        CollisionDetectionEnemy();
-                        animPipe.SetTrigger("Melee");
-                        selfCollider.enabled = true;
-                        audioSource.clip = MeleeSounds[Random.Range(4, 5)];
-                        audioSource.Play();
-                        if (!isStunWand)
-                        {
-                            GetComponent<TrailRenderer>().enabled = true;
-                            Invoke("RemoveTrail", 0.3f);
-                        }
-                        ParentGOScript.CanSwing = false;
+                        GetComponent<TrailRenderer>().enabled = true;
+                        Invoke("RemoveTrail", 0.3f);
                     }
+
                     break;
-                    
+
                 case WhichHolder.Player:
-                    if (CharacterStats.CS.Dead == false && !CharacterStats.CS.stunned)
-                    {
-                        if (CharacterStats.CS.CanShoot)
+                    if (CharacterStats.CS.stunned || !CharacterStats.CS.CanShoot)
+                        return;
+                    
+                        if (Tutorial.AllowAttack)
                         {
-                            if (Tutorial.AllowAttack)
+
+                            if (Time.time >= MeleeTime)
                             {
+                                swingAttack = Random.Range(1, 4);
+                                CollisionDetection();
+                                audioSource.clip = MeleeSounds[Random.Range(4, 5)];
+                                audioSource.Play();
 
-                                if (Time.time >= MeleeTime)
+                                selfCollider.enabled = true;
+
+                                // attack here
+                                if (CharacterStats.CS.TypeofWeapon == CharacterStats.Weapon.Fist)
                                 {
-                                    swingAttack = Random.Range(1, 4);
-                                    CollisionDetection();
-                                    audioSource.clip = MeleeSounds[Random.Range(4, 5)];
-                                    audioSource.Play();
-
-                                    selfCollider.enabled = true;
-                                    MeleeTime = Time.time + MeleeInterval;
-
-                                    // attack here
-                                    if (CharacterStats.CS.TypeofWeapon == CharacterStats.Weapon.Fist)
+                                    CharacterStats.CS.Stamina -= 5;
+                                    if (CharacterStats.CS.Stamina > 5)
                                     {
-                                        CharacterStats.CS.Stamina -= 5;
-                                        if (CharacterStats.CS.Stamina > 5)
-                                        {
 
-                                            if (StaticVariables.MovementMultiply == 1)
-                                            {
-                                                MeleeInterval = 0.2f;
-                                            }
-                                            else
-                                            {
-                                                MeleeInterval = 0.2f / StaticVariables.MovementMultiply;
-                                            }
+                                        if (StaticVariables.MovementMultiply == 1)
+                                        {
+                                            MeleeInterval = 0.2f;
                                         }
                                         else
                                         {
-                                            MeleeInterval = 1f;
+                                            MeleeInterval = 0.2f / StaticVariables.MovementMultiply;
                                         }
-                                        switch (swingAttack)
-                                        {
-
-                                            case 1:
-                                                animPipe.SetTrigger("rightHook");
-                                                GetComponent<TrailRenderer>().enabled = true;
-                                                Invoke("RemoveTrail", 0.3f);
-                                                break;
-                                            case 2:
-                                                animPipe.SetTrigger("leftHook");
-                                                break;
-                                            case 3:
-                                                animPipe.SetTrigger("finalPunch");
-
-                                                break;
-
-                                        }
-                                        selfCollider.enabled = true;
-                                        MeleeTime = Time.time + MeleeInterval;
                                     }
-
-                                    if (CharacterStats.CS.TypeofWeapon == CharacterStats.Weapon.Pipe)
+                                    else
                                     {
-                                        CharacterStats.CS.Stamina -= 10;
-                                        if (CharacterStats.CS.Stamina > 5)
-                                        {
+                                        MeleeInterval = 1f;
+                                    }
+                                    switch (swingAttack)
+                                    {
+
+                                        case 1:
+                                            animPipe.SetTrigger("rightHook");
                                             GetComponent<TrailRenderer>().enabled = true;
                                             Invoke("RemoveTrail", 0.3f);
-                                            if (StaticVariables.MovementMultiply == 1)
-                                            {
-                                                MeleeInterval = 0.4f;
-                                            }
-                                            else
-                                            {
-                                                MeleeInterval = 0.4f / StaticVariables.MovementMultiply;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            MeleeInterval = 1.2f;
-                                        }
-                                        animPipe.SetTrigger("Melee");
-                                        selfCollider.enabled = true;
-                                        MeleeTime = Time.time + MeleeInterval;
+                                            break;
+                                        case 2:
+                                            animPipe.SetTrigger("leftHook");
+                                            break;
+                                        case 3:
+                                            animPipe.SetTrigger("finalPunch");
+
+                                            break;
+
                                     }
-                                    if (CharacterStats.CS.TypeofWeapon == CharacterStats.Weapon.Knife)
+                                    selfCollider.enabled = true;
+                                }
+
+                                if (CharacterStats.CS.TypeofWeapon == CharacterStats.Weapon.Pipe)
+                                {
+                                    CharacterStats.CS.Stamina -= 10;
+                                    if (CharacterStats.CS.Stamina > 5)
                                     {
-                                        CharacterStats.CS.Stamina -= 10;
                                         GetComponent<TrailRenderer>().enabled = true;
                                         Invoke("RemoveTrail", 0.3f);
                                         if (StaticVariables.MovementMultiply == 1)
@@ -198,15 +174,35 @@ public class MeleeWeapon : MonoBehaviour
                                         {
                                             MeleeInterval = 0.4f / StaticVariables.MovementMultiply;
                                         }
-                                        animPipe.SetTrigger("Melee");
-                                        selfCollider.enabled = true;
-                                        MeleeTime = Time.time + MeleeInterval;
                                     }
-
+                                    else
+                                    {
+                                        MeleeInterval = 1.2f;
+                                    }
+                                    animPipe.SetTrigger("Melee");
+                                    selfCollider.enabled = true;
                                 }
+                                if (CharacterStats.CS.TypeofWeapon == CharacterStats.Weapon.Knife)
+                                {
+                                    CharacterStats.CS.Stamina -= 10;
+                                    GetComponent<TrailRenderer>().enabled = true;
+                                    Invoke("RemoveTrail", 0.3f);
+                                    if (StaticVariables.MovementMultiply == 1)
+                                    {
+                                        MeleeInterval = 0.4f;
+                                    }
+                                    else
+                                    {
+                                        MeleeInterval = 0.4f / StaticVariables.MovementMultiply;
+                                    }
+                                    animPipe.SetTrigger("Melee");
+                                    selfCollider.enabled = true;
+                                }
+                                MeleeTime = Time.time + MeleeInterval;
                             }
                         }
-                    }
+                    
+
                     break;
 
             }
@@ -227,7 +223,7 @@ public class MeleeWeapon : MonoBehaviour
 
             if (target != null)
             {
-               
+
                 if (target != ParentCollider)
                 {
 
@@ -248,7 +244,7 @@ public class MeleeWeapon : MonoBehaviour
 
                             if (!isStunWand)
                             {
-                                CharacterStats.CS.Damaged(ParentGOScript.Damage);
+                                CharacterStats.CS.Damaged(ParentGOScript.EnemyType.Damage * WaveManager.DamageMultiplier);
                                 Hit.Spawn(target.transform.position, target.transform.rotation); // hit effect
                             }
                             else
@@ -269,7 +265,7 @@ public class MeleeWeapon : MonoBehaviour
                         }
                     }
 
-                   
+
                 }
             }
         }
@@ -371,15 +367,10 @@ public class MeleeWeapon : MonoBehaviour
                                     {
                                         target.transform.GetComponent<attackPlayer>().DamagedByPlayer((dmg / 5), false, true);
                                     }
-
-
                                 }
-
-                                target.transform.GetComponent<attackPlayer>().shootTime = 0;
                                 Hit.Spawn(new Vector3(target.transform.position.x + Random.Range(-0.2f, 0.2f), target.transform.position.y + Random.Range(0.3f, 0.8f), target.transform.position.z), target.transform.rotation); // hit effect
                                 if (target.transform.GetComponentInParent<attackPlayer>().health <= 0)
                                 {
-
                                     if (this.transform.position.x < target.transform.position.x)
                                     {
                                         target.transform.GetComponent<attackPlayer>().flipped = true;
@@ -398,9 +389,9 @@ public class MeleeWeapon : MonoBehaviour
                             }
                         }
 
-                        
+
                     }
-                    
+
                     // Guards ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     if (whichholder == WhichHolder.Enemy)
                     {
@@ -418,7 +409,7 @@ public class MeleeWeapon : MonoBehaviour
 
                             if (!isStunWand)
                             {
-                                CharacterStats.CS.Damaged(ParentGOScript.Damage);
+                                CharacterStats.CS.Damaged(ParentGOScript.EnemyType.Damage * WaveManager.DamageMultiplier);
                                 Hit.Spawn(target.transform.position, target.transform.rotation); // hit effect
                             }
                             else

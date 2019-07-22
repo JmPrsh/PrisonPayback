@@ -52,6 +52,55 @@ TagManager:
   - MiniMap
   - Neutral
   - enemyInmatetarget
+  - ShotFire
+  - Boss
+  - enemybosstarget
+  - Bossplace3
+  - CHECKPOINT1
+  - Bossplace5
+  - bossMusic
+  - Bossplace1
+  - Bossplace2
+  - CHECKPOINT2
+  - CHECKPOINT4
+  - Bossplace4
+  - CHECKPOINT3
+  - bulletSpawn1
+  - JoyStick2
+  - zombieAttack
+  - zombieplaceStart
+  - bulletSpawn4
+  - bulletSpawn5
+  - zombieplace3
+  - bulletSpawn3
+  - bulletSpawn2
+  - zombieplace2
+  - JoyStick
+  - zombieplace1
+  - zombieplace4
+  - RoomManager
+  - CamTarget
+  - VerticalWall
+  - Door
+  - finish
+  - Cigs
+  - Checkpoint
+  - Pipe
+  - Sniper
+  - ShotgunUI
+  - MachineGunUI
+  - SpawnPoint4
+  - SpawnPoint1
+  - SpawnPoint2
+  - SpawnPoint3
+  - Blood
+  - lockedDoor
+  - EnemySpawner3
+  - EnemySpawner1
+  - EnemySpawner4
+  - EnemySpawner2
+  - EnemySpawner5
+  - Knife
   layers:
   - Default
   - TransparentFX
@@ -62,7 +111,7 @@ TagManager:
   - 
   - 
   - Enemy
-  - 
+  - Player
   - 
   - 
   - 

@@ -917,7 +917,7 @@ GameObject:
   - component: {fileID: 8885734}
   - component: {fileID: 8885736}
   - component: {fileID: 8885735}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: Muzzleflash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4098,7 +4098,7 @@ GameObject:
   - component: {fileID: 69939782}
   - component: {fileID: 69939784}
   - component: {fileID: 69939783}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: Muzzleflash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5017,7 +5017,7 @@ GameObject:
   m_Component:
   - component: {fileID: 83292541}
   - component: {fileID: 83292542}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: BloodSplat2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9935,7 +9935,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 163414824}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: RotatetoLookat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10509,7 +10509,7 @@ GameObject:
   m_Component:
   - component: {fileID: 176929529}
   - component: {fileID: 176929530}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: BulletSpawn
   m_TagString: bulletSpawn
   m_Icon: {fileID: 0}
@@ -11068,7 +11068,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 187982868}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: HealthRegenParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19321,7 +19321,7 @@ GameObject:
   - component: {fileID: 294328206}
   - component: {fileID: 294328208}
   - component: {fileID: 294328207}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: BloodSplat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23329,7 +23329,7 @@ GameObject:
   - component: {fileID: 367737778}
   - component: {fileID: 367737780}
   - component: {fileID: 367737779}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: Blood
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24864,7 +24864,7 @@ MonoBehaviour:
   originPositions:
   - {x: 0, y: 0}
   sizeOrigin: {x: 84, y: 86}
-  scaleRatio: {x: 0.6547619, y: 0.63854235}
+  scaleRatio: {x: 0.6547619, y: 0.6388274}
 --- !u!114 &385937348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26458,7 +26458,7 @@ GameObject:
   - component: {fileID: 408456488}
   - component: {fileID: 408456490}
   - component: {fileID: 408456489}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: generated_slot_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36551,7 +36551,7 @@ GameObject:
   - component: {fileID: 541853168}
   - component: {fileID: 541853167}
   - component: {fileID: 541853166}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: ReloadBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39019,7 +39019,7 @@ GameObject:
   m_Component:
   - component: {fileID: 574853708}
   - component: {fileID: 574853709}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: ObjectiveHUD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40995,7 +40995,7 @@ GameObject:
   - component: {fileID: 620122568}
   - component: {fileID: 620122570}
   - component: {fileID: 620122569}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: Muzzleflash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41644,7 +41644,7 @@ GameObject:
   m_Component:
   - component: {fileID: 629040519}
   - component: {fileID: 629040520}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: BulletSpawn
   m_TagString: bulletSpawn
   m_Icon: {fileID: 0}
@@ -43484,6 +43484,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3df17dd225737334b8dba33db9c82b76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SkipCountdown: 1
   ZombieMode: 1
   WeaponStore: 0
   WeaponStoreGO: {fileID: 1445340853}
@@ -45414,7 +45415,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 55, y: 54.914642}
+  m_SizeDelta: {x: 55, y: 54.939156}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &700278734
 GameObject:
@@ -46334,6 +46335,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 160098, guid: a8130e7229de26c49820973927e78ed8, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 488876, guid: a8130e7229de26c49820973927e78ed8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -46377,6 +46382,10 @@ PrefabInstance:
     - target: {fileID: 488876, guid: a8130e7229de26c49820973927e78ed8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 196804, guid: a8130e7229de26c49820973927e78ed8, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a8130e7229de26c49820973927e78ed8, type: 3}
@@ -46475,7 +46484,7 @@ GameObject:
   - component: {fileID: 709350803}
   - component: {fileID: 709350805}
   - component: {fileID: 709350804}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: Muzzleflash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49258,7 +49267,7 @@ GameObject:
   - component: {fileID: 762620393}
   - component: {fileID: 762620392}
   - component: {fileID: 762620399}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: Knife
   m_TagString: PlayerMelee
   m_Icon: {fileID: 0}
@@ -49558,6 +49567,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ff9b2b55242c5a43bace10a4a3b380f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Damage: 0
   Hit: {fileID: 400000, guid: 30f2488dffb9841078e4d395bad4c54f, type: 3}
   KnifeHit: {fileID: 400000, guid: a0e4bf07fa1f74802b9f30f5357dfaa4, type: 3}
   animPipe: {fileID: 0}
@@ -53130,7 +53140,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 295.4376, y: 60.112366}
+  m_SizeDelta: {x: 295.07227, y: 60.13922}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &799239476
 MonoBehaviour:
@@ -53393,7 +53403,7 @@ GameObject:
   m_Component:
   - component: {fileID: 803919267}
   - component: {fileID: 803919268}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: minimapSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -61579,7 +61589,7 @@ GameObject:
   m_Component:
   - component: {fileID: 925137688}
   - component: {fileID: 925137689}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: BulletSpawn
   m_TagString: bulletSpawn
   m_Icon: {fileID: 0}
@@ -64360,7 +64370,7 @@ GameObject:
   - component: {fileID: 979145268}
   - component: {fileID: 979145271}
   - component: {fileID: 979145269}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: Sprite
   m_TagString: EnemyShootsThis
   m_Icon: {fileID: 0}
@@ -64835,7 +64845,7 @@ GameObject:
   - component: {fileID: 983239984}
   - component: {fileID: 983239982}
   - component: {fileID: 983239983}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: MiniGun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -66474,7 +66484,7 @@ GameObject:
   - component: {fileID: 1008508658}
   - component: {fileID: 1008508657}
   - component: {fileID: 1008508661}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: Sniper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72086,7 +72096,7 @@ GameObject:
   - component: {fileID: 1105994127}
   - component: {fileID: 1105994126}
   - component: {fileID: 1105994125}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: PlayerCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76312,7 +76322,7 @@ GameObject:
   - component: {fileID: 1180130814}
   - component: {fileID: 1180130816}
   - component: {fileID: 1180130815}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: generated_icon_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78432,7 +78442,7 @@ GameObject:
   - component: {fileID: 1216378278}
   - component: {fileID: 1216378277}
   - component: {fileID: 1216378281}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: Shotgun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -82144,7 +82154,7 @@ GameObject:
   - component: {fileID: 1278116447}
   - component: {fileID: 1278116446}
   - component: {fileID: 1278116450}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: MachineGun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -82737,7 +82747,7 @@ GameObject:
   - component: {fileID: 1284585454}
   - component: {fileID: 1284585456}
   - component: {fileID: 1284585455}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: Fire
   m_TagString: Fire
   m_Icon: {fileID: 0}
@@ -84239,7 +84249,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1301985412}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84672,7 +84682,7 @@ GameObject:
   - component: {fileID: 1313880361}
   - component: {fileID: 1313880369}
   - component: {fileID: 1313880370}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: Fists
   m_TagString: PlayerMelee
   m_Icon: {fileID: 0}
@@ -84982,6 +84992,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ff9b2b55242c5a43bace10a4a3b380f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Damage: 0
   Hit: {fileID: 400000, guid: 30f2488dffb9841078e4d395bad4c54f, type: 3}
   KnifeHit: {fileID: 400000, guid: a0e4bf07fa1f74802b9f30f5357dfaa4, type: 3}
   animPipe: {fileID: 0}
@@ -88493,7 +88504,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1369675713}
   - component: {fileID: 1369675714}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: BulletSpawn
   m_TagString: bulletSpawn
   m_Icon: {fileID: 0}
@@ -89824,7 +89835,7 @@ GameObject:
   - component: {fileID: 1388567853}
   - component: {fileID: 1388567855}
   - component: {fileID: 1388567854}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: RightSelected (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -91110,7 +91121,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1415529890}
   - component: {fileID: 1415529891}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: BulletSpawn
   m_TagString: bulletSpawn
   m_Icon: {fileID: 0}
@@ -91585,7 +91596,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1426849315}
   - component: {fileID: 1426849316}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: Skeleton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -91666,7 +91677,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1427075132}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -91949,7 +91960,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1436270327}
   - component: {fileID: 1436270328}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: Shadow
   m_TagString: shadow
   m_Icon: {fileID: 0}
@@ -93070,7 +93081,7 @@ GameObject:
   - component: {fileID: 1449773228}
   - component: {fileID: 1449773234}
   - component: {fileID: 1449773223}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -93457,13 +93468,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b92daeb8d40e24866913413c8cfd3c14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WeaponsPickedUp: []
-  ScoreGO: {fileID: 1240830355}
+  PlayerSettings: {fileID: 11400000, guid: c70482b5535714b63b85eb999cd5ae00, type: 2}
   Health: 1000
   Damage: 0
   HealthStarting: 0
   SteroidEffect: {fileID: 1496694206}
-  MainCameraGO: {fileID: 1781358012}
   hittext: {fileID: 22463120, guid: 75797f9ceb170084caed62f604a38aff, type: 3}
   ammo: {fileID: 0}
   shotInterval: 0.1
@@ -93480,7 +93489,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 0b09d0660a4666040aee5b34635fc37e, type: 3}
   - {fileID: 8300000, guid: 4affb74f211bde04e98aa165106fa574, type: 3}
   - {fileID: 8300000, guid: 4affb74f211bde04e98aa165106fa574, type: 3}
-  RotateSpeed: 300
   ShowMinigun: 0
   ShowSniper: 0
   ShowShotgun: 0
@@ -93497,12 +93505,6 @@ MonoBehaviour:
   - {fileID: 1498739894}
   - {fileID: 8885735}
   - {fileID: 620122569}
-  Muzzleflashes:
-  - {fileID: 69939781}
-  - {fileID: 709350802}
-  - {fileID: 1498739892}
-  - {fileID: 8885733}
-  - {fileID: 620122567}
   Dead: 0
   TypeofWeapon: 0
   Weapons:
@@ -93514,15 +93516,11 @@ MonoBehaviour:
   - {fileID: 1216378275}
   - {fileID: 1008508655}
   - {fileID: 983239980}
+  Controls:
+  - {fileID: 162006521}
+  - {fileID: 995248594}
   Stamina: 99
-  StaminaGO: {fileID: 1963234088}
-  LivesGO: {fileID: 208815805}
-  AimingGO: {fileID: 2073795634}
-  LeftJoystick: {fileID: 0}
-  RightJoystick: {fileID: 0}
   DodgeHorizontal: {fileID: 488876, guid: a8130e7229de26c49820973927e78ed8, type: 3}
-  DodgeVertical: {fileID: 0}
-  Feet: {fileID: 1473243753}
   CharacterSprites:
   - {fileID: 21300000, guid: 0ea5d3774ee83514395df192e20e7bac, type: 3}
   - {fileID: 21300000, guid: 82ea1cf3eeb7e6a43ae504c8be7682e6, type: 3}
@@ -93569,8 +93567,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 764bd72d35cf0144698965ccedd330ee, type: 3}
   - {fileID: 21300000, guid: b6916a6684a181c46807ae8fe43785cf, type: 3}
   - {fileID: 21300000, guid: 6da8daf2ba5a73b498dbe53bcf6b58e8, type: 3}
-  DeadSprite: {fileID: 21300000, guid: c1b581e68d37f7d478f6de56e22779e1, type: 3}
-  SpriteGO: {fileID: 979145266}
   AmmoCollectedText: {fileID: 22425268, guid: 35cdd60cb253df64b8d8bf6c35a34b06, type: 3}
   HealthCollectedText: {fileID: 22442544, guid: 18f3038a9c0f42247bf8e79b46f4260e,
     type: 3}
@@ -93613,9 +93609,18 @@ MonoBehaviour:
   - {fileID: 405830, guid: 8822add0c2ca0524d8ed4f305f852ca8, type: 3}
   - {fileID: 405830, guid: 8822add0c2ca0524d8ed4f305f852ca8, type: 3}
   bursttimer: 0.2
+  AimingGO: {fileID: 2073795634}
+  StaminaGO: {fileID: 1963234088}
+  LivesGO: {fileID: 208815805}
+  ScoreGO: {fileID: 1240830355}
+  SpriteGO: {fileID: 979145266}
   DyingGO: {fileID: 1427075131}
   BloodSplat: {fileID: 294328205}
   BloodPool: {fileID: 367737777}
+  ComboGO: {fileID: 192162810}
+  PlayerHUD: {fileID: 517179948}
+  EnemyCanvas: {fileID: 1866377567}
+  MainPauseParent: {fileID: 1728965731}
   greyAmount: 0
   Cash: 0
   CashText: {fileID: 266274831}
@@ -93626,8 +93631,6 @@ MonoBehaviour:
   ComboText: {fileID: 1296151977}
   ComboTimerEB: {fileID: 192162813}
   HealthBar: {fileID: 967342576}
-  isPaused: 0
-  TargetPauseButton: {fileID: 0}
   KillStreakGO: {fileID: 22465108, guid: 11f314a39c3611f4e826d482dcca5d8c, type: 3}
   Killstreaks:
   - {fileID: 21300000, guid: 01f82ed84653c994ba4389b40987f335, type: 3}
@@ -93638,37 +93641,24 @@ MonoBehaviour:
   - {fileID: 21300010, guid: 01f82ed84653c994ba4389b40987f335, type: 3}
   OrangeColour: {r: 0, g: 0, b: 0, a: 1}
   ComboParent: {fileID: 569014932}
-  ComboGO: {fileID: 192162810}
-  PlayerHUD: {fileID: 517179948}
   DamageToShow: 
-  EnemyCanvas: {fileID: 1866377567}
-  SBAnim: {fileID: 2135115237}
   ScoringSceneLevelToLoadForLoadingScreen: TitleScreen
   stunned: 0
-  ShockScreen: {fileID: 1861912404}
   evadeTimer: 0
-  evadeDistance: 0.015
   cooldownTimer: 0
   evading: 0
-  moveSpeed: 3
-  evadeTime: 0.04
   ImpactSound: {fileID: 465788, guid: 01cf3cad7bdba2046a19a49c4153b82c, type: 3}
   Aiming: {fileID: 1948451620}
   DodgeButton: {fileID: 1986927728}
-  Controls:
-  - {fileID: 162006521}
-  - {fileID: 995248594}
-  GOEnemyShoots: {fileID: 0}
-  MainPauseParent: {fileID: 1728965731}
+  ControlType: 1
+  MoveForce: 10
+  vel: {x: 0, y: 0}
+  maxVel: 5
   WhichWeapon: 0
   rightJoystickInput: {x: 0, y: 0, z: 0}
   leftJoystick: {fileID: 939221073}
   rightJoystick: {fileID: 995248596}
   CanShoot: 0
-  ControlType: 1
-  MoveForce: 10
-  vel: {x: 0, y: 0}
-  maxVel: 5
   ControlChoiceText: {fileID: 123156523}
   PickUpGUIy: 15
 --- !u!114 &1449773231
@@ -94378,7 +94368,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1460129824}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: Player Attach Point
   m_TagString: Untagged
   m_Icon: {fileID: 1182211791, guid: 0000000000000000d000000000000000, type: 0}
@@ -94882,7 +94872,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1473243753}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: Feet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96862,7 +96852,7 @@ GameObject:
   - component: {fileID: 1498739893}
   - component: {fileID: 1498739895}
   - component: {fileID: 1498739894}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: Muzzleflash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101642,7 +101632,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1579341787}
   - component: {fileID: 1579341788}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101876,7 +101866,7 @@ GameObject:
   - component: {fileID: 1584780344}
   - component: {fileID: 1584780346}
   - component: {fileID: 1584780345}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: Objective
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102320,7 +102310,7 @@ GameObject:
   - component: {fileID: 1598478955}
   - component: {fileID: 1598478956}
   - component: {fileID: 1598478957}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: Spotlight
   m_TagString: PlayerLight
   m_Icon: {fileID: 0}
@@ -107156,7 +107146,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1673198790}
   - component: {fileID: 1673198791}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: StunnedSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107449,7 +107439,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1675545867}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: Locator (1)
   m_TagString: Locator
   m_Icon: {fileID: 0}
@@ -116903,7 +116893,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1840913950}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: HealthRegenPlus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -122261,7 +122251,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 295.4376, y: 60.112366}
+  m_SizeDelta: {x: 295.07227, y: 60.13922}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1932053352
 MonoBehaviour:
@@ -123353,7 +123343,7 @@ GameObject:
   - component: {fileID: 1944866789}
   - component: {fileID: 1944866788}
   - component: {fileID: 1944866795}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: Pipe
   m_TagString: PlayerMelee
   m_Icon: {fileID: 0}
@@ -123633,6 +123623,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ff9b2b55242c5a43bace10a4a3b380f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Damage: 0
   Hit: {fileID: 400000, guid: 30f2488dffb9841078e4d395bad4c54f, type: 3}
   KnifeHit: {fileID: 400000, guid: a0e4bf07fa1f74802b9f30f5357dfaa4, type: 3}
   animPipe: {fileID: 0}
@@ -123735,7 +123726,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1948451619}
   - component: {fileID: 1948451620}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: Aiming
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -126095,7 +126086,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 55, y: 54.914642}
+  m_SizeDelta: {x: 55, y: 54.939156}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1979772836
 GameObject:
@@ -130784,7 +130775,7 @@ GameObject:
   - component: {fileID: 2071108117}
   - component: {fileID: 2071108116}
   - component: {fileID: 2071108120}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: Pistol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -131038,7 +131029,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2073795635}
   - component: {fileID: 2073795636}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: RotatingToMousePosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -134312,7 +134303,7 @@ GameObject:
   - component: {fileID: 2124939518}
   - component: {fileID: 2124939516}
   - component: {fileID: 2124939515}
-  m_Layer: 15
+  m_Layer: 9
   m_Name: LeftFist
   m_TagString: PlayerMelee
   m_Icon: {fileID: 0}

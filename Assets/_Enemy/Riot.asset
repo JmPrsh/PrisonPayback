@@ -12,8 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357ea14a322789a4a86b90c8c5f7bf06, type: 3}
   m_Name: Riot
   m_EditorClassIdentifier: 
+  enemyType: 0
+  enemyAttackType: 0
+  Damage: 0
   Health: 150
   MoveSpeed: 8
   ShootRate: 1
   AttackDistance: 5
-  Weapon: {fileID: 21300006, guid: adf333b7f09da8f4d9c4f2684d6cd0b7, type: 3}
+  reloadtime: 0
+  bulletsinclip: 0
+  bulletPrefab: {fileID: 0}
+  EnemySprite: {fileID: 21300000, guid: 709e69452e07e7843ab7283ad1319bc6, type: 3}
+  BulletSprite: {fileID: 0}
+  AllowWeaponDrop: 0
+  WeaponToSpawn: {fileID: 0}

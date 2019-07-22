@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 357ea14a322789a4a86b90c8c5f7bf06, type: 3}
+  m_Name: Swat
+  m_EditorClassIdentifier: 
+  enemyType: 0
+  enemyAttackType: 1
+  Damage: 0
+  Health: 100
+  MoveSpeed: 8
+  ShootRate: 1
+  AttackDistance: 5
+  reloadtime: 0
+  bulletsinclip: 0
+  bulletPrefab: {fileID: 0}
+  EnemySprite: {fileID: 21300000, guid: 5f8e586fa96454a40890c951c7cb1993, type: 3}
+  BulletSprite: {fileID: 0}
+  AllowWeaponDrop: 0
+  WeaponToSpawn: {fileID: 0}

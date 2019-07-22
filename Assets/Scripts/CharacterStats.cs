@@ -10,94 +10,34 @@ using UnityEngine.SceneManagement;
 public class CharacterStats : MonoBehaviour
 {
     public static CharacterStats CS;
-    public List<GameObject> WeaponsPickedUp;
-    public GameObject ScoreGO;
-    //    public bool isEnemyInFront;
-    //    public bool Debugging;
+    public Player PlayerSettings;
     public float Health;
     float startingHealth;
     public float Damage;
     public float HealthStarting;
     public GameObject SteroidEffect;
-    public GameObject MainCameraGO;
-
-    // GAME ELEMENTS
-    //    public int BossSpawnChance;
-    //    public static bool spawnBoss;
-    //    public int EnemySpeed;
-    //    public int EnemyFrequency;
-    //    public int EnemyTotal;
-    //    public int AmmoCount;
-    //    public int HealthPack;
-    // END GAME ELEMENTS
-
-    // Buff Variables
-    //	public static int MovementMultiply = 1;
-    //	public static bool infStamina;
-    //	public static bool RegenHealth;
-    //    public int Deaths;
-
     public Transform hittext;
-
     // Ammo Script
     public AmmoScript ammo;
-
-    // player movement speed
-    //    public float playerSpeed = 10f;
-    //speed player moves
-
-    // Time it takes between shooting each bullet
     public float shotInterval = 0.5f;
     private float shootTime = 0.0f;
-
-    // bullet prefab we instantiate when shooting
     public Transform bulletPrefab;
-
-    // bullet spawn positions
     GameObject bulletSpawn;
-
-    // sound files
     public AudioClip[] fire;
     public AudioClip[] impact;
 
-    // if the boss has already been spawned, dont spawn again
-    //    public static bool bossAlreadySpawned;
+    [HideInInspector]
+    public bool ShowMinigun, ShowSniper, ShowShotgun, ShowMachineGun, ShowPistol, ShowKnife, ShowPipe;
 
-    // how fast the player rotates using mobile controls
-    public float RotateSpeed = 10.0F;
-
-
-    // if we have picked up the weapons, show them on screen so we can click on them to use
-    public bool ShowMinigun;
-    public bool ShowSniper;
-    public bool ShowShotgun;
-    public bool ShowMachineGun;
-    public bool ShowPistol;
-    public bool ShowKnife;
-    public bool ShowPipe;
-    //	public float Damage;
-
-    // Players Animator Controller
-    Animator anim;
-    Animator animGun;
-
-    // Sprite Animator
-
-    // Muzzleflash Animator
+    Animator anim, animGun;
     public Animator[] animMuzzle;
-
-    public GameObject[] Muzzleflashes;
-
-    // DDA Manager GameObject's Script
     PlayerModel playermodel;
-
-    //	public Rigidbody2D Bullet;
     Rigidbody2D r;
+    [HideInInspector]
     public bool Dead;
     SpriteRenderer SpriteGORenderer;
     float screenX;
     float screenY;
-
     // which weapon are we holding
     public enum Weapon
     {
@@ -111,32 +51,16 @@ public class CharacterStats : MonoBehaviour
         Minigun
     }
     ;
-    //set the original weapon ( can be set in the inspector )
+    [HideInInspector]
     public Weapon TypeofWeapon;
-    public GameObject[] Weapons;
-
-    // Enemies
-    //	public List<Transform> Enemies;
-
-    // HUD
+    public GameObject[] Weapons, Controls;
     public int Stamina;
-    public GameObject StaminaGO;
-    public GameObject LivesGO;
     EnergyBar LivesGOEB;
-    public GameObject AimingGO;
-    public Joystick LeftJoystick;
-    public Joystick RightJoystick;
     int Lives;
-
     // Dodge
     public Transform DodgeHorizontal;
-    public Transform DodgeVertical;
-    public Transform Feet;
-
     // Sprites
     public Sprite[] CharacterSprites;
-    public Sprite DeadSprite;
-    public GameObject SpriteGO;
     public Transform AmmoCollectedText;
     public Transform HealthCollectedText;
     public Transform ScoreCollectedText;
@@ -153,11 +77,11 @@ public class CharacterStats : MonoBehaviour
     public Ethnic EthnicCharacter;
     public Sprite[] CurrentWeapon;
     public Image WeaponGUI;
+    [HideInInspector]
     public bool Blur;
     public RectTransform[] PickUpGUI;
     public Animator[] WeaponShoot;
-    public Animator WSanim;
-    public Animator GeneralMuzzle;
+    public Animator WSanim, GeneralMuzzle;
     public Transform[] BulletCasing;
     int chosenCasing;
     public float bursttimer = 0.2f;
@@ -165,10 +89,9 @@ public class CharacterStats : MonoBehaviour
     int shotsfired;
     GameObject Shadow;
     bool showgrey;
-    public GameObject DyingGO;
-    public GameObject BloodSplat;
-    public GameObject BloodPool;
+    public GameObject AimingGO, StaminaGO, LivesGO, ScoreGO, SpriteGO, DyingGO, BloodSplat, BloodPool, ComboGO, PlayerHUD, EnemyCanvas,MainPauseParent;
     public static bool flipped;
+    [HideInInspector]
     public float greyAmount;
     float CharacterAngle;
     DPadButtons DPB;
@@ -178,53 +101,50 @@ public class CharacterStats : MonoBehaviour
     public Text CashText;
     public static int Combo;
     int highestCombo;
+    [HideInInspector]
     public float HighScoreNormal;
+    [HideInInspector]
     public float HighScoreZombie;
-    // this one we save after calculation and devide into contraband
+    [HideInInspector]
     public float ComboTimer;
     public Text ScoreText;
     public Text ComboText;
     public EnergyBar ComboTimerEB;
     public EnergyBar HealthBar;
-    public bool isPaused;
-    // make event system gameobject be set to target object... then set target object as the options in pause
-    public GameObject TargetPauseButton;
     bool showkillstreaks;
     public Transform KillStreakGO;
     public Sprite[] Killstreaks;
     public Color OrangeColour;
     public Text ComboParent;
-    public GameObject ComboGO;
-    public GameObject PlayerHUD;
     CanvasGroup cg;
+    [HideInInspector]
     public string DamageToShow;
     public static int WeaponID;
-    public GameObject EnemyCanvas;
-    public Animator SBAnim;
-    AudioSource music;
     public static bool allowMovement;
     public static bool Finished;
     public static string ScoringSceneLevelToLoad;
     public string ScoringSceneLevelToLoadForLoadingScreen;
+    [HideInInspector]
     public bool stunned;
-    public GameObject ShockScreen;
-
-    // Dodge
     public float evadeTimer;
-    // this tells us how long the evade takes
-    public float evadeDistance = 10;
     // this tells us how far player will evade
     public float cooldownTimer;
+    [HideInInspector]
     public bool evading;
-    Vector3 moveDirection;
-    public float moveSpeed;
-    public float evadeTime;
-
     public Transform ImpactSound;
     public static float timeplayed;
     Transform PlayerCanvas;
     public SpriteRenderer Aiming;
     public Button DodgeButton;
+    int tempAmmoCount;
+        float shootdelay = 0;
+    public int ControlType;
+    public static float xAmount;
+    public float MoveForce;
+    public Vector2 vel;
+    public float maxVel;
+
+    float smokeTimer;
 
     public static float EnemyDelayTimer;
 
@@ -282,10 +202,9 @@ public class CharacterStats : MonoBehaviour
         // 270
         AimingGO.transform.rotation = Quaternion.AngleAxis(-180.0f, Vector3.forward);
         SoundFXController.Check = true;
-        if (!Tutorial.isTutorial)
-        {
-            Invoke("AllowToMove", 2);
-        }
+
+        Invoke("AllowToMove", 2);
+
         allowMovement = false;
         HealthStarting = Health;
         startingHealth = Health;
@@ -315,13 +234,6 @@ public class CharacterStats : MonoBehaviour
 
     }
 
-    void DisAllowToMove()
-    {
-        allowMovement = false;
-
-    }
-
-    public GameObject[] Controls;
 
     void FixedUpdate()
     {
@@ -892,7 +804,6 @@ public class CharacterStats : MonoBehaviour
             }
             if (hitInfo.transform.tag == "Milk")
             {
-                ObjectiveMarker.PickedUpItem = true;
                 if (DPB.Milk < 5)
                 {
                     DPB.Milk += 1;
@@ -909,7 +820,6 @@ public class CharacterStats : MonoBehaviour
             }
             if (hitInfo.transform.tag == "Needle")
             {
-                ObjectiveMarker.PickedUpItem = true;
                 if (DPB.Needles < 5)
                 {
                     DPB.Needles += 1;
@@ -926,7 +836,6 @@ public class CharacterStats : MonoBehaviour
             }
             if (hitInfo.transform.tag == "Pills")
             {
-                ObjectiveMarker.PickedUpItem = true;
                 if (DPB.Pills < 5)
                 {
                     DPB.Pills += 1;
@@ -943,7 +852,6 @@ public class CharacterStats : MonoBehaviour
             }
             if (hitInfo.transform.tag == "Powder")
             {
-                ObjectiveMarker.PickedUpItem = true;
                 if (DPB.Powder < 5)
                 {
                     DPB.Powder += 1;
@@ -997,7 +905,7 @@ public class CharacterStats : MonoBehaviour
         }
     }
 
-    int tempAmmoCount;
+
 
     public void PistolPickup(bool purchased, bool pickup)
     {
@@ -1257,12 +1165,6 @@ public class CharacterStats : MonoBehaviour
 
 
                                 }
-                                else
-                                {
-                                    // play empty gun sound effect
-                                    //								GetComponent<AudioSource> ().clip = fire;
-                                    //								GetComponent<AudioSource> ().Play ();
-                                }
 
                             }
                             if (TypeofWeapon == Weapon.MachineGun)
@@ -1272,12 +1174,6 @@ public class CharacterStats : MonoBehaviour
                                     shotsfired = 0;
                                     shootBurst = true;
 
-                                }
-                                else
-                                {
-                                    // play empty gun sound effect
-                                    //								GetComponent<AudioSource> ().clip = fire;
-                                    //								GetComponent<AudioSource> ().Play ();
                                 }
                             }
                             if (TypeofWeapon == Weapon.Shotgun)
@@ -1308,12 +1204,6 @@ public class CharacterStats : MonoBehaviour
                                     BulletCasing[chosenCasing].Spawn(new Vector3(transform.position.x + Random.Range(-0.2f, 0.2f), transform.position.y + Random.Range(-0.2f, 0.2f), transform.position.z), transform.rotation * Quaternion.AngleAxis(90, Vector3.forward));
 
 
-                                }
-                                else
-                                {
-                                    // play empty gun sound effect
-                                    //								GetComponent<AudioSource> ().clip = fire;
-                                    //								GetComponent<AudioSource> ().Play ();
                                 }
                             }
                             if (TypeofWeapon == Weapon.Sniper)
@@ -1376,12 +1266,6 @@ public class CharacterStats : MonoBehaviour
 
 
                                 }
-                                else
-                                {
-                                    // play empty gun sound effect
-                                    //                              GetComponent<AudioSource> ().clip = fire;
-                                    //                              GetComponent<AudioSource> ().Play ();
-                                }
                             }
                         }
                     }
@@ -1410,15 +1294,12 @@ public class CharacterStats : MonoBehaviour
 
                     if (Stamina == 33)
                     {
-                        //                        Debug.Log("First Stamina Filled");
                         yield return new WaitForSeconds(2f);
 
                     }
                     if (Stamina == 66)
                     {
-                        //                        Debug.Log("Second Stamina Filled");
                         yield return new WaitForSeconds(2f);
-
                     }
                     if (Stamina < 99)
                     {
@@ -1432,9 +1313,6 @@ public class CharacterStats : MonoBehaviour
 
         StartCoroutine(IncrementStamina());
     }
-
-    public GameObject GOEnemyShoots;
-    public GameObject MainPauseParent;
 
 
     IEnumerator Death()
@@ -1517,6 +1395,7 @@ public class CharacterStats : MonoBehaviour
         allowMovement = true;
     }
 
+[HideInInspector]
     public int WhichWeapon;
 
     void WeaponChange()
@@ -1582,6 +1461,7 @@ public class CharacterStats : MonoBehaviour
     public RightJoystick rightJoystick;
     // the game object containing the RightJoystick script
 
+[HideInInspector]
     public bool CanShoot;
 
     void MoveForward()
@@ -1628,14 +1508,7 @@ public class CharacterStats : MonoBehaviour
         }
     }
 
-    float shootdelay = 0;
-    public int ControlType;
-    public static float xAmount;
-    public float MoveForce;
-    public Vector2 vel;
-    public float maxVel;
 
-    float smokeTimer;
     void TestAnalogs()
     {
         vel = r.velocity;
@@ -1644,10 +1517,6 @@ public class CharacterStats : MonoBehaviour
             r.velocity = Vector3.ClampMagnitude(r.velocity, maxVel);
             vel = Vector3.ClampMagnitude(vel, maxVel);
         }
-
-#if UNITY_EDITOR
-        moveSpeed = 3;
-#endif
 
         leftJoystickInput = leftJoystick.GetInputDirection();
         rightJoystickInput = rightJoystick.GetInputDirection();
@@ -1685,7 +1554,7 @@ public class CharacterStats : MonoBehaviour
 
             leftJoystickInput = new Vector3(xMovementLeftJoystick, zMovementLeftJoystick, 0);
             leftJoystickInput = transform.TransformDirection(-leftJoystickInput);
-            leftJoystickInput *= moveSpeed;
+            leftJoystickInput *= PlayerSettings.MoveSpeed;
 
             if (!evading)
             {
@@ -1783,7 +1652,7 @@ public class CharacterStats : MonoBehaviour
 
             leftJoystickInput = new Vector3(xMovementLeftJoystick, zMovementLeftJoystick, 0);
             leftJoystickInput = transform.TransformDirection(-leftJoystickInput);
-            leftJoystickInput *= moveSpeed;
+            leftJoystickInput *= PlayerSettings.MoveSpeed;
 
             if (!evading)
             {
@@ -1910,7 +1779,7 @@ public class CharacterStats : MonoBehaviour
 
             leftJoystickInput = new Vector3(xMovementLeftJoystick, zMovementLeftJoystick, 0);
             leftJoystickInput = transform.TransformDirection(-leftJoystickInput);
-            leftJoystickInput *= moveSpeed;
+            leftJoystickInput *= PlayerSettings.MoveSpeed;
 
             transform.Translate(leftJoystickInput * Time.fixedDeltaTime);
 
@@ -1947,11 +1816,4 @@ public class CharacterStats : MonoBehaviour
     {
         Score += score;
     }
-
-
-    //    public float hEnergyBarvalueCurrent= 1.0F;
-    //    void OnGUI() {
-    ////        hEnergyBarvalueCurrent= GUI.HorizontalEnergyBar(new Rect(25, 100, 200, 25), hEnergyBarValue, 1.0F, 10.0F);
-    //        GUI.Label(new Rect(25, 150, 200, 25),"Can Shoot = " +CanShoot);
-    //    }
 }

@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 public class WaveManager : MonoBehaviour
 {
     public static WaveManager WM;
+
+    public bool SkipCountdown;
     public bool ZombieMode;
     public bool WeaponStore;
     public GameObject WeaponStoreGO;
@@ -172,7 +174,31 @@ public class WaveManager : MonoBehaviour
             }
         }
 
+        EnemiesSurroundPlayer();
+    }
 
+    void EnemiesSurroundPlayer()
+    {
+        int rad = 3;
+        if (EnemiesSpawned.Count <= 0)
+            return;
+        for (int i = 0; i < EnemiesSpawned.Count; i++)
+        {
+
+
+            //summon the enemies around this central GameObject
+            float radian = i * Mathf.PI / (EnemiesSpawned.Count / 2);
+            Vector3 ePosition = new Vector3(rad * Mathf.Cos(radian), rad * Mathf.Sin(radian), transform.position.z);
+            // EnemiesSpawned[i].position = ePosition;
+            // print(ePosition);
+            if (!System.Single.IsNaN(ePosition.x) && !System.Single.IsNaN(ePosition.y))
+            {
+                if (Random.Range(0, 10) == 0)
+                {
+                    EnemiesSpawned[i].GetComponent<attackPlayer>().targetPosition = Player.position + ePosition;
+                }
+            }
+        }
     }
 
     void OpenWeaponStore()
@@ -247,8 +273,15 @@ public class WaveManager : MonoBehaviour
         {
             HealthMultiplier += 0.01f;
         }
-        //		EnemiesSpawned.Clear ();
-        StartCoroutine(StartWave());
+
+        if (!SkipCountdown)
+            StartCoroutine(StartWave());
+        else
+        {
+            StartRound();
+        }
+
+
     }
 
     IEnumerator StartWave()
@@ -280,6 +313,11 @@ public class WaveManager : MonoBehaviour
         yield return new WaitForSeconds(1);
         CountDownTimer.Play();
         yield return new WaitForSeconds(1);
+        StartRound();
+    }
+
+    void StartRound()
+    {
         CountDownTimer.Play();
         ThumbAreaHelpers[0].enabled = false;
         ThumbAreaHelpers[1].enabled = false;
@@ -339,7 +377,7 @@ public class WaveManager : MonoBehaviour
             {
                 WaveStats.SetActive(true);
                 Invoke("TurnOffEnemyStats", 6);
-                spawnLimit = 5 * PlayerCount;
+                spawnLimit = 50 * PlayerCount;
                 EnemiesToSpawn = set1Enemies;
                 BruteEnemiesToSpawn = BruteEnemies[1];
             }

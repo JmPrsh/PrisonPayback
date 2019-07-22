@@ -55,6 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\_Players\Player.cs" />
      <Compile Include="Assets\_TempleEscape\Scripts\BulletController.cs" />
      <Compile Include="Assets\_TempleEscape\Scripts\CameraController.cs" />
      <Compile Include="Assets\_TempleEscape\Scripts\CoinController.cs" />
