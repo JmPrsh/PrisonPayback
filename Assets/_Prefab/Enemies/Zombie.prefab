@@ -535,6 +535,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ff9b2b55242c5a43bace10a4a3b380f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Damage: 0
   Hit: {fileID: 400000, guid: 30f2488dffb9841078e4d395bad4c54f, type: 3}
   KnifeHit: {fileID: 400000, guid: a0e4bf07fa1f74802b9f30f5357dfaa4, type: 3}
   animPipe: {fileID: 9599970}
@@ -556,8 +557,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e70cc532616da740a13a530e6a8b1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalscale: {x: 0, y: 0, z: 0}
-  flip: 0
+  PlayerGO: 0
   TypeofWeapon: 0
 --- !u!82 &8237302
 AudioSource:
@@ -979,8 +979,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e70cc532616da740a13a530e6a8b1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalscale: {x: 0, y: 0, z: 0}
-  flip: 0
+  PlayerGO: 0
   TypeofWeapon: 1
 --- !u!95 &9566906
 Animator:
@@ -1226,6 +1225,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ff9b2b55242c5a43bace10a4a3b380f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Damage: 0
   Hit: {fileID: 400000, guid: 30f2488dffb9841078e4d395bad4c54f, type: 3}
   KnifeHit: {fileID: 400000, guid: a0e4bf07fa1f74802b9f30f5357dfaa4, type: 3}
   animPipe: {fileID: 9543618}
@@ -1247,8 +1247,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e70cc532616da740a13a530e6a8b1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalscale: {x: 0, y: 0, z: 0}
-  flip: 0
+  PlayerGO: 0
   TypeofWeapon: 0
 --- !u!82 &8215886
 AudioSource:
@@ -1530,9 +1529,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9157cfb71bdd2f440a33806b5c92c47e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Targets:
-  - {fileID: 463648}
-  - {fileID: 430398}
   Target: {fileID: 146746}
 --- !u!212 &21249356
 SpriteRenderer:
@@ -1678,8 +1674,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e70cc532616da740a13a530e6a8b1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalscale: {x: 0, y: 0, z: 0}
-  flip: 0
+  PlayerGO: 0
   TypeofWeapon: 1
 --- !u!95 &9525612
 Animator:
@@ -2306,8 +2301,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e70cc532616da740a13a530e6a8b1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalscale: {x: 0, y: 0, z: 0}
-  flip: 0
+  PlayerGO: 0
   TypeofWeapon: 1
 --- !u!95 &9557498
 Animator:
@@ -2377,9 +2371,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9157cfb71bdd2f440a33806b5c92c47e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Targets:
-  - {fileID: 463648}
-  - {fileID: 430398}
   Target: {fileID: 0}
 --- !u!1 &134098
 GameObject:
@@ -2788,8 +2779,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e70cc532616da740a13a530e6a8b1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalscale: {x: 0, y: 0, z: 0}
-  flip: 0
+  PlayerGO: 0
   TypeofWeapon: 1
 --- !u!1 &143952
 GameObject:
@@ -2981,15 +2971,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4aeb300bd76f4e9a883eb2b0d89815d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 8
-  EnemyProperties: {fileID: 11400000, guid: 504cc28988cdaa547abf4bb7f073575f, type: 2}
-  enemyclass: 13
+  EnemyType: {fileID: 11400000, guid: 2464bea95724647959f2cc83259c8bb5, type: 2}
+  targetPosition: {x: 0, y: 0, z: 0}
   anim: {fileID: 9592648}
   seenPlayer: 0
   health: 100
-  bulletPrefab: {fileID: 11483164, guid: 9ed06f5e59e984542bc98c62bb04203a, type: 3}
-  shotInterval: 2
-  shootTime: 0
   ShootFrom:
   - {fileID: 470836}
   - {fileID: 487090}
@@ -2998,13 +2984,6 @@ MonoBehaviour:
   - {fileID: 499190}
   SpawnWeapon: 0
   WeaponChanceMax: 6
-  WeaponToSpawn:
-  - {fileID: 465662, guid: e9a449dbf85c3054c972ebe69056fb49, type: 3}
-  - {fileID: 465662, guid: e9a449dbf85c3054c972ebe69056fb49, type: 3}
-  - {fileID: 400002, guid: 829999d9ad5864d64aafc51e1b4c881b, type: 3}
-  - {fileID: 400002, guid: 029ee378d054949b1a7c787fc08c494f, type: 3}
-  Warning: {fileID: 155990}
-  typeofenemy: 0
   WeaponOfChoice:
   - {fileID: 115336}
   - {fileID: 111054}
@@ -3017,14 +2996,6 @@ MonoBehaviour:
   chooseEnemyAtStartUp: 0
   childRandom: {fileID: 407992}
   ChildSprite: {fileID: 467384}
-  DeadGuard:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   EnemySprite:
   - {fileID: 21300000, guid: 353c48755d12a6348bb4f76e74dd0e23, type: 3}
   - {fileID: 21300000, guid: 3303890a87e16584e80180662a293532, type: 3}
@@ -3038,11 +3009,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 8d15c50aa5ac81c4e98d4f1bcb1a5c2b, type: 3}
   - {fileID: 21300000, guid: 23b2f5868dabea44783ace2f6002325e, type: 3}
   - {fileID: 21300000, guid: 3c9b5daf71f171047b14c90f233a23d7, type: 3}
-  InmateSprite:
-  - {fileID: 21300000, guid: cd16ccca86c9ad043b87f1a389425793, type: 3}
-  - {fileID: 21300000, guid: 9156ab1724725a444aa38d5ea85226b2, type: 3}
-  - {fileID: 21300000, guid: 093af100c97ef8d42a7eb46b4dd1cb63, type: 3}
-  Damage: 0
   WeaponInt: []
   EnemyBullets:
   - {fileID: 21300006, guid: fbb7eb96a881322458310712adf33d10, type: 3}
@@ -3091,11 +3057,13 @@ MonoBehaviour:
   Grenade: {fileID: 11463922, guid: 4add03f10a930d045bd987c6d034bc70, type: 3}
   Target: {fileID: 0}
   BossIcon: {fileID: 148874}
-  CanSwing: 0
   WorldCanvas: {fileID: 119710}
-  MoveTimer: 0
+  flipLook: 0
+  ChildSpriteRenderer: {fileID: 0}
+  ObstacleLayer:
+    serializedVersion: 2
+    m_Bits: 0
   RandomSwingTime: 0
-  EnemyMovement: 1
 --- !u!114 &11471156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3356,8 +3324,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e70cc532616da740a13a530e6a8b1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalscale: {x: 0, y: 0, z: 0}
-  flip: 0
+  PlayerGO: 0
   TypeofWeapon: 1
 --- !u!95 &9535036
 Animator:
@@ -3749,8 +3716,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e70cc532616da740a13a530e6a8b1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalscale: {x: 0, y: 0, z: 0}
-  flip: 0
+  PlayerGO: 0
   TypeofWeapon: 1
 --- !u!1 &153498
 GameObject:
@@ -4123,8 +4089,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e70cc532616da740a13a530e6a8b1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalscale: {x: 0, y: 0, z: 0}
-  flip: 0
+  PlayerGO: 0
   TypeofWeapon: 1
 --- !u!1 &154834
 GameObject:
@@ -4243,6 +4208,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ff9b2b55242c5a43bace10a4a3b380f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Damage: 0
   Hit: {fileID: 400000, guid: 30f2488dffb9841078e4d395bad4c54f, type: 3}
   KnifeHit: {fileID: 400000, guid: a0e4bf07fa1f74802b9f30f5357dfaa4, type: 3}
   animPipe: {fileID: 9591022}
@@ -4264,8 +4230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e70cc532616da740a13a530e6a8b1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalscale: {x: 0, y: 0, z: 0}
-  flip: 0
+  PlayerGO: 0
   TypeofWeapon: 0
 --- !u!82 &8267788
 AudioSource:
@@ -4988,8 +4953,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e70cc532616da740a13a530e6a8b1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalscale: {x: 0, y: 0, z: 0}
-  flip: 0
+  PlayerGO: 0
   TypeofWeapon: 1
 --- !u!1 &160372
 GameObject:
@@ -5550,8 +5514,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e70cc532616da740a13a530e6a8b1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalscale: {x: 0, y: 0, z: 0}
-  flip: 0
+  PlayerGO: 0
   TypeofWeapon: 1
 --- !u!95 &9511698
 Animator:
@@ -5749,6 +5712,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ff9b2b55242c5a43bace10a4a3b380f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Damage: 0
   Hit: {fileID: 400000, guid: 30f2488dffb9841078e4d395bad4c54f, type: 3}
   KnifeHit: {fileID: 400000, guid: a0e4bf07fa1f74802b9f30f5357dfaa4, type: 3}
   animPipe: {fileID: 0}
@@ -5770,8 +5734,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e70cc532616da740a13a530e6a8b1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalscale: {x: 0, y: 0, z: 0}
-  flip: 0
+  PlayerGO: 0
   TypeofWeapon: 0
 --- !u!82 &8200634
 AudioSource:
@@ -6212,6 +6175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ff9b2b55242c5a43bace10a4a3b380f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Damage: 0
   Hit: {fileID: 400000, guid: 30f2488dffb9841078e4d395bad4c54f, type: 3}
   KnifeHit: {fileID: 0}
   animPipe: {fileID: 0}
@@ -6259,8 +6223,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e70cc532616da740a13a530e6a8b1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalscale: {x: 0, y: 0, z: 0}
-  flip: 0
+  PlayerGO: 0
   TypeofWeapon: 0
 --- !u!82 &8222388
 AudioSource:
@@ -7336,8 +7299,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e70cc532616da740a13a530e6a8b1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalscale: {x: 0, y: 0, z: 0}
-  flip: 0
+  PlayerGO: 0
   TypeofWeapon: 1
 --- !u!1 &197570
 GameObject:

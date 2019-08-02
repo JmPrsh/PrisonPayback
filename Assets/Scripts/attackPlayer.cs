@@ -7,36 +7,43 @@ using System.Linq;
 public class attackPlayer : MonoBehaviour
 {
     public Enemy EnemyType;
-    public float MoveSpeed;
+    [HideInInspector]
     public Vector3 targetPosition = new Vector3();
     public Animator anim;
-    public bool seenPlayer;
-
     [HideInInspector]
+    public bool seenPlayer = true;
+
+    // [HideInInspector]
     public float health = 100;
+    [HideInInspector]
     float shootTime = 0.0f;
     public Transform[] ShootFrom;
     public int SpawnWeapon;
     public int WeaponChanceMax;
     public GameObject[] WeaponOfChoice;
+    [HideInInspector]
     public int chooseEnemyAtStartUp;
 
     public Transform childRandom;
     public Transform ChildSprite;
     public Sprite[] EnemySprite;
     float Damage;
+    [HideInInspector]
     public List<GameObject> WeaponInt;
     public Sprite[] EnemyBullets;
     public Transform[] EnemyBulletCasing;
+    [HideInInspector]
     public bool reload;
+    [HideInInspector]
     public int bulletsused;
-    int bulletsinclip;
     public float bursttimer = 0.2f;
     bool shootBurst;
     int shotsfired;
     public AudioClip[] fire;
     public Animator[] WeaponShoot;
+    int WeaponID;
     Animator WSanim;
+    Collider2D MeleeCollider;
     public Animator[] WeaponMuzzleFlash;
     Animator WMFanim;
     public GameObject Shadow;
@@ -44,8 +51,11 @@ public class attackPlayer : MonoBehaviour
     public GameObject DyingGO;
     public GameObject BloodSplat;
     public GameObject BloodPool;
+    [HideInInspector]
     public bool flipped;
+    [HideInInspector]
     public float greyAmount;
+    [HideInInspector]
     public bool Dead = false;
     float CharacterAngle;
     public GameObject AimingGO;
@@ -63,9 +73,12 @@ public class attackPlayer : MonoBehaviour
     Collider2D Col;
     Collider2D ChildCol;
     Text CSScoreCollected;
+    [HideInInspector]
+    public float flipLook;
     Rigidbody2D rg2d;
-    SpriteRenderer ChildSpriteRenderer;
-
+    [HideInInspector]
+    public SpriteRenderer ChildSpriteRenderer;
+    public LayerMask ObstacleLayer;
 
     void Awake()
     {
@@ -82,7 +95,7 @@ public class attackPlayer : MonoBehaviour
             return;
 
         CSScoreCollected = CharacterStats.CS.ScoreCollectedText.GetComponent<Text>();
-        hitSpawnText = CharacterStats.CS.hittext.GetComponent<Text>();
+        hitSpawnText = CharacterStats.CS.hittext.GetComponentInChildren<Text>();
         ScoreGO = CharacterStats.CS.ScoreGO.GetComponent<Text>();
         ScoreGOAnim = CharacterStats.CS.ScoreGO.GetComponent<Animator>();
     }
@@ -90,16 +103,12 @@ public class attackPlayer : MonoBehaviour
     void OnEnable()
     {
         ResetEnemy();
-        BossIcon.SetActive(EnemyType.enemyType == Enemy.EnemyType.Boss);
+        if (BossIcon)
+            BossIcon.SetActive(EnemyType.enemyType == Enemy.EnemyType.Boss);
 
         FindClosestPlayer();
         RandomSwingTime = Random.Range(1.6f, 2.5f);
-        // transform.SetParent(GameObject.Find("EnemiesParent").transform);
 
-        // if (Target != null)
-        // {
-        //     targetPosition = Target.transform.position;
-        // }
         transform.position = new Vector3(transform.position.x + Random.Range(3, -3), transform.position.y + Random.Range(3, -3), transform.position.z);
         shootTime = 0;
 
@@ -107,8 +116,6 @@ public class attackPlayer : MonoBehaviour
         childRandom.transform.rotation = randomRot;
 
         ChooseEnemyType();
-
-
 
         for (var i = 0; i < WeaponInt.Count; i++)
         {
@@ -123,14 +130,15 @@ public class attackPlayer : MonoBehaviour
     {
         health = EnemyType.Health * WaveManager.HealthMultiplier;
         Damage = EnemyType.Damage + Random.Range((EnemyType.Damage - EnemyType.Damage / 10), (EnemyType.Damage + EnemyType.Damage / 10)) * WaveManager.DamageMultiplier;
-        ChildSprite.GetComponent<SpriteRenderer>().sprite = EnemyType.EnemySprite;
+        ChildSpriteRenderer.sprite = EnemyType.EnemySprite;
 
         if (EnemyType.name == "StandardGuard")
         {
-            ChildSprite.GetComponent<SpriteRenderer>().sprite = EnemySprite[Random.Range(0, 3)];
+            ChildSpriteRenderer.sprite = EnemySprite[Random.Range(0, 3)];
             if (EnemyType.enemyAttackType == Enemy.EnemyAttackType.Melee)
             {
                 WeaponHandler(0);
+                AssignMeleeCollider(0);
             }
             else if (EnemyType.enemyAttackType == Enemy.EnemyAttackType.Gun)
             {
@@ -141,7 +149,7 @@ public class attackPlayer : MonoBehaviour
         }
         else if (EnemyType.name == "StandardGuardBrute")
         {
-            ChildSprite.GetComponent<SpriteRenderer>().sprite = EnemySprite[Random.Range(0, 3)];
+            ChildSpriteRenderer.sprite = EnemySprite[Random.Range(0, 3)];
             ChildSprite.transform.localScale = ChildSprite.transform.localScale * 1.3f;
             ChildSprite.transform.position = new Vector2(ChildSprite.transform.position.x, ChildSprite.transform.position.y + 0.2f);
             chooseEnemyAtStartUp = Random.Range(0, 2);
@@ -149,6 +157,7 @@ public class attackPlayer : MonoBehaviour
             if (EnemyType.enemyAttackType == Enemy.EnemyAttackType.Melee)
             {
                 WeaponHandler(0);
+                AssignMeleeCollider(0);
             }
             else if (EnemyType.enemyAttackType == Enemy.EnemyAttackType.Gun)
             {
@@ -159,7 +168,6 @@ public class attackPlayer : MonoBehaviour
         }
         else if (EnemyType.name == "Captain")
         {
-
             WeaponHandler(3);
             WSanim = WeaponShoot[1];
             WMFanim = WeaponMuzzleFlash[1];
@@ -173,11 +181,13 @@ public class attackPlayer : MonoBehaviour
         }
         else if (EnemyType.name == "Riot")
         {
-            WeaponHandler(6);
+            WeaponHandler(6);// shield
+            AssignMeleeCollider(6);
         }
         else if (EnemyType.name == "RiotStun")
         {
-            WeaponHandler(7);
+            WeaponHandler(7);// stun wand
+            AssignMeleeCollider(7);
         }
         else if (EnemyType.name == "RiotBrute")
         {
@@ -216,15 +226,27 @@ public class attackPlayer : MonoBehaviour
         {
             WeaponHandler(0);
         }
+        else if (EnemyType.enemyType == Enemy.EnemyType.Dog)
+        {
+            AssignMeleeCollider(0);
+            WeaponHandler(0);
+        }
     }
 
     void WeaponHandler(int ID)
     {
+        WeaponID = ID;
         foreach (GameObject weapons in WeaponOfChoice)
         {
             WeaponInt.Add(WeaponOfChoice[ID]);
             weapons.SetActive(false);
         }
+    }
+
+    void AssignMeleeCollider(int i)
+    {
+        MeleeCollider = WeaponOfChoice[i].GetComponent<Collider2D>();
+        WeaponOfChoice[i].GetComponent<MeleeWeapon>().isStunWand = EnemyType.enemyType == Enemy.EnemyType.StunWand;
     }
 
     // Use this for initialization
@@ -236,13 +258,22 @@ public class attackPlayer : MonoBehaviour
     // Update is called once per frame
     bool RemovedSelf;
 
+    void UpdateSpriteSortingOrder()
+    {
+        ChildSpriteRenderer.sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
+    }
+
     void FixedUpdate()
     {
+
         if (!CharacterStats.CS)
             return;
 
+        CheckifAlive();
+
         if (!CharacterStats.CS.Dead)
         {
+             InvokeRepeating("UpdateSpriteSortingOrder", 0.2f, 1f);
             if (!PauseMenu.isPaused && CharacterStats.allowMovement)
             {
                 ChildSpriteRenderer.material.SetFloat("_GrayScale", greyAmount);
@@ -322,21 +353,30 @@ public class attackPlayer : MonoBehaviour
         Dead = false;
     }
 
-    void CheckAttackDistance()
+    void CheckObstacle(bool inPosition)
     {
-        anim.SetBool("Walk", Vector2.Distance(transform.position, targetPosition) > 1);
-        if (Vector2.Distance(transform.position, targetPosition) > 1)
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, (transform.position - Target.transform.position), 5, ObstacleLayer);
+
+        if (hit.transform != null)
         {
-            if (Random.Range(0, 3) == 0)
-            {
-                transform.position = Vector3.MoveTowards(transform.position, targetPosition, EnemyType.MoveSpeed * Time.deltaTime);
-            }
-        }
-        if (Vector2.Distance(transform.position, Target.transform.position) > EnemyType.AttackDistance)
-        {
-            // transform.position = Vector3.MoveTowards(transform.position, Target.transform.position, EnemyType.MoveSpeed * Time.deltaTime);
+            if (hit.collider.CompareTag("Wall"))
+                anim.SetBool("Walk", false);
         }
         else
+            anim.SetBool("Walk", !inPosition);
+    }
+
+    void CheckAttackDistance()
+    {
+        if (Vector2.Distance(transform.position, targetPosition) > 1)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, EnemyType.MoveSpeed * Time.deltaTime);
+            CheckObstacle(false);
+        }
+        else
+            CheckObstacle(true);
+
+        if (Vector2.Distance(transform.position, Target.transform.position) <= (EnemyType.AttackDistance + 1.1f))
         {
             shootTime += 1 * Time.deltaTime;
 
@@ -391,9 +431,18 @@ public class attackPlayer : MonoBehaviour
         }
     }
 
+
+
+    void MeleeAttack()
+    {
+        MeleeWeapon meleeScript = WeaponOfChoice[WeaponID].GetComponent<MeleeWeapon>();
+        meleeScript.Attack();
+        shootTime = 0;
+    }
+
     void PistolAttack()
     {
-        EnemyBullet temp = EnemyType.bulletPrefab.Spawn(ShootFrom[0].transform.position, ShootFrom[0].transform.rotation * Quaternion.AngleAxis(-90, Vector3.forward));
+        EnemyBullet temp = EnemyType.bulletPrefab.Spawn(ShootFrom[0].transform.position, ShootFrom[0].transform.rotation * Quaternion.AngleAxis(-90, Vector3.forward * flipLook));
 
         temp.transform.SetParent(null);
         temp.gameObject.SetActive(true);
@@ -409,11 +458,11 @@ public class attackPlayer : MonoBehaviour
 
     void ShotgunAttack()
     {
-        EnemyBullet temp = EnemyType.bulletPrefab.Spawn(ShootFrom[1].transform.position, ShootFrom[1].transform.rotation * Quaternion.AngleAxis(-60, Vector3.forward)); // -30 on z
-        EnemyBullet temp2 = EnemyType.bulletPrefab.Spawn(ShootFrom[1].transform.position, ShootFrom[1].transform.rotation * Quaternion.AngleAxis(-75, Vector3.forward)); // -30 on z
-        EnemyBullet temp3 = EnemyType.bulletPrefab.Spawn(ShootFrom[1].transform.position, ShootFrom[1].transform.rotation * Quaternion.AngleAxis(-90, Vector3.forward)); // 0 on z
-        EnemyBullet temp4 = EnemyType.bulletPrefab.Spawn(ShootFrom[1].transform.position, ShootFrom[1].transform.rotation * Quaternion.AngleAxis(-105, Vector3.forward)); // 15 on z
-        EnemyBullet temp5 = EnemyType.bulletPrefab.Spawn(ShootFrom[1].transform.position, ShootFrom[1].transform.rotation * Quaternion.AngleAxis(-120, Vector3.forward)); // 30 on z
+        EnemyBullet temp = EnemyType.bulletPrefab.Spawn(ShootFrom[1].transform.position, ShootFrom[1].transform.rotation * Quaternion.AngleAxis(-60, Vector3.forward * flipLook)); // -30 on z
+        EnemyBullet temp2 = EnemyType.bulletPrefab.Spawn(ShootFrom[1].transform.position, ShootFrom[1].transform.rotation * Quaternion.AngleAxis(-75, Vector3.forward * flipLook)); // -30 on z
+        EnemyBullet temp3 = EnemyType.bulletPrefab.Spawn(ShootFrom[1].transform.position, ShootFrom[1].transform.rotation * Quaternion.AngleAxis(-90, Vector3.forward * flipLook)); // 0 on z
+        EnemyBullet temp4 = EnemyType.bulletPrefab.Spawn(ShootFrom[1].transform.position, ShootFrom[1].transform.rotation * Quaternion.AngleAxis(-105, Vector3.forward * flipLook)); // 15 on z
+        EnemyBullet temp5 = EnemyType.bulletPrefab.Spawn(ShootFrom[1].transform.position, ShootFrom[1].transform.rotation * Quaternion.AngleAxis(-120, Vector3.forward * flipLook)); // 30 on z
         temp.Damage = Damage;
         temp2.Damage = Damage;
         temp3.Damage = Damage;
@@ -448,7 +497,7 @@ public class attackPlayer : MonoBehaviour
 
     void SniperAttack()
     {
-        EnemyBullet temp = EnemyType.bulletPrefab.Spawn(ShootFrom[3].transform.position, ShootFrom[3].transform.rotation * Quaternion.AngleAxis(-90, Vector3.forward));
+        EnemyBullet temp = EnemyType.bulletPrefab.Spawn(ShootFrom[3].transform.position, ShootFrom[3].transform.rotation * Quaternion.AngleAxis(-90, Vector3.forward * flipLook));
         temp.Damage = Damage;
         temp.spriterenderer.sprite = EnemyBullets[3];
         EnemyBulletCasing[3].Spawn(new Vector3(transform.position.x + Random.Range(-0.2f, 0.2f), transform.position.y + Random.Range(-0.2f, 0.2f), transform.position.z), transform.rotation);
@@ -460,7 +509,7 @@ public class attackPlayer : MonoBehaviour
 
     void MiniGunAttack()
     {
-        EnemyBullet temp = EnemyType.bulletPrefab.Spawn(ShootFrom[4].transform.position, ShootFrom[4].transform.rotation * Quaternion.AngleAxis(-90, Vector3.forward));
+        EnemyBullet temp = EnemyType.bulletPrefab.Spawn(ShootFrom[4].transform.position, ShootFrom[4].transform.rotation * Quaternion.AngleAxis(-90, Vector3.forward * flipLook));
         temp.Damage = Damage;
         temp.spriterenderer.sprite = EnemyBullets[4];
         EnemyBulletCasing[3].Spawn(new Vector3(transform.position.x + Random.Range(-0.2f, 0.2f), transform.position.y + Random.Range(-0.2f, 0.2f), transform.position.z), transform.rotation);
@@ -486,7 +535,7 @@ public class attackPlayer : MonoBehaviour
                     }
                     if (bursttimer <= 0)
                     {
-                        EnemyBullet temp = EnemyType.bulletPrefab.Spawn(ShootFrom[2].transform.position, ShootFrom[2].transform.rotation * Quaternion.AngleAxis(-90, Vector3.forward));
+                        EnemyBullet temp = EnemyType.bulletPrefab.Spawn(ShootFrom[2].transform.position, ShootFrom[2].transform.rotation * Quaternion.AngleAxis(-90, Vector3.forward * flipLook));
                         temp.Damage = EnemyType.Damage;
                         temp.spriterenderer.sprite = EnemyBullets[2];
                         audiosource.Play();
@@ -504,15 +553,6 @@ public class attackPlayer : MonoBehaviour
                 }
             }
         }
-
-    }
-
-    void MeleeAttack()
-    {
-
-        // do melee function here;
-
-        shootTime = 0;
 
     }
 
@@ -536,20 +576,8 @@ public class attackPlayer : MonoBehaviour
                 else
                     BloodPool.SetActive(true);
             }
-
-            Tail.enabled = EnemyType.enemyType != Enemy.EnemyType.Dog;
-        }
-
-        if (health < 0)
-        {
-            if (EnemyType.enemyType != Enemy.EnemyType.Dog)
-            {
-                BossIcon.SetActive(BossIcon.activeInHierarchy);
-            }
-            rg2d.isKinematic = true;
-            StartCoroutine(Death());
-            WaveManager.WM.RemoveEnemyFromList();
-            return;
+            if (EnemyType.enemyType == Enemy.EnemyType.Dog)
+                Tail.gameObject.SetActive(false);
         }
     }
 
@@ -583,7 +611,7 @@ public class attackPlayer : MonoBehaviour
         PlayerComboHandler();
         ColliderHandler();
 
-        Dead = true;
+
         BloodSplat.SetActive(true);
         Shadow.SetActive(false);
         showgrey = true;
@@ -651,12 +679,12 @@ public class attackPlayer : MonoBehaviour
 
     public void DamagedByPlayer(float dmg, bool crit, bool dmgBoost)
     {
-
         health -= dmg;
         ChildAnimator.SetTrigger("GetHurt");
 
-        Transform temp = CharacterStats.CS.hittext.Spawn(new Vector3(transform.position.x + Random.Range(-0.2f, 0.2f), transform.position.y + 0.8f, transform.position.z), transform.rotation);
+        Transform temp = CharacterStats.CS.hittext.Spawn(new Vector3(WorldCanvas.transform.position.x + Random.Range(-0.2f, 0.2f), WorldCanvas.transform.position.y + 0.8f, WorldCanvas.transform.position.z), transform.rotation);
         temp.SetParent(WorldCanvas.transform, false);
+        temp.localPosition = Vector3.zero;
 
         if (!crit)
         {
@@ -670,6 +698,19 @@ public class attackPlayer : MonoBehaviour
         {
             hitSpawnText.text = "CRITICAL\n " + dmg.ToString();
             hitSpawnText.color = Color.red;
+        }
+
+        if (health <= 0)
+        {
+            if (EnemyType.enemyType != Enemy.EnemyType.Dog)
+            {
+                BossIcon.SetActive(BossIcon.activeInHierarchy);
+            }
+            Dead = true;
+            rg2d.isKinematic = true;
+            StartCoroutine(Death());
+            WaveManager.WM.RemoveEnemyFromList();
+            return;
         }
     }
 }

@@ -70,7 +70,10 @@ public class WaveManager : MonoBehaviour
     public Text EnemyHealth;
     public Text EnemyStrength;
     public Text ScoreText;
-
+    public Image StageGO;
+    public Sprite[] Stages;
+    public GameObject BossText;
+    public Animator StageAnim;
     public int SpawnCount = 8;
 
     public EnergyBar EnemyCountBar;
@@ -179,12 +182,19 @@ public class WaveManager : MonoBehaviour
 
     void EnemiesSurroundPlayer()
     {
-        int rad = 3;
+
         if (EnemiesSpawned.Count <= 0)
             return;
+
+        ChooseRandomPosition();
+
+    }
+
+    void ChooseRandomPosition()
+    {
         for (int i = 0; i < EnemiesSpawned.Count; i++)
         {
-
+            float rad = EnemiesSpawned[i].GetComponent<attackPlayer>().EnemyType.AttackDistance;
 
             //summon the enemies around this central GameObject
             float radian = i * Mathf.PI / (EnemiesSpawned.Count / 2);
@@ -273,7 +283,7 @@ public class WaveManager : MonoBehaviour
         {
             HealthMultiplier += 0.01f;
         }
-
+        StageAnim.SetTrigger("ShowAreaStage");
         if (!SkipCountdown)
             StartCoroutine(StartWave());
         else
@@ -289,6 +299,7 @@ public class WaveManager : MonoBehaviour
         CountdownText.text = "NEXT WAVE STARTS IN...";
         ThumbAreaHelpers[0].enabled = true;
         ThumbAreaHelpers[1].enabled = true;
+
         yield return new WaitForSeconds(2);
         ItemSpawner.i.Spawn();
         Countdown = true;
@@ -377,53 +388,54 @@ public class WaveManager : MonoBehaviour
             {
                 WaveStats.SetActive(true);
                 Invoke("TurnOffEnemyStats", 6);
-                spawnLimit = 50 * PlayerCount;
+                spawnLimit = 5 * PlayerCount;
                 EnemiesToSpawn = set1Enemies;
                 BruteEnemiesToSpawn = BruteEnemies[1];
             }
-            if (CurrentWave == 2 || CurrentWave == 12 || CurrentWave == 22 || CurrentWave == 32 || CurrentWave == 42)
+            else if (CurrentWave == 2 || CurrentWave == 12 || CurrentWave == 22 || CurrentWave == 32 || CurrentWave == 42)
             {
                 spawnLimit = 7 * PlayerCount;
                 EnemiesToSpawn = set2Enemies;
                 BruteEnemiesToSpawn = BruteEnemies[1];
             }
-            if (CurrentWave == 3 || CurrentWave == 13 || CurrentWave == 23 || CurrentWave == 33 || CurrentWave == 43)
+            else if (CurrentWave == 3 || CurrentWave == 13 || CurrentWave == 23 || CurrentWave == 33 || CurrentWave == 43)
             {
                 spawnLimit = 10 * PlayerCount;
                 EnemiesToSpawn = set3Enemies;
                 BruteEnemiesToSpawn = BruteEnemies[2];
             }
-            if (CurrentWave == 4 || CurrentWave == 14 || CurrentWave == 24 || CurrentWave == 34 || CurrentWave == 44)
+            else if (CurrentWave == 4 || CurrentWave == 14 || CurrentWave == 24 || CurrentWave == 34 || CurrentWave == 44)
             {
                 spawnLimit = 12 * PlayerCount;
                 EnemiesToSpawn = set4Enemies;
                 BruteEnemiesToSpawn = BruteEnemies[2];
             }
-            if (CurrentWave == 5 || CurrentWave == 15 || CurrentWave == 25 || CurrentWave == 35 || CurrentWave == 45)
+            else if (CurrentWave == 5 || CurrentWave == 15 || CurrentWave == 25 || CurrentWave == 35 || CurrentWave == 45)
             {
-                spawnLimit = 15 * PlayerCount;
+                // Dog Round
+                spawnLimit = 30 * PlayerCount;
                 EnemiesToSpawn = set5Enemies;
                 BruteEnemiesToSpawn = BruteEnemies[3];
             }
-            if (CurrentWave == 6 || CurrentWave == 16 || CurrentWave == 26 || CurrentWave == 36 || CurrentWave == 46)
+            else if (CurrentWave == 6 || CurrentWave == 16 || CurrentWave == 26 || CurrentWave == 36 || CurrentWave == 46)
             {
                 spawnLimit = 18 * PlayerCount;
                 EnemiesToSpawn = set6Enemies;
                 BruteEnemiesToSpawn = BruteEnemies[3];
             }
-            if (CurrentWave == 7 || CurrentWave == 17 || CurrentWave == 27 || CurrentWave == 37 || CurrentWave == 47)
+            else if (CurrentWave == 7 || CurrentWave == 17 || CurrentWave == 27 || CurrentWave == 37 || CurrentWave == 47)
             {
                 spawnLimit = 20 * PlayerCount;
                 EnemiesToSpawn = set7Enemies;
                 BruteEnemiesToSpawn = BruteEnemies[3];
             }
-            if (CurrentWave == 8 || CurrentWave == 18 || CurrentWave == 28 || CurrentWave == 38 || CurrentWave == 48)
+            else if (CurrentWave == 8 || CurrentWave == 18 || CurrentWave == 28 || CurrentWave == 38 || CurrentWave == 48)
             {
                 spawnLimit = 22 * PlayerCount;
                 EnemiesToSpawn = set8Enemies;
                 BruteEnemiesToSpawn = BruteEnemies[4];
             }
-            if (CurrentWave == 9 || CurrentWave == 19 || CurrentWave == 29 || CurrentWave == 39 || CurrentWave == 49)
+            else if (CurrentWave == 9 || CurrentWave == 19 || CurrentWave == 29 || CurrentWave == 39 || CurrentWave == 49)
             {
                 spawnLimit = 25 * PlayerCount;
                 EnemiesToSpawn = set9Enemies;
@@ -431,11 +443,26 @@ public class WaveManager : MonoBehaviour
             }
             if (CurrentWave == 10 || CurrentWave == 20 || CurrentWave == 30 || CurrentWave == 40 || CurrentWave == 50)
             {
+                BossText.SetActive(true);
                 spawnLimit = 25 * PlayerCount;
                 EnemiesToSpawn = set10Enemies;
                 BruteEnemiesToSpawn = BruteEnemies[4];
                 SpawnBoss = true;
             }
+            else
+            {
+                BossText.SetActive(false);
+            }
+            if (CurrentWave < 11)
+                StageGO.sprite = Stages[(CurrentWave - 1)];
+            else if (CurrentWave < 21)
+                StageGO.sprite = Stages[(CurrentWave - 11)];
+            else if (CurrentWave < 31)
+                StageGO.sprite = Stages[(CurrentWave - 21)];
+            else if (CurrentWave < 41)
+                StageGO.sprite = Stages[(CurrentWave - 31)];
+            else if (CurrentWave < 51)
+                StageGO.sprite = Stages[(CurrentWave - 41)];
         }
         else
         {
@@ -446,23 +473,24 @@ public class WaveManager : MonoBehaviour
         }
         EnemiesLeft = spawnLimit;
 
-        //		switch(CurrentWave){
-        //		case 1:
-        //			StageGO.sprite = Stages [0];
-        //			break;
-        //		case 11:
-        //			StageGO.sprite = Stages [1];
-        //			break;
-        //		case 21:
-        //			StageGO.sprite = Stages [2];
-        //			break;
-        //		case 31:
-        //			StageGO.sprite = Stages [3];
-        //			break;
-        //		case 41:
-        //			StageGO.sprite = Stages [4];
-        //			break;
-        //
+        switch (CurrentWave)
+        {
+            case 1:
+                StageGO.sprite = Stages[0];
+                break;
+            case 11:
+                StageGO.sprite = Stages[1];
+                break;
+            case 21:
+                StageGO.sprite = Stages[2];
+                break;
+            case 31:
+                StageGO.sprite = Stages[3];
+                break;
+            case 41:
+                StageGO.sprite = Stages[4];
+                break;
+        }
         //		} // ADD HARDER CONDITIONS HERE /////////////////////////////////////
         //        WaveHUDAnims [0].SetTrigger ("ShowAreaStage");
     }

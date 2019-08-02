@@ -31,11 +31,12 @@ public class GameOver : MonoBehaviour
         {
             CharacterStats.CS.Blur = true;
         }
-       
-       
+
+
     }
 
-    void OnEnable(){
+    void OnEnable()
+    {
         allowTransfer = true;
         adButton.gameObject.SetActive(true);
 
@@ -54,7 +55,8 @@ public class GameOver : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(testAdSuccess){
+        if (testAdSuccess)
+        {
             DoubleReward();
             testAdSuccess = false;
         }
@@ -88,7 +90,8 @@ public class GameOver : MonoBehaviour
         }
     }
 
-    public void Restart(){
+    public void Restart()
+    {
         if (!quit)
         {
             PlayerPrefs.SetString("LevelToLoad", "GameMode");
@@ -96,7 +99,8 @@ public class GameOver : MonoBehaviour
         }
     }
 
-    public void Quit(){
+    public void Quit()
+    {
         if (!quit)
         {
             PlayerPrefs.SetString("LevelToLoad", "Main");
@@ -106,15 +110,18 @@ public class GameOver : MonoBehaviour
         }
     }
 
-    public void DoubleReward(){
+    public void DoubleReward()
+    {
         adButton.gameObject.SetActive(false);
         SgLib.CoinManager.Instance.AddCoins((int)savedScore);
+        
     }
 
     public void LoadScene()
     {
         allowTransfer = false;
-        SgLib.CoinManager.Instance.AddCoins((int)(TargetScore - tempReward));
+        if (SgLib.CoinManager.Instance)
+            SgLib.CoinManager.Instance.AddCoins((int)(TargetScore - tempReward));
         Application.LoadLevel("LoadingScreen");
     }
 
@@ -124,7 +131,8 @@ public class GameOver : MonoBehaviour
 
     }
 
-    void transferCigs(){
+    void transferCigs()
+    {
         if (transfer)
         {
             if (tempReward < TargetScore)
@@ -159,7 +167,7 @@ public class GameOver : MonoBehaviour
             {
                 CharacterStats.Score -= 5;
 
-				
+
                 //				MoneyTick.clip = TickUp;
                 //				MoneyTick.GetComponent<AudioSource>().Play ();
             }
@@ -168,10 +176,10 @@ public class GameOver : MonoBehaviour
                 CharacterStats.Score = 0;
             }
             yield return null;
-			
+
         }
 
-      
+
 
         Invoke("AllowContinue", 1);
     }

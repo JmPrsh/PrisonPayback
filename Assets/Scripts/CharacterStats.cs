@@ -14,10 +14,12 @@ public class CharacterStats : MonoBehaviour
     public float Health;
     float startingHealth;
     public float Damage;
+    [HideInInspector]
     public float HealthStarting;
     public GameObject SteroidEffect;
     public Transform hittext;
     // Ammo Script
+    [HideInInspector]
     public AmmoScript ammo;
     public float shotInterval = 0.5f;
     private float shootTime = 0.0f;
@@ -28,14 +30,15 @@ public class CharacterStats : MonoBehaviour
 
     [HideInInspector]
     public bool ShowMinigun, ShowSniper, ShowShotgun, ShowMachineGun, ShowPistol, ShowKnife, ShowPipe;
-
-    Animator anim, animGun;
+    [HideInInspector]
+    public Animator anim, animGun;
     public Animator[] animMuzzle;
     PlayerModel playermodel;
     Rigidbody2D r;
     [HideInInspector]
     public bool Dead;
-    SpriteRenderer SpriteGORenderer;
+    [HideInInspector]
+    public SpriteRenderer SpriteGORenderer;
     float screenX;
     float screenY;
     // which weapon are we holding
@@ -73,7 +76,7 @@ public class CharacterStats : MonoBehaviour
         DarkerBrown
     }
     ;
-    //set the original weapon ( can be set in the inspector )
+    [HideInInspector]
     public Ethnic EthnicCharacter;
     public Sprite[] CurrentWeapon;
     public Image WeaponGUI;
@@ -81,6 +84,7 @@ public class CharacterStats : MonoBehaviour
     public bool Blur;
     public RectTransform[] PickUpGUI;
     public Animator[] WeaponShoot;
+    [HideInInspector]
     public Animator WSanim, GeneralMuzzle;
     public Transform[] BulletCasing;
     int chosenCasing;
@@ -89,7 +93,7 @@ public class CharacterStats : MonoBehaviour
     int shotsfired;
     GameObject Shadow;
     bool showgrey;
-    public GameObject AimingGO, StaminaGO, LivesGO, ScoreGO, SpriteGO, DyingGO, BloodSplat, BloodPool, ComboGO, PlayerHUD, EnemyCanvas,MainPauseParent;
+    public GameObject AimingGO, StaminaGO, LivesGO, ScoreGO, SpriteGO, DyingGO, BloodSplat, BloodPool, ComboGO, PlayerHUD, EnemyCanvas, MainPauseParent;
     public static bool flipped;
     [HideInInspector]
     public float greyAmount;
@@ -137,10 +141,11 @@ public class CharacterStats : MonoBehaviour
     public SpriteRenderer Aiming;
     public Button DodgeButton;
     int tempAmmoCount;
-        float shootdelay = 0;
+    float shootdelay = 0;
     public int ControlType;
     public static float xAmount;
     public float MoveForce;
+    [HideInInspector]
     public Vector2 vel;
     public float maxVel;
 
@@ -155,6 +160,7 @@ public class CharacterStats : MonoBehaviour
         HighScoreNormal = PlayerPrefs.GetFloat("HighScoreNormal");
         HighScoreZombie = PlayerPrefs.GetFloat("HighScoreZombie");
 
+        CharacterSpriteID = PlayerPrefs.GetInt("SGLIB_CURRENT_CHARACTER");
 
         anim = GetComponent<Animator>();
         animGun = AimingGO.GetComponent<Animator>();
@@ -167,22 +173,9 @@ public class CharacterStats : MonoBehaviour
         SpriteGORenderer = SpriteGO.GetComponent<SpriteRenderer>();
         LivesGOEB = LivesGO.GetComponent<EnergyBar>();
         PlayerCanvas = GameObject.Find("PlayerCanvas").transform;
-        if (PlayerPrefs.HasKey("Controls"))
-        {
-            ControlType = PlayerPrefs.GetInt("Controls");
-        }
-        else
-        {
-            ControlType = 1;
-        }
-        if (ControlType == 0)
-        {
-            ControlChoiceText.text = "Aim Controls: Button";
-        }
-        else
-        {
-            ControlChoiceText.text = "Aim Controls: Analog";
-        }
+
+        ControlChoice(PlayerPrefs.GetInt("Controls", ControlType));
+
     }
 
     void Start()
@@ -208,14 +201,10 @@ public class CharacterStats : MonoBehaviour
         allowMovement = false;
         HealthStarting = Health;
         startingHealth = Health;
-        //		Stamina = 99;
         playermodel.TimeLeft = 100;
         playermodel.timePlayed = 0;
         playermodel.Health = 100;
         Dead = false;
-        //        bossAlreadySpawned = false;
-        //		EnemyManager.EnemySpawnPositionID = 0;
-        //		EnemyManager.spawn = true;
         playermodel.FindPlayer();
         playermodel.EnemySpawnAmount = PlayerPrefs.GetInt("SpawnAmount");
         playermodel.EnemyAdd = 0;
@@ -226,12 +215,14 @@ public class CharacterStats : MonoBehaviour
         DPB = GetComponent<DPadButtons>();
         ComboTimerEB.valueMax = 40;
         cg.alpha = 1;
+
+        ScoringSceneLevelToLoad = ScoringSceneLevelToLoadForLoadingScreen;
+        UpdateText();
     }
 
     void AllowToMove()
     {
         allowMovement = true;
-
     }
 
 
@@ -245,56 +236,37 @@ public class CharacterStats : MonoBehaviour
         else
             EnemyDelayTimer += Time.deltaTime;
 
-        ScoringSceneLevelToLoad = ScoringSceneLevelToLoadForLoadingScreen;
+        if (PauseMenu.isPaused)
+            return;
 
-        //        if (WaveManager.WM.ZombieMode)
-        CashText.text = Cash.ToString("000000");
+        PickUpCollisionDetections();
+        RegenerateHealth();
 
-        if (ControlType == 0)
+        // ?
+
+        ComboHandler();
+
+
+
+        EnemyCanvas.SetActive(!Dead);
+
+        PlayerHUD.SetActive(!Blur);
+
+        if (!bulletSpawn)
+            bulletSpawn = GameObject.FindGameObjectWithTag("bulletSpawn");
+
+        if (Health <= 0)
+            StartCoroutine(Death());
+
+
+    }
+
+    void isDead(bool yes)
+    {
+        if (yes)
         {
-            Controls[0].SetActive(true);
-            Controls[1].SetActive(false);
-        }
-        else
-        {
-            Controls[0].SetActive(false);
-            Controls[1].SetActive(true);
-        }
-
-        if (!PauseMenu.isPaused)
-        {
-
-            PickUpCollisionDetections();
-            RegenerateHealth();
-
-            if (Stamina < 0)
-            {
-                Stamina = 0;
-            }
-
-            if (!Dead)
-            {
-                if (!stunned)
-                {
-                    ProcessEvasion();
-                    MoveForward(); // Player Movement
-                    timeplayed += Time.deltaTime;
-                }
-            }
-
-            if (TypeofWeapon != Weapon.Fist && TypeofWeapon != Weapon.Pipe && TypeofWeapon != Weapon.Knife)
-            {
-                Shooting();
-            }
-
-            ScoreText.text = Score.ToString("000000");
-            ComboHandler();
-
-            CharacterSpriteID = PlayerPrefs.GetInt("SGLIB_CURRENT_CHARACTER");
-
-            SpriteGORenderer.sprite = CharacterSprites[CharacterSpriteID];
             SpriteGORenderer.material.SetFloat("_GrayScale", greyAmount);
-
+            DyingGO.transform.rotation = Quaternion.AngleAxis(CharacterAngle - 90, Vector3.forward);
             if (showgrey)
             {
                 if (greyAmount > 0)
@@ -306,20 +278,51 @@ public class CharacterStats : MonoBehaviour
                     greyAmount += 1 * Time.deltaTime * 2;
             }
 
-            CheckDead();
-
-            EnemyCanvas.SetActive(!Dead);
-
-            DyingGO.transform.rotation = Quaternion.AngleAxis(CharacterAngle - 90, Vector3.forward);
+            EnemyCanvas.SetActive(false);
+            if (!flipped)
+            {
+                if (CharacterAngle < 90)
+                {
+                    CharacterAngle += 90 * Time.deltaTime * 2;
+                }
+                else
+                {
+                    BloodPool.SetActive(true);
+                }
+            }
+            else
+            {
+                if (CharacterAngle > -90)
+                {
+                    CharacterAngle -= 90 * Time.deltaTime * 2;
+                }
+                else
+                {
+                    BloodPool.SetActive(true);
+                }
+            }
+        }
+        else
+        {
+            SpriteGORenderer.sprite = CharacterSprites[CharacterSpriteID];
+            if (!stunned)
+            {
+                ProcessEvasion();
+                MoveForward(); // Player Movement
+                timeplayed += Time.deltaTime;
+            }
 
             if (Time.timeScale < 1)
                 Time.timeScale += 1f * Time.deltaTime / 4;
 
-            if (Blur)
-                PlayerHUD.SetActive(false);
-
-            if (!bulletSpawn)
-                bulletSpawn = GameObject.FindGameObjectWithTag("bulletSpawn");
+            if (TypeofWeapon != Weapon.Fist && TypeofWeapon != Weapon.Pipe && TypeofWeapon != Weapon.Knife)
+            {
+                Shooting();
+            }
+            else
+            {
+                Weapons[WeaponID].GetComponent<MeleeWeapon>().Attack();
+            }
 
             WeaponChange();
 
@@ -327,13 +330,6 @@ public class CharacterStats : MonoBehaviour
 
             LivesGOEB.valueCurrent = Lives * 33;
 
-
-            // Respawning function
-            if (Health <= 0)
-            {
-                StartCoroutine(Death());
-
-            }
             if (Health < HealthStarting / 7)
             {
                 SteroidEffect.SetActive(true);
@@ -346,6 +342,12 @@ public class CharacterStats : MonoBehaviour
                 BurstFireHandler();
             }
         }
+    }
+
+    public void UpdateText()
+    {
+        ScoreText.text = Score.ToString("000000");
+        CashText.text = Cash.ToString("000000");
     }
 
     void ComboHandler()
@@ -488,35 +490,6 @@ public class CharacterStats : MonoBehaviour
         }
     }
 
-    void CheckDead()
-    {
-        if (Dead)
-        {
-            EnemyCanvas.SetActive(false);
-            if (!flipped)
-            {
-                if (CharacterAngle < 90)
-                {
-                    CharacterAngle += 90 * Time.deltaTime * 2;
-                }
-                else
-                {
-                    BloodPool.SetActive(true);
-                }
-            }
-            else
-            {
-                if (CharacterAngle > -90)
-                {
-                    CharacterAngle -= 90 * Time.deltaTime * 2;
-                }
-                else
-                {
-                    BloodPool.SetActive(true);
-                }
-            }
-        }
-    }
 
     void BurstFireHandler()
     {
@@ -532,7 +505,6 @@ public class CharacterStats : MonoBehaviour
                 //                        animMuzzle[WeaponID].SetTrigger("Shoot");
 
                 Transform temp = bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(1, Vector3.forward));
-                //                        temp.rotation = AimingGO.transform.rotation;
 
                 if (StaticVariables.MovementMultiply == 1)
                 {
@@ -661,8 +633,6 @@ public class CharacterStats : MonoBehaviour
 
         for (int i = 0; i < Weapons.Length; i++)
         {
-            //                int index = Weapons.IndexOf(WeaponID);
-
             if (i != WeaponID)
             {
                 if (Weapons[i].activeInHierarchy)
@@ -675,7 +645,7 @@ public class CharacterStats : MonoBehaviour
 
     void PickUpCollisionDetections()
     {
-        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.right, 0.5f, 1 << LayerMask.NameToLayer("Pickups"));
+        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.right, 1, 1 << LayerMask.NameToLayer("Pickups"));
         if (hitInfo.collider != null)
         {
 
@@ -852,6 +822,7 @@ public class CharacterStats : MonoBehaviour
             }
             if (hitInfo.transform.tag == "Powder")
             {
+                print(hitInfo.collider.name);
                 if (DPB.Powder < 5)
                 {
                     DPB.Powder += 1;
@@ -1124,163 +1095,164 @@ public class CharacterStats : MonoBehaviour
 
     void Shooting()
     {
-        if (!Dead && !PauseMenu.isPaused)
+        if (Dead && PauseMenu.isPaused)
+            return;
+
+        if (!stunned)
         {
-
-            if (!stunned)
+            if (CanShoot)
             {
-
-
-                // if can shoot
-
-                if (CanShoot)
+                if (Time.time >= shootTime)
                 {
-                    if (Time.time >= shootTime)
+                    if (!ammo.reloading)
                     {
-                        if (!ammo.reloading)
+
+                        if (TypeofWeapon == Weapon.Pistol)
                         {
-
-                            if (TypeofWeapon == Weapon.Pistol)
+                            if (ammo.PistolClipLeft > 0)
                             {
-                                if (ammo.PistolClipLeft > 0)
+                                bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation);
+
+                                if (StaticVariables.MovementMultiply == 1)
                                 {
-
-                                    //                                        Debug.Log(bulletSpawn.transform.rotation);
-                                    bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation);
-
-                                    if (StaticVariables.MovementMultiply == 1)
-                                    {
-                                        shootTime = Time.time + shotInterval;
-                                    }
-                                    else
-                                    {
-                                        shootTime = Time.time + shotInterval / StaticVariables.MovementMultiply;
-                                    }
-
-                                    playermodel.bulletsUsed += 1;
-                                    ammo.PistolClipLeft -= 1;
-                                    WSanim.SetTrigger("Shoot");
-                                    GeneralMuzzle.SetTrigger("Shoot");
-                                    BulletCasing[chosenCasing].Spawn(new Vector3(transform.position.x + Random.Range(-0.2f, 0.2f), transform.position.y + Random.Range(-0.2f, 0.2f), transform.position.z), transform.rotation * Quaternion.AngleAxis(90, Vector3.forward));
-
-
-                                }
-
-                            }
-                            if (TypeofWeapon == Weapon.MachineGun)
-                            {
-                                if (ammo.MachineGunClipLeft > 0)
-                                {
-                                    shotsfired = 0;
-                                    shootBurst = true;
-
-                                }
-                            }
-                            if (TypeofWeapon == Weapon.Shotgun)
-                            {
-                                if (ammo.ShotgunClipLeft > 0)
-                                {
-
-                                    bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(-16, Vector3.forward)); // -30 on z
-                                    bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(-7, Vector3.forward)); // -30 on z
-                                    bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(1, Vector3.forward)); // 0 on z
-                                    bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(7, Vector3.forward)); // 15 on z
-                                    bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(16, Vector3.forward)); // 30 on z
-                                    //										
-                                    if (StaticVariables.MovementMultiply == 1)
-                                    {
-                                        shootTime = Time.time + shotInterval;
-                                    }
-                                    else
-                                    {
-                                        shootTime = Time.time + shotInterval / StaticVariables.MovementMultiply;
-                                    }
-                                    playermodel.bulletsUsed += 1;
-                                    ammo.ShotgunClipLeft -= 1;
-
-                                    WSanim.SetTrigger("Shoot");
-                                    GeneralMuzzle.SetTrigger("Shoot");
-
-                                    BulletCasing[chosenCasing].Spawn(new Vector3(transform.position.x + Random.Range(-0.2f, 0.2f), transform.position.y + Random.Range(-0.2f, 0.2f), transform.position.z), transform.rotation * Quaternion.AngleAxis(90, Vector3.forward));
-
-
-                                }
-                            }
-                            if (TypeofWeapon == Weapon.Sniper)
-                            {
-                                if (ammo.SniperClipLeft > 0)
-                                {
-
-                                    Transform tempBullet = bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(1, Vector3.forward)); // 0 on z
-
-                                    tempBullet.GetComponent<bullet>().SniperBullet = true;
-
-                                    if (StaticVariables.MovementMultiply == 1)
-                                    {
-                                        shootTime = Time.time + shotInterval;
-                                    }
-                                    else
-                                    {
-                                        shootTime = Time.time + shotInterval / StaticVariables.MovementMultiply;
-                                    }
-                                    playermodel.bulletsUsed += 1;
-                                    ammo.SniperClipLeft -= 1;
-
-                                    WSanim.SetTrigger("Shoot");
-                                    GeneralMuzzle.SetTrigger("Shoot");
-
-                                    BulletCasing[chosenCasing].Spawn(new Vector3(transform.position.x + Random.Range(-0.2f, 0.2f), transform.position.y + Random.Range(-0.2f, 0.2f), transform.position.z), transform.rotation * Quaternion.AngleAxis(90, Vector3.forward));
-
-
+                                    shootTime = Time.time + shotInterval;
                                 }
                                 else
                                 {
-                                    // play empty gun sound effect
-                                    //								GetComponent<AudioSource> ().clip = fire;
-                                    //								GetComponent<AudioSource> ().Play ();
+                                    shootTime = Time.time + shotInterval / StaticVariables.MovementMultiply;
                                 }
+
+                                playermodel.bulletsUsed += 1;
+                                ammo.PistolClipLeft -= 1;
+                                WSanim.SetTrigger("Shoot");
+                                GeneralMuzzle.SetTrigger("Shoot");
+                                BulletCasing[chosenCasing].Spawn(new Vector3(transform.position.x + Random.Range(-0.2f, 0.2f), transform.position.y + Random.Range(-0.2f, 0.2f), transform.position.z), transform.rotation * Quaternion.AngleAxis(90, Vector3.forward));
+
+
                             }
-                            if (TypeofWeapon == Weapon.Minigun)
+                            else
+                                EmptyClipSound();
+
+                        }
+                        if (TypeofWeapon == Weapon.MachineGun)
+                        {
+                            if (ammo.MachineGunClipLeft > 0)
+                            {
+                                shotsfired = 0;
+                                shootBurst = true;
+
+                            }
+                            else
+                                EmptyClipSound();
+                        }
+                        if (TypeofWeapon == Weapon.Shotgun)
+                        {
+                            if (ammo.ShotgunClipLeft > 0)
                             {
 
-                                if (ammo.MinigunClipLeft > 0)
+                                bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(-16, Vector3.forward)); // -30 on z
+                                bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(-7, Vector3.forward)); // -30 on z
+                                bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(1, Vector3.forward)); // 0 on z
+                                bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(7, Vector3.forward)); // 15 on z
+                                bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(16, Vector3.forward)); // 30 on z
+                                                                                                                                                             //										
+                                if (StaticVariables.MovementMultiply == 1)
                                 {
-                                    bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation);
-
-                                    if (StaticVariables.MovementMultiply == 1)
-                                    {
-                                        shootTime = Time.time + shotInterval;
-                                    }
-                                    else
-                                    {
-                                        shootTime = Time.time + shotInterval / StaticVariables.MovementMultiply;
-                                    }
-
-                                    playermodel.bulletsUsed += 1;
-                                    ammo.MinigunClipLeft -= 1;
-
-
-                                    WSanim.SetTrigger("Shoot");
-                                    GeneralMuzzle.SetTrigger("Shoot");
-                                    BulletCasing[chosenCasing].Spawn(new Vector3(transform.position.x + Random.Range(-0.2f, 0.2f), transform.position.y + Random.Range(-0.2f, 0.2f), transform.position.z), transform.rotation * Quaternion.AngleAxis(90, Vector3.forward));
-
-
+                                    shootTime = Time.time + shotInterval;
                                 }
+                                else
+                                {
+                                    shootTime = Time.time + shotInterval / StaticVariables.MovementMultiply;
+                                }
+                                playermodel.bulletsUsed += 1;
+                                ammo.ShotgunClipLeft -= 1;
+
+                                WSanim.SetTrigger("Shoot");
+                                GeneralMuzzle.SetTrigger("Shoot");
+
+                                BulletCasing[chosenCasing].Spawn(new Vector3(transform.position.x + Random.Range(-0.2f, 0.2f), transform.position.y + Random.Range(-0.2f, 0.2f), transform.position.z), transform.rotation * Quaternion.AngleAxis(90, Vector3.forward));
+
+
+                            }
+                            else
+                                EmptyClipSound();
+                        }
+                        if (TypeofWeapon == Weapon.Sniper)
+                        {
+                            if (ammo.SniperClipLeft > 0)
+                            {
+
+                                Transform tempBullet = bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(1, Vector3.forward)); // 0 on z
+
+                                tempBullet.GetComponent<bullet>().SniperBullet = true;
+
+                                if (StaticVariables.MovementMultiply == 1)
+                                {
+                                    shootTime = Time.time + shotInterval;
+                                }
+                                else
+                                {
+                                    shootTime = Time.time + shotInterval / StaticVariables.MovementMultiply;
+                                }
+                                playermodel.bulletsUsed += 1;
+                                ammo.SniperClipLeft -= 1;
+
+                                WSanim.SetTrigger("Shoot");
+                                GeneralMuzzle.SetTrigger("Shoot");
+
+                                BulletCasing[chosenCasing].Spawn(new Vector3(transform.position.x + Random.Range(-0.2f, 0.2f), transform.position.y + Random.Range(-0.2f, 0.2f), transform.position.z), transform.rotation * Quaternion.AngleAxis(90, Vector3.forward));
+
+
+                            }
+                            else
+                                EmptyClipSound();
+
+                        }
+                        if (TypeofWeapon == Weapon.Minigun)
+                        {
+
+                            if (ammo.MinigunClipLeft > 0)
+                            {
+                                bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation);
+
+                                if (StaticVariables.MovementMultiply == 1)
+                                {
+                                    shootTime = Time.time + shotInterval;
+                                }
+                                else
+                                {
+                                    shootTime = Time.time + shotInterval / StaticVariables.MovementMultiply;
+                                }
+
+                                playermodel.bulletsUsed += 1;
+                                ammo.MinigunClipLeft -= 1;
+
+
+                                WSanim.SetTrigger("Shoot");
+                                GeneralMuzzle.SetTrigger("Shoot");
+                                BulletCasing[chosenCasing].Spawn(new Vector3(transform.position.x + Random.Range(-0.2f, 0.2f), transform.position.y + Random.Range(-0.2f, 0.2f), transform.position.z), transform.rotation * Quaternion.AngleAxis(90, Vector3.forward));
+
+
                             }
                         }
                     }
-
-
                 }
-            }
-            else if (stunned)
-            {
-                Shake.shake = 1;
-                allowMovement = false;
-                Invoke("RemoveStun", 2);
-            }
 
+
+            }
         }
+        else
+        {
+            Shake.shake = 1;
+            allowMovement = false;
+            Invoke("RemoveStun", 2);
+        }
+
+    }
+
+    void EmptyClipSound()
+    {
+
     }
 
     IEnumerator IncrementStamina()
@@ -1395,7 +1367,7 @@ public class CharacterStats : MonoBehaviour
         allowMovement = true;
     }
 
-[HideInInspector]
+    [HideInInspector]
     public int WhichWeapon;
 
     void WeaponChange()
@@ -1461,7 +1433,7 @@ public class CharacterStats : MonoBehaviour
     public RightJoystick rightJoystick;
     // the game object containing the RightJoystick script
 
-[HideInInspector]
+    [HideInInspector]
     public bool CanShoot;
 
     void MoveForward()
@@ -1727,13 +1699,18 @@ public class CharacterStats : MonoBehaviour
     {
         ControlType = i;
         PlayerPrefs.SetInt("Controls", ControlType);
+
         if (ControlType == 0)
         {
             ControlChoiceText.text = "Aim Controls: Button";
+            Controls[0].SetActive(true);
+            Controls[1].SetActive(false);
         }
         else
         {
             ControlChoiceText.text = "Aim Controls: Analog";
+            Controls[0].SetActive(false);
+            Controls[1].SetActive(true);
         }
     }
 
@@ -1756,6 +1733,10 @@ public class CharacterStats : MonoBehaviour
                     Stamina -= 33;
                 }
             }
+        }
+        if (Stamina < 0)
+        {
+            Stamina = 0;
         }
     }
 

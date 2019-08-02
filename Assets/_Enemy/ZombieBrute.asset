@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 357ea14a322789a4a86b90c8c5f7bf06, type: 3}
+  m_Name: ZombieBrute
+  m_EditorClassIdentifier: 
+  enemyType: 4
+  enemyAttackType: 0
+  Damage: 4
+  Health: 40
+  MoveSpeed: 9
+  ShootRate: 1
+  AttackDistance: 1
+  reloadtime: 1
+  AimSpeed: 10
+  bulletsinclip: 1
+  bulletPrefab: {fileID: 11483164, guid: 9ed06f5e59e984542bc98c62bb04203a, type: 3}
+  EnemySprite: {fileID: 21300000, guid: 3c9b5daf71f171047b14c90f233a23d7, type: 3}
+  BulletSprite: {fileID: 21300006, guid: fbb7eb96a881322458310712adf33d10, type: 3}
+  AllowWeaponDrop: 0
+  WeaponToSpawn: {fileID: 465662, guid: e9a449dbf85c3054c972ebe69056fb49, type: 3}

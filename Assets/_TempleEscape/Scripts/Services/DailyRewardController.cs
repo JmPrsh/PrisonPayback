@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using ChartboostSDK;
 
 namespace SgLib
 {
@@ -18,7 +19,7 @@ namespace SgLib
         }
 
         public TimeSpan TimeUntilReward
-        { 
+        {
             get
             {
                 return NextRewardTime.Subtract(DateTime.Now);
@@ -35,8 +36,9 @@ namespace SgLib
         public int rewardIntervalMinutes = 0;
         [Tooltip("Number of seconds between 2 rewards")]
         public int rewardIntervalSeconds = 0;
-        public int minRewardvalueCurrent= 20;
-        public int maxRewardvalueCurrent= 50;
+        public int rareChance;
+        public int minRewardvalueCurrent = 20;
+        public int maxRewardvalueCurrent = 50;
 
         private const string NextRewardTimePPK = "SGLIB_NEXT_DAILY_REWARD_TIME";
 
@@ -51,6 +53,7 @@ namespace SgLib
                 Instance = this;
                 DontDestroyOnLoad(gameObject);
             }
+            Chartboost.cacheInterstitial(CBLocation.Default);
         }
 
         /// <summary>
@@ -68,14 +71,32 @@ namespace SgLib
         /// <returns>The random reward.</returns>
         public int GetRandomReward()
         {
-            int rarityChance = UnityEngine.Random.Range(0, 20);
-            if (rarityChance == 5)
+            return reward;
+
+        }
+        int reward;
+        IEnumerator ShowAdThenReward()
+        {
+            if (Chartboost.hasInterstitial(CBLocation.Default))
             {
-                return 100;
+                Chartboost.showInterstitial(CBLocation.Default);
+                Debug.Log("watching ad");
             }
             else
             {
-                return UnityEngine.Random.Range(minRewardvalueCurrent, maxRewardvalueCurrent+ 1);
+                // We don't have a cached video right now, but try to get one for next time
+                Chartboost.cacheInterstitial(CBLocation.Default);
+                Debug.Log("no ad to be found");
+            }
+            yield return new WaitForEndOfFrame();
+            int rarityChance = UnityEngine.Random.Range(0, 20);
+            if (rarityChance == 5)
+            {
+                reward = 300;
+            }
+            else
+            {
+                reward = UnityEngine.Random.Range(minRewardvalueCurrent, maxRewardvalueCurrent + 1);
             }
         }
 

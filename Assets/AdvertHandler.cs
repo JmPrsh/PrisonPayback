@@ -5,12 +5,19 @@ using ChartboostSDK;
 
 public class AdvertHandler : MonoBehaviour {
 
-	
+	public static AdvertHandler instance;
+    public static int RemovedAds;
+
+     void Awake()
+    {
+        instance = this;
+    }
 
     void OnEnable()
     {
         Chartboost.didCompleteRewardedVideo += didCompleteRewardedVideo;
         Chartboost.cacheRewardedVideo(CBLocation.MainMenu);
+        Chartboost.cacheInterstitial(CBLocation.GameScreen);
     }
 
     void OnDisable()
@@ -25,6 +32,20 @@ public class AdvertHandler : MonoBehaviour {
 //        UIManager.uim.GrabDailyRewardAdvert();
         GameOver.GO.DoubleReward();
         Debug.Log("reward player");
+    }
+
+    public void WatchAdvert(){
+         if (Chartboost.hasInterstitial(CBLocation.GameScreen))
+        { 
+            Chartboost.showInterstitial(CBLocation.GameScreen);
+            Debug.Log("watching ad");
+        }
+        else
+        {
+            // We don't have a cached video right now, but try to get one for next time
+            Chartboost.cacheInterstitial(CBLocation.GameScreen);
+            Debug.Log("no ad to be found");
+        }
     }
 
     public void SearchAgainUsingAdvert()

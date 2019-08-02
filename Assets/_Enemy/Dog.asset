@@ -14,15 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 3
   enemyAttackType: 0
-  Damage: 0
-  Health: 150
-  MoveSpeed: 7
-  ShootRate: 2
-  AttackDistance: 4
-  reloadtime: 0
-  bulletsinclip: 0
-  bulletPrefab: {fileID: 0}
+  Damage: 2
+  Health: 20
+  MoveSpeed: 10
+  ShootRate: 4
+  AttackDistance: 1
+  reloadtime: 1
+  AimSpeed: 10
+  bulletsinclip: 1
+  bulletPrefab: {fileID: 11483164, guid: 9ed06f5e59e984542bc98c62bb04203a, type: 3}
   EnemySprite: {fileID: 21300000, guid: 85f9c613a0f420e4da6d2f70d3e2f782, type: 3}
-  BulletSprite: {fileID: 0}
+  BulletSprite: {fileID: 21300006, guid: fbb7eb96a881322458310712adf33d10, type: 3}
   AllowWeaponDrop: 0
-  WeaponToSpawn: {fileID: 0}
+  WeaponToSpawn: {fileID: 465662, guid: e9a449dbf85c3054c972ebe69056fb49, type: 3}

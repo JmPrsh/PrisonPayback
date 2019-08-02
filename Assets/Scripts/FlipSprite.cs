@@ -3,12 +3,12 @@ using System.Collections;
 
 public class FlipSprite : MonoBehaviour
 {
-
-    public Vector3 originalscale;
+float defaultScale;
     float originalsize;
     SpriteRenderer sr;
     float x;
-    public bool flip;
+    public bool PlayerGO;
+    attackPlayer enemy;
 
     public enum Weapon
     {
@@ -23,8 +23,13 @@ public class FlipSprite : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        if (!PlayerGO)
+        {
+            enemy = transform.parent.parent.GetComponent<attackPlayer>();
+        }
         sr = this.GetComponent<SpriteRenderer>();
         // originalscale = CharacterStats.CS.rightJoystick.GetInputDirection();
+     defaultScale = transform.parent.localScale.x;
     }
 
     // Update is called once per frame
@@ -32,9 +37,27 @@ public class FlipSprite : MonoBehaviour
     {
         if (!CharacterStats.CS)
             return;
-            
-        x = CharacterStats.CS.rightJoystick.GetInputDirection().x;
-        flip = CharacterStats.xAmount <= 0;
-        sr.flipY = flip;
+
+       
+
+        
+        
+        if (PlayerGO)
+        {
+            x = CharacterStats.CS.rightJoystick.GetInputDirection().x;
+            float direction = x > 0 ? defaultScale : -defaultScale;
+            transform.localScale = new Vector3(direction, defaultScale, defaultScale);
+            sr.sortingOrder = (CharacterStats.CS.SpriteGORenderer.sortingOrder + 1);
+            // flip = CharacterStats.xAmount <= 0;
+            // sr.flipY = flip;
+        }
+        else
+        {
+            x = CharacterStats.CS.transform.position.x > enemy.ChildSprite.transform.position.x ? 1 : -1;
+            float direction = x > 0 ? defaultScale : -defaultScale;
+            enemy.flipLook = x;
+            transform.parent.localScale = new Vector3(direction, defaultScale, defaultScale);
+            sr.sortingOrder = (enemy.ChildSpriteRenderer.sortingOrder + 1);
+        }
     }
 }

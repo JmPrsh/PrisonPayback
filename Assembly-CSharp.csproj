@@ -429,6 +429,7 @@
      <Compile Include="Assets\SimpleAndroidNotifications\NotificationIcon.cs" />
      <Compile Include="Assets\SimpleAndroidNotifications\NotificationManager.cs" />
      <Compile Include="Assets\SimpleAndroidNotifications\NotificationParams.cs" />
+     <Compile Include="Assets\SpriteSortingView.cs" />
      <Compile Include="Assets\TouchJoysticks\Scripts\DualJoystickPlayerController.cs" />
      <Compile Include="Assets\TouchJoysticks\Scripts\DualJoystickTouchContoller.cs" />
      <Compile Include="Assets\TouchJoysticks\Scripts\LeftJoystick.cs" />

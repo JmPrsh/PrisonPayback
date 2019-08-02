@@ -119,5 +119,6 @@ public class WeaponPurchases : MonoBehaviour {
                 CharacterStats.CS.MiniGunPickup(true, false);
                 break;
         }
+        CharacterStats.CS.UpdateText();
     }
 }

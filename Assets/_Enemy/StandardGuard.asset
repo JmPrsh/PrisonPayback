@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 0
   enemyAttackType: 1
-  Damage: 0
+  Damage: 5
   Health: 100
-  MoveSpeed: 8
+  MoveSpeed: 7
   ShootRate: 1
   AttackDistance: 5
   reloadtime: 4

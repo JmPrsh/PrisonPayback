@@ -16,6 +16,7 @@ public class RateMe : MonoBehaviour {
 
     public void Yes(){
         Application.OpenURL("https://play.google.com/store/apps/details?id=com.JamieParish.PrisonPayback");
+        CharacterStats.CS.Cash += 500;
         this.gameObject.SetActive(false);
     }
 

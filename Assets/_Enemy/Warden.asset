@@ -13,17 +13,17 @@ MonoBehaviour:
   m_Name: Warden
   m_EditorClassIdentifier: 
   enemyType: 1
-  enemyAttackType: 0
-  Damage: 0
-  Health: 150
-  MoveSpeed: 7
-  ShootRate: 2
-  AttackDistance: 4
-  reloadtime: 0
-  AimSpeed: 5
-  bulletsinclip: 0
-  bulletPrefab: {fileID: 0}
+  enemyAttackType: 1
+  Damage: 5
+  Health: 1000
+  MoveSpeed: 4
+  ShootRate: 0.2
+  AttackDistance: 6
+  reloadtime: 8
+  AimSpeed: 10
+  bulletsinclip: 100
+  bulletPrefab: {fileID: 11483164, guid: 9ed06f5e59e984542bc98c62bb04203a, type: 3}
   EnemySprite: {fileID: 21300000, guid: 7897adf88318a7e489d3abd450db6b7d, type: 3}
-  BulletSprite: {fileID: 0}
-  AllowWeaponDrop: 0
-  WeaponToSpawn: {fileID: 0}
+  BulletSprite: {fileID: 21300008, guid: fbb7eb96a881322458310712adf33d10, type: 3}
+  AllowWeaponDrop: 1
+  WeaponToSpawn: {fileID: 400002, guid: 829999d9ad5864d64aafc51e1b4c881b, type: 3}

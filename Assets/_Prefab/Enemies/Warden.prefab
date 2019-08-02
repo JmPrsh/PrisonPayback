@@ -522,8 +522,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e70cc532616da740a13a530e6a8b1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalscale: {x: 0, y: 0, z: 0}
-  flip: 0
+  PlayerGO: 0
   TypeofWeapon: 0
 --- !u!82 &8237302
 AudioSource:
@@ -945,8 +944,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e70cc532616da740a13a530e6a8b1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalscale: {x: 0, y: 0, z: 0}
-  flip: 0
+  PlayerGO: 0
   TypeofWeapon: 1
 --- !u!95 &9566906
 Animator:
@@ -1135,8 +1133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e70cc532616da740a13a530e6a8b1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalscale: {x: 0, y: 0, z: 0}
-  flip: 0
+  PlayerGO: 0
   TypeofWeapon: 0
 --- !u!82 &8215886
 AudioSource:
@@ -1418,9 +1415,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9157cfb71bdd2f440a33806b5c92c47e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Targets:
-  - {fileID: 463648}
-  - {fileID: 430398}
   Target: {fileID: 146746}
 --- !u!212 &21249356
 SpriteRenderer:
@@ -1566,8 +1560,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e70cc532616da740a13a530e6a8b1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalscale: {x: 0, y: 0, z: 0}
-  flip: 0
+  PlayerGO: 0
   TypeofWeapon: 1
 --- !u!95 &9525612
 Animator:
@@ -2096,8 +2089,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e70cc532616da740a13a530e6a8b1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalscale: {x: 0, y: 0, z: 0}
-  flip: 0
+  PlayerGO: 0
   TypeofWeapon: 1
 --- !u!95 &9557498
 Animator:
@@ -2168,9 +2160,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9157cfb71bdd2f440a33806b5c92c47e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Targets:
-  - {fileID: 463648}
-  - {fileID: 430398}
   Target: {fileID: 0}
 --- !u!1 &134098
 GameObject:
@@ -2579,8 +2568,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e70cc532616da740a13a530e6a8b1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalscale: {x: 0, y: 0, z: 0}
-  flip: 0
+  PlayerGO: 0
   TypeofWeapon: 1
 --- !u!1 &143952
 GameObject:
@@ -2771,8 +2759,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4aeb300bd76f4e9a883eb2b0d89815d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnemyType: {fileID: 0}
-  MoveSpeed: 0
+  EnemyType: {fileID: 11400000, guid: 9939259c9fba644bca5b9f6503d13ca5, type: 2}
+  targetPosition: {x: 0, y: 0, z: 0}
   anim: {fileID: 9592648}
   seenPlayer: 0
   health: 0
@@ -2857,6 +2845,11 @@ MonoBehaviour:
   Target: {fileID: 0}
   BossIcon: {fileID: 0}
   WorldCanvas: {fileID: 0}
+  flipLook: 0
+  ChildSpriteRenderer: {fileID: 0}
+  ObstacleLayer:
+    serializedVersion: 2
+    m_Bits: 0
   RandomSwingTime: 0
 --- !u!114 &11471156
 MonoBehaviour:
@@ -3118,8 +3111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e70cc532616da740a13a530e6a8b1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalscale: {x: 0, y: 0, z: 0}
-  flip: 0
+  PlayerGO: 0
   TypeofWeapon: 1
 --- !u!95 &9535036
 Animator:
@@ -3511,8 +3503,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e70cc532616da740a13a530e6a8b1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalscale: {x: 0, y: 0, z: 0}
-  flip: 0
+  PlayerGO: 0
   TypeofWeapon: 1
 --- !u!1 &153498
 GameObject:
@@ -3885,8 +3876,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e70cc532616da740a13a530e6a8b1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalscale: {x: 0, y: 0, z: 0}
-  flip: 0
+  PlayerGO: 0
   TypeofWeapon: 1
 --- !u!1 &154834
 GameObject:
@@ -4027,8 +4017,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e70cc532616da740a13a530e6a8b1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalscale: {x: 0, y: 0, z: 0}
-  flip: 0
+  PlayerGO: 0
   TypeofWeapon: 0
 --- !u!82 &8267788
 AudioSource:
@@ -4751,8 +4740,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e70cc532616da740a13a530e6a8b1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalscale: {x: 0, y: 0, z: 0}
-  flip: 0
+  PlayerGO: 0
   TypeofWeapon: 1
 --- !u!1 &160372
 GameObject:
@@ -5313,8 +5301,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e70cc532616da740a13a530e6a8b1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalscale: {x: 0, y: 0, z: 0}
-  flip: 0
+  PlayerGO: 0
   TypeofWeapon: 1
 --- !u!95 &9511698
 Animator:
@@ -5534,8 +5521,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e70cc532616da740a13a530e6a8b1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalscale: {x: 0, y: 0, z: 0}
-  flip: 0
+  PlayerGO: 0
   TypeofWeapon: 0
 --- !u!82 &8200634
 AudioSource:
@@ -6185,8 +6171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e70cc532616da740a13a530e6a8b1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalscale: {x: 0, y: 0, z: 0}
-  flip: 0
+  PlayerGO: 0
   TypeofWeapon: 0
 --- !u!82 &8222388
 AudioSource:
@@ -7262,8 +7247,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e70cc532616da740a13a530e6a8b1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalscale: {x: 0, y: 0, z: 0}
-  flip: 0
+  PlayerGO: 0
   TypeofWeapon: 1
 --- !u!1 &197570
 GameObject:

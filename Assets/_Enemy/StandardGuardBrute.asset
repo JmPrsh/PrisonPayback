@@ -13,16 +13,17 @@ MonoBehaviour:
   m_Name: StandardGuardBrute
   m_EditorClassIdentifier: 
   enemyType: 2
-  enemyAttackType: 0
-  Damage: 0
+  enemyAttackType: 1
+  Damage: 5
   Health: 200
-  MoveSpeed: 7
-  ShootRate: 1
+  MoveSpeed: 6
+  ShootRate: 1.4
   AttackDistance: 5
-  reloadtime: 0
-  bulletsinclip: 0
-  bulletPrefab: {fileID: 0}
-  EnemySprite: {fileID: 0}
-  BulletSprite: {fileID: 0}
-  AllowWeaponDrop: 0
-  WeaponToSpawn: {fileID: 0}
+  reloadtime: 4
+  AimSpeed: 9
+  bulletsinclip: 15
+  bulletPrefab: {fileID: 11483164, guid: 9ed06f5e59e984542bc98c62bb04203a, type: 3}
+  EnemySprite: {fileID: 21300000, guid: f466eee730e360d42abea9ee852e2315, type: 3}
+  BulletSprite: {fileID: 21300006, guid: fbb7eb96a881322458310712adf33d10, type: 3}
+  AllowWeaponDrop: 1
+  WeaponToSpawn: {fileID: 465662, guid: e9a449dbf85c3054c972ebe69056fb49, type: 3}
