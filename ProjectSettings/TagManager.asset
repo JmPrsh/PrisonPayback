@@ -102,6 +102,11 @@ TagManager:
   - EnemySpawner5
   - Knife
   - MiniGun
+  - Key3
+  - Key5
+  - Key2
+  - Key4
+  - Key1
   layers:
   - Default
   - TransparentFX
@@ -114,7 +119,7 @@ TagManager:
   - Enemy
   - Player
   - Obstacle
-  - 
+  - Pickups
   - 
   - 
   - 

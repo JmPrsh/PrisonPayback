@@ -37,16 +37,13 @@ float defaultScale;
     {
         if (!CharacterStats.CS)
             return;
-
-       
-
-        
         
         if (PlayerGO)
         {
             x = CharacterStats.CS.rightJoystick.GetInputDirection().x;
             float direction = x > 0 ? defaultScale : -defaultScale;
             transform.localScale = new Vector3(direction, defaultScale, defaultScale);
+            // sr.sortingOrder = transform.position.y < CharacterStats.CS.transform.position.y? CharacterStats.CS.SpriteGORenderer.sortingOrder + 1 : CharacterStats.CS.SpriteGORenderer.sortingOrder - 1;
             sr.sortingOrder = (CharacterStats.CS.SpriteGORenderer.sortingOrder + 1);
             // flip = CharacterStats.xAmount <= 0;
             // sr.flipY = flip;
@@ -57,7 +54,9 @@ float defaultScale;
             float direction = x > 0 ? defaultScale : -defaultScale;
             enemy.flipLook = x;
             transform.parent.localScale = new Vector3(direction, defaultScale, defaultScale);
+        //    sr.sortingOrder = transform.position.y < enemy.transform.position.y? enemy.ChildSpriteRenderer.sortingOrder + 1 : enemy.ChildSpriteRenderer.sortingOrder - 1;
             sr.sortingOrder = (enemy.ChildSpriteRenderer.sortingOrder + 1);
         }
     }
+    
 }

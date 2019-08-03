@@ -547,6 +547,7 @@ MonoBehaviour:
   hittext: {fileID: 22463120, guid: 1d2e19a871ad24b47a75044a9a6fb1e4, type: 3}
   isStunWand: 0
   selfCollider: []
+  selfSprite: []
 --- !u!114 &11472480
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1239,6 +1240,7 @@ MonoBehaviour:
   hittext: {fileID: 22463120, guid: 1d2e19a871ad24b47a75044a9a6fb1e4, type: 3}
   isStunWand: 0
   selfCollider: []
+  selfSprite: []
 --- !u!114 &11424314
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4225,6 +4227,7 @@ MonoBehaviour:
   hittext: {fileID: 22463120, guid: 1d2e19a871ad24b47a75044a9a6fb1e4, type: 3}
   isStunWand: 0
   selfCollider: []
+  selfSprite: []
 --- !u!114 &11475874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5731,6 +5734,7 @@ MonoBehaviour:
   hittext: {fileID: 22463120, guid: 1d2e19a871ad24b47a75044a9a6fb1e4, type: 3}
   isStunWand: 1
   selfCollider: []
+  selfSprite: []
 --- !u!114 &11490678
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6196,6 +6200,7 @@ MonoBehaviour:
   hittext: {fileID: 0}
   isStunWand: 0
   selfCollider: []
+  selfSprite: []
 --- !u!61 &6143550
 BoxCollider2D:
   m_ObjectHideFlags: 0

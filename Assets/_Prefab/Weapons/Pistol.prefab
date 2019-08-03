@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 465662}
   - component: {fileID: 21271204}
   - component: {fileID: 6183088}
-  m_Layer: 16
+  m_Layer: 11
   m_Name: Pistol
   m_TagString: Pistol
   m_Icon: {fileID: 0}

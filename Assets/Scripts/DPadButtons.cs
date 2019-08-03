@@ -222,7 +222,7 @@ public class DPadButtons : MonoBehaviour
             {
                 CharacterStats.CS.SpriteGO.GetComponent<Animator>().SetBool("HealthRegen", true);
                 CharacterStats.CS.SteroidEffect.SetActive(false);
-                HealthBar.SetBool("HealthRegen", true);
+                // HealthBar.SetBool("HealthRegen", true);
                 //HealthPlusEffect.emission.enabled = true;
                 StaticVariables.RegenHealth = true;
                 GeneralTimer = PillsTimer;
@@ -378,7 +378,7 @@ public class DPadButtons : MonoBehaviour
         CharacterStats.CS.SpriteGO.GetComponent<Animator>().SetBool("SpeedUsed", false);
         CharacterStats.CS.SpriteGO.GetComponent<Animator>().SetBool("StaminaBoost", false);
         //HealthPlusEffect.emit = false;
-        HealthBar.SetBool("HealthRegen", false);
+        // HealthBar.SetBool("HealthRegen", false);
 //		SteroidEffect.SetActive(false);
 
 

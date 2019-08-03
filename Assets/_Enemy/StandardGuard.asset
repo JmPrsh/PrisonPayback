@@ -16,7 +16,7 @@ MonoBehaviour:
   enemyAttackType: 1
   Damage: 5
   Health: 100
-  MoveSpeed: 7
+  MoveSpeed: 6
   ShootRate: 1
   AttackDistance: 5
   reloadtime: 4

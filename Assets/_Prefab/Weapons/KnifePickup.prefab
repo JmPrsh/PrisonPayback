@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 435132}
   - component: {fileID: 21281820}
   - component: {fileID: 5877424}
-  m_Layer: 16
+  m_Layer: 11
   m_Name: KnifePickup
   m_TagString: Knife
   m_Icon: {fileID: 0}
