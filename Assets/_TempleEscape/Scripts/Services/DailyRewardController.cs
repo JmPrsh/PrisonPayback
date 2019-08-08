@@ -54,6 +54,7 @@ namespace SgLib
                 DontDestroyOnLoad(gameObject);
             }
             Chartboost.cacheInterstitial(CBLocation.Default);
+
         }
 
         /// <summary>
@@ -71,12 +72,25 @@ namespace SgLib
         /// <returns>The random reward.</returns>
         public int GetRandomReward()
         {
+            if (UnityEngine.Random.Range(0, 20) == 5)
+            {
+                reward = 300;
+            }
+            else
+            {
+                reward = UnityEngine.Random.Range(minRewardvalueCurrent, maxRewardvalueCurrent + 1);
+            }
+            StartCoroutine(ShowAdThenReward());
             return reward;
 
         }
+        public void ShowAd(){
+            StartCoroutine(ShowAdThenReward());
+        }
         int reward;
-        IEnumerator ShowAdThenReward()
+        public IEnumerator ShowAdThenReward()
         {
+            yield return new WaitForEndOfFrame();
             if (Chartboost.hasInterstitial(CBLocation.Default))
             {
                 Chartboost.showInterstitial(CBLocation.Default);
@@ -87,16 +101,6 @@ namespace SgLib
                 // We don't have a cached video right now, but try to get one for next time
                 Chartboost.cacheInterstitial(CBLocation.Default);
                 Debug.Log("no ad to be found");
-            }
-            yield return new WaitForEndOfFrame();
-            int rarityChance = UnityEngine.Random.Range(0, 20);
-            if (rarityChance == 5)
-            {
-                reward = 300;
-            }
-            else
-            {
-                reward = UnityEngine.Random.Range(minRewardvalueCurrent, maxRewardvalueCurrent + 1);
             }
         }
 

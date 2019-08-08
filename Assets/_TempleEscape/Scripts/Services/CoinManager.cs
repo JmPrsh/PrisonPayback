@@ -2,26 +2,14 @@
 using System;
 using System.Collections;
 
-namespace SgLib
-{
+
     public class CoinManager : MonoBehaviour
     {
         public static CoinManager Instance;
 
-        public int Coins
-        { 
-            get { return _coins; }
-            private set { _coins = value; }
-        }
-
-        public static event Action<int> CoinsUpdated = delegate {};
-
-        [SerializeField]
+        public int Coins;
+       
         int initialCoins = 0;
-
-        // Show the current coins valueCurrentin editor for easy testing
-        [SerializeField]
-        int _coins;
 
         // key name to store high score in PlayerPrefs
         const string PPK_COINS = "SGLIB_COINS";
@@ -38,6 +26,7 @@ namespace SgLib
                 Instance = this;
                 DontDestroyOnLoad(gameObject);
             }
+            Coins = PlayerPrefs.GetInt(PPK_COINS);
         }
 
         void Start()
@@ -58,9 +47,6 @@ namespace SgLib
 
             // Store new coin value
             PlayerPrefs.SetInt(PPK_COINS, Coins);
-
-            // Fire event
-            CoinsUpdated(Coins);
         }
 
         public void RemoveCoins(int amount)
@@ -69,9 +55,6 @@ namespace SgLib
 
             // Store new coin value
             PlayerPrefs.SetInt(PPK_COINS, Coins);
-
-            // Fire event
-            CoinsUpdated(Coins);
         }
-    }
+    
 }

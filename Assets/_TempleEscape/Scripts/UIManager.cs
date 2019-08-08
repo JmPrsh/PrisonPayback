@@ -73,10 +73,10 @@ public class UIManager : MonoBehaviour
         scoreAnimator = score.GetComponent<Animator>();
         dailyRewardAnimator = dailyRewardBtn.GetComponent<Animator>();
 
-//        Reset();
+        //        Reset();
         ShowStartUI();
     }
-        
+
 
     // Update is called once per frame
     void Update()
@@ -109,18 +109,18 @@ public class UIManager : MonoBehaviour
 
     void GameManager_GameStateChanged(GameState newState, GameState oldState)
     {
-//        if (newState == GameState.Playing)
-//        {              
-//            ShowGameUI();
-//        }
-//        else if (newState == GameState.PreGameOver)
-//        {
-//            // Before game over, i.e. game potentially will be recovered
-//        }
-//        else if (newState == GameState.GameOver)
-//        {
-//            Invoke("ShowGameOverUI", 1.5f);
-//        }
+        //        if (newState == GameState.Playing)
+        //        {              
+        //            ShowGameUI();
+        //        }
+        //        else if (newState == GameState.PreGameOver)
+        //        {
+        //            // Before game over, i.e. game potentially will be recovered
+        //        }
+        //        else if (newState == GameState.GameOver)
+        //        {
+        //            Invoke("ShowGameOverUI", 1.5f);
+        //        }
     }
 
     void OnScoreUpdated(int newScore)
@@ -132,7 +132,7 @@ public class UIManager : MonoBehaviour
     {
         header.SetActive(false);
         title.SetActive(false);
-        instructions.SetActive(false); 
+        instructions.SetActive(false);
         score.gameObject.SetActive(false);
         newBestScore.SetActive(false);
         tapToStart.SetActive(false);
@@ -156,7 +156,7 @@ public class UIManager : MonoBehaviour
 
         // These premium feature buttons are hidden by default
         // and shown when certain criteria are met (e.g. rewarded ad is loaded)
-//        watchRewardedAdBtn.gameObject.SetActive(false);
+        //        watchRewardedAdBtn.gameObject.SetActive(false);
     }
     //
     //    public void StartGame()
@@ -180,14 +180,14 @@ public class UIManager : MonoBehaviour
 
         header.SetActive(true);
         title.SetActive(true);
-//        tapToStart.SetActive(true);
+        //        tapToStart.SetActive(true);
         characterSelectBtn.SetActive(true);
-//        helpBtn.SetActive(true);
+        //        helpBtn.SetActive(true);
 
-//        if (PlayerPrefs.GetInt(INSTRUCTIONS_SHOWN_PPK, 0) == 0)
-//        {
-//            Invoke("ShowInstructions", 0.5f);
-//        }
+        //        if (PlayerPrefs.GetInt(INSTRUCTIONS_SHOWN_PPK, 0) == 0)
+        //        {
+        //            Invoke("ShowInstructions", 0.5f);
+        //        }
 
         // If first launch: show "WatchForCoins" and "DailyReward" buttons if the conditions are met
         if (GameManager.GameCount == 0)
@@ -246,7 +246,7 @@ public class UIManager : MonoBehaviour
     void ShowWatchForCoinsBtn()
     {
         // Only show "watch for coins button" if a rewarded ad is loaded and premium features are enabled
-        #if EASY_MOBILE
+#if EASY_MOBILE
         if (IsPremiumFeaturesEnabled() && AdDisplayer.Instance.CanShowRewardedAd() && AdDisplayer.Instance.watchAdToEarnCoins)
         {
             watchRewardedAdBtn.SetActive(true);
@@ -256,7 +256,7 @@ public class UIManager : MonoBehaviour
         {
             watchRewardedAdBtn.SetActive(false);
         }
-        #endif
+#endif
     }
 
     void ShowDailyRewardBtn()
@@ -290,34 +290,35 @@ public class UIManager : MonoBehaviour
 
     public void WatchRewardedAd()
     {
-        #if EASY_MOBILE
+#if EASY_MOBILE
         // Hide the button
         watchRewardedAdBtn.SetActive(false);
 
         AdDisplayer.CompleteRewardedAdToEarnCoins += OnCompleteRewardedAdToEarnCoins;
         AdDisplayer.Instance.ShowRewardedAdToEarnCoins();
-        #endif
+#endif
     }
 
     void OnCompleteRewardedAdToEarnCoins()
     {
-        #if EASY_MOBILE
+#if EASY_MOBILE
         // Unsubscribe
         AdDisplayer.CompleteRewardedAdToEarnCoins -= OnCompleteRewardedAdToEarnCoins;
 
         // Give the coins!
         ShowRewardUI(AdDisplayer.Instance.rewardedCoins);
-        #endif
+#endif
     }
 
     public void GrabDailyReward()
     {
         if (DailyRewardController.Instance.CanRewardNow())
         {
+            // StartCoroutine(DailyRewardController.Instance.ShowAdThenReward());
             int reward = DailyRewardController.Instance.GetRandomReward();
 
             // Round the number and make it mutiplies of 5 only.
-            int roundedReward = (reward / 5) * 5;
+            int roundedReward = reward;
 
             // Show the reward UI
             ShowRewardUI(roundedReward);
@@ -332,7 +333,7 @@ public class UIManager : MonoBehaviour
         int reward = DailyRewardController.Instance.GetRandomReward();
 
         // Round the number and make it mutiplies of 5 only.
-        int roundedReward = (reward / 5) * 5;
+        int roundedReward = reward;
 
         // Show the reward UI
         ShowRewardUI(roundedReward);
@@ -351,52 +352,52 @@ public class UIManager : MonoBehaviour
 
     public void ShowLeaderboardUI()
     {
-        #if EASY_MOBILE
+#if EASY_MOBILE
         if (GameServiceManager.IsInitialized())
         {
             GameServiceManager.ShowLeaderboardUI();
         }
         else
         {
-        #if UNITY_IOS
+#if UNITY_IOS
             MobileNativeUI.Alert("Service Unavailable", "The user is not logged in to Game Center.");
-        #elif UNITY_ANDROID
+#elif UNITY_ANDROID
             GameServiceManager.Init();
-        #endif
+#endif
         }
-        #endif
+#endif
     }
 
     public void ShowAchievementsUI()
     {
-        #if EASY_MOBILE
+#if EASY_MOBILE
         if (GameServiceManager.IsInitialized())
         {
             GameServiceManager.ShowAchievementsUI();
         }
         else
         {
-        #if UNITY_IOS
+#if UNITY_IOS
             MobileNativeUI.Alert("Service Unavailable", "The user is not logged in to Game Center.");
-        #elif UNITY_ANDROID
+#elif UNITY_ANDROID
             GameServiceManager.Init();
-        #endif
+#endif
         }
-        #endif
+#endif
     }
 
     public void PurchaseRemoveAds()
     {
-        #if EASY_MOBILE
+#if EASY_MOBILE
         InAppPurchaser.Instance.Purchase(InAppPurchaser.Instance.removeAds);
-        #endif
+#endif
     }
 
     public void RestorePurchase()
     {
-        #if EASY_MOBILE
+#if EASY_MOBILE
         InAppPurchaser.Instance.RestorePurchase();
-        #endif
+#endif
     }
 
     public void ShowShareUI()
@@ -406,10 +407,10 @@ public class UIManager : MonoBehaviour
             Texture2D texture = ScreenshotSharer.Instance.CapturedScreenshot;
             shareUIController.ImgTex = texture;
 
-            #if EASY_MOBILE
+#if EASY_MOBILE
             AnimatedClip clip = ScreenshotSharer.Instance.RecordedClip;
             shareUIController.AnimClip = clip;
-            #endif
+#endif
 
             shareUI.SetActive(true);
         }

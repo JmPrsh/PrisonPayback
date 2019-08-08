@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357ea14a322789a4a86b90c8c5f7bf06, type: 3}
   m_Name: SwatDemolition
   m_EditorClassIdentifier: 
+  CashToGive: 10
   enemyType: 0
   enemyAttackType: 1
   Damage: 40
@@ -23,7 +24,10 @@ MonoBehaviour:
   AimSpeed: 8
   bulletsinclip: 3
   bulletPrefab: {fileID: 11483164, guid: 9ed06f5e59e984542bc98c62bb04203a, type: 3}
-  EnemySprite: {fileID: 21300000, guid: 23b2f5868dabea44783ace2f6002325e, type: 3}
+  EnemySprite:
+  - {fileID: 21300000, guid: 23b2f5868dabea44783ace2f6002325e, type: 3}
   BulletSprite: {fileID: 21300004, guid: 71bc68156fe4b844d93db273b2d83e3d, type: 3}
   AllowWeaponDrop: 0
   WeaponToSpawn: {fileID: 400002, guid: 829999d9ad5864d64aafc51e1b4c881b, type: 3}
+  BulletCasing: {fileID: 0}
+  AttackSound: {fileID: 8300000, guid: 408aeb7dbd36f7e4d810d4d926ff7e5d, type: 3}

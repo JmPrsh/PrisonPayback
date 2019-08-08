@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357ea14a322789a4a86b90c8c5f7bf06, type: 3}
   m_Name: Swat
   m_EditorClassIdentifier: 
+  CashToGive: 10
   enemyType: 0
   enemyAttackType: 1
   Damage: 5
@@ -23,7 +24,10 @@ MonoBehaviour:
   AimSpeed: 10
   bulletsinclip: 20
   bulletPrefab: {fileID: 11483164, guid: 9ed06f5e59e984542bc98c62bb04203a, type: 3}
-  EnemySprite: {fileID: 21300000, guid: 790347583082ce848aa6b2e20a3ca61f, type: 3}
+  EnemySprite:
+  - {fileID: 21300000, guid: 5f8e586fa96454a40890c951c7cb1993, type: 3}
   BulletSprite: {fileID: 21300008, guid: fbb7eb96a881322458310712adf33d10, type: 3}
   AllowWeaponDrop: 1
   WeaponToSpawn: {fileID: 400002, guid: 829999d9ad5864d64aafc51e1b4c881b, type: 3}
+  BulletCasing: {fileID: 405830, guid: 872d982ee7a1c444b8aeec448df4867f, type: 3}
+  AttackSound: {fileID: 8300000, guid: ef3dbb899f8bb3e44b7452bf986b7875, type: 3}

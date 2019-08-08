@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357ea14a322789a4a86b90c8c5f7bf06, type: 3}
   m_Name: Captain
   m_EditorClassIdentifier: 
+  CashToGive: 10
   enemyType: 0
   enemyAttackType: 1
   Damage: 5
@@ -23,7 +24,10 @@ MonoBehaviour:
   AimSpeed: 10
   bulletsinclip: 6
   bulletPrefab: {fileID: 11483164, guid: 9ed06f5e59e984542bc98c62bb04203a, type: 3}
-  EnemySprite: {fileID: 21300000, guid: a920b9c82c5c2f74fb15f307202fd08f, type: 3}
+  EnemySprite:
+  - {fileID: 21300000, guid: a920b9c82c5c2f74fb15f307202fd08f, type: 3}
   BulletSprite: {fileID: 21300008, guid: ac85fe6bed1040348be9db7c723becc5, type: 3}
   AllowWeaponDrop: 1
   WeaponToSpawn: {fileID: 400002, guid: 029ee378d054949b1a7c787fc08c494f, type: 3}
+  BulletCasing: {fileID: 405830, guid: e27e5ae4df9b53e4b9a55dd797326d61, type: 3}
+  AttackSound: {fileID: 8300000, guid: cde9cf3e584c9e64590b75bccba0d1d9, type: 3}

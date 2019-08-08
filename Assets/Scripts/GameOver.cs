@@ -61,9 +61,9 @@ public class GameOver : MonoBehaviour
             testAdSuccess = false;
         }
 
-        if (SgLib.CoinManager.Instance)
+        if (CoinManager.Instance)
         {
-            Cigs.text = SgLib.CoinManager.Instance.Coins.ToString("00");
+            Cigs.text = CoinManager.Instance.Coins.ToString("00");
         }
 
         Scoreboard.text = CharacterStats.Score.ToString("000000");
@@ -113,15 +113,16 @@ public class GameOver : MonoBehaviour
     public void DoubleReward()
     {
         adButton.gameObject.SetActive(false);
-        SgLib.CoinManager.Instance.AddCoins((int)savedScore);
+         if (CoinManager.Instance)
+        CoinManager.Instance.AddCoins((int)savedScore);
         
     }
 
     public void LoadScene()
     {
         allowTransfer = false;
-        if (SgLib.CoinManager.Instance)
-            SgLib.CoinManager.Instance.AddCoins((int)(TargetScore - tempReward));
+        if (CoinManager.Instance)
+            CoinManager.Instance.AddCoins((int)(TargetScore - tempReward));
         Application.LoadLevel("LoadingScreen");
     }
 
@@ -138,7 +139,8 @@ public class GameOver : MonoBehaviour
             if (tempReward < TargetScore)
             {
                 tempReward += 1;
-                SgLib.CoinManager.Instance.AddCoins(1);
+                 if (CoinManager.Instance)
+                CoinManager.Instance.AddCoins(1);
 
                 //              MoneyTick.clip = TickUp;
                 //              MoneyTick.GetComponent<AudioSource>().Play ();

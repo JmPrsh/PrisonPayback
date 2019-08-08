@@ -165,16 +165,6 @@ public class MeleeWeapon : MonoBehaviour {
     int hits;
 
     private void Update () {
-        if (!CharacterStats.CS.Dead && ParentGOScript != null)
-            UpdateSpriteSortingOrder ();
-        // InvokeRepeating ("UpdateSpriteSortingOrder", 0.2f, 1f);
-    }
-
-    void UpdateSpriteSortingOrder () {
-        foreach (SpriteRenderer s in selfSprite)
-            s.sortingOrder = ParentGOScript.ChildSpriteRenderer.sortingOrder + 1; // transform.position.y < ParentGOScript.transform.position.y? ParentGOScript.ChildSpriteRenderer.sortingOrder + 1 : ParentGOScript.ChildSpriteRenderer.sortingOrder - 1;
-        // s.sortingOrder = Mathf.RoundToInt((transform.position.y+1) * 100f) * -1;
-
     }
 
     public void CollisionDetectionEnemy () {

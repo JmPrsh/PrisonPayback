@@ -7,7 +7,8 @@ using UnityEngine.UI;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.ImageEffects;
 
-public class CharacterStats : MonoBehaviour {
+public class CharacterStats : MonoBehaviour
+{
     public static CharacterStats CS;
     public Player PlayerSettings;
     public float Health;
@@ -42,7 +43,8 @@ public class CharacterStats : MonoBehaviour {
     float screenX;
     float screenY;
     // which weapon are we holding
-    public enum Weapon {
+    public enum Weapon
+    {
         Fist,
         Pipe,
         Knife,
@@ -51,131 +53,134 @@ public class CharacterStats : MonoBehaviour {
         Shotgun,
         Sniper,
         Minigun
-        };
-        [HideInInspector]
-        public Weapon TypeofWeapon;
-        public GameObject[] Weapons, Controls;
-        public int Stamina;
-        EnergyBar LivesGOEB;
-        int Lives;
-        // Dodge
-        public Transform DodgeHorizontal;
-        // Sprites
-        public Sprite[] CharacterSprites;
-        public Transform AmmoCollectedText;
-        public Transform HealthCollectedText;
-        public Transform ScoreCollectedText;
+    };
+    [HideInInspector]
+    public Weapon TypeofWeapon;
+    public GameObject[] Weapons, Controls;
+    public int Stamina;
+    EnergyBar LivesGOEB;
+    int Lives;
+    // Dodge
+    public Transform DodgeHorizontal;
+    // Sprites
+    public Sprite[] CharacterSprites;
+    public Transform AmmoCollectedText;
+    public Transform HealthCollectedText;
+    public Transform ScoreCollectedText;
 
-        public enum Ethnic {
+    public enum Ethnic
+    {
         White,
         Hispanic,
         Brown,
         DarkerBrown
-        };
-        [HideInInspector]
-        public Ethnic EthnicCharacter;
-        public Sprite[] CurrentWeapon;
-        public Image WeaponGUI;
-        [HideInInspector]
-        public bool Blur;
-        public RectTransform[] PickUpGUI;
-        public Animator[] WeaponShoot;
-        [HideInInspector]
-        public Animator WSanim, GeneralMuzzle;
-        public Transform[] BulletCasing;
-        int chosenCasing;
-        public float bursttimer = 0.2f;
-        bool shootBurst;
-        int shotsfired;
-        GameObject Shadow;
-        bool showgrey;
-        public GameObject AimingGO, StaminaGO, LivesGO, ScoreGO, SpriteGO, DyingGO, BloodSplat, BloodPool, ComboGO, PlayerHUD, EnemyCanvas, MainPauseParent;
-        public static bool flipped;
-        [HideInInspector]
-        public float greyAmount;
-        float CharacterAngle;
-        [HideInInspector]
-        public DPadButtons DPB;
-        public static int CharacterSpriteID;
-        public static int Score;
-        public float Cash;
-        public Text CashText;
-        public static int Combo;
-        int highestCombo;
-        [HideInInspector]
-        public float HighScoreNormal;
-        [HideInInspector]
-        public float HighScoreZombie;
-        [HideInInspector]
-        public float ComboTimer;
-        public Text ScoreText;
-        public Text ComboText;
-        public EnergyBar ComboTimerEB;
-        public EnergyBar HealthBar;
-        bool showkillstreaks;
-        public Transform KillStreakGO;
-        public Sprite[] Killstreaks;
-        public Color OrangeColour;
-        public Text ComboParent;
-        CanvasGroup cg;
-        [HideInInspector]
-        public string DamageToShow;
-        public static int WeaponID;
-        public static bool allowMovement;
-        public static bool Finished;
-        public static string ScoringSceneLevelToLoad;
-        public string ScoringSceneLevelToLoadForLoadingScreen;
-        [HideInInspector]
-        public bool stunned;
-        public float evadeTimer;
-        // this tells us how far player will evade
-        public float cooldownTimer;
-        [HideInInspector]
-        public bool evading;
-        public Transform ImpactSound;
-        public static float timeplayed;
-        [HideInInspector]
-        public Transform PlayerCanvas;
-        public SpriteRenderer Aiming;
-        public Button DodgeButton;
-        int tempAmmoCount;
-        float shootdelay = 0;
-        public int ControlType;
-        public static float xAmount;
-        public float MoveForce;
-        [HideInInspector]
-        public Vector2 vel;
-        public float maxVel;
+    };
+    [HideInInspector]
+    public Ethnic EthnicCharacter;
+    public Sprite[] CurrentWeapon;
+    public Image WeaponGUI;
+    [HideInInspector]
+    public bool Blur;
+    public RectTransform[] PickUpGUI;
+    public Animator[] WeaponShoot;
+    [HideInInspector]
+    public Animator WSanim, GeneralMuzzle;
+    public Transform[] BulletCasing;
+    int chosenCasing;
+    public float bursttimer = 0.2f;
+    bool shootBurst;
+    int shotsfired;
+    GameObject Shadow;
+    bool showgrey;
+    public GameObject AimingGO, StaminaGO, LivesGO, ScoreGO, SpriteGO, DyingGO, BloodSplat, BloodPool, ComboGO, PlayerHUD, EnemyCanvas, MainPauseParent;
+    public static bool flipped;
+    [HideInInspector]
+    public float greyAmount;
+    float CharacterAngle;
+    [HideInInspector]
+    public DPadButtons DPB;
+    public static int CharacterSpriteID;
+    public static int Score;
+    public float Cash;
+    public Text CashText;
+    public static int Combo;
+    int highestCombo;
+    [HideInInspector]
+    public float HighScoreNormal;
+    [HideInInspector]
+    public float HighScoreZombie;
+    [HideInInspector]
+    public float ComboTimer;
+    public Text ScoreText;
+    public Text ComboText;
+    public EnergyBar ComboTimerEB;
+    public EnergyBar HealthBar;
+    bool showkillstreaks;
+    public Transform KillStreakGO;
+    public Sprite[] Killstreaks;
+    public Color OrangeColour;
+    public Text ComboParent;
+    CanvasGroup cg;
+    [HideInInspector]
+    public string DamageToShow;
+    public static int WeaponID;
+    public static bool allowMovement;
+    public static bool Finished;
+    public static string ScoringSceneLevelToLoad;
+    public string ScoringSceneLevelToLoadForLoadingScreen;
+    [HideInInspector]
+    public bool stunned;
+    public float evadeTimer;
+    // this tells us how far player will evade
+    public float cooldownTimer;
+    [HideInInspector]
+    public bool evading;
+    public Transform ImpactSound;
+    public static float timeplayed;
+    [HideInInspector]
+    public Transform PlayerCanvas;
+    public SpriteRenderer Aiming;
+    public Button DodgeButton;
+    int tempAmmoCount;
+    float shootdelay = 0;
+    public int ControlType;
+    public static float xAmount;
+    public float MoveForce;
+    [HideInInspector]
+    public Vector2 vel;
+    public float maxVel;
 
-        float smokeTimer;
+    float smokeTimer;
 
-        public static float EnemyDelayTimer;
+    public static float EnemyDelayTimer;
 
-        void Awake () {
+    void Awake()
+    {
         CS = this;
-        r = GetComponent<Rigidbody2D> ();
-        HighScoreNormal = PlayerPrefs.GetFloat ("HighScoreNormal");
-        HighScoreZombie = PlayerPrefs.GetFloat ("HighScoreZombie");
+        r = GetComponent<Rigidbody2D>();
+        HighScoreNormal = PlayerPrefs.GetFloat("HighScoreNormal");
+        HighScoreZombie = PlayerPrefs.GetFloat("HighScoreZombie");
 
-        CharacterSpriteID = PlayerPrefs.GetInt ("SGLIB_CURRENT_CHARACTER");
+        CharacterSpriteID = PlayerPrefs.GetInt("SGLIB_CURRENT_CHARACTER");
 
-        anim = GetComponent<Animator> ();
-        animGun = AimingGO.GetComponent<Animator> ();
+        anim = GetComponent<Animator>();
+        animGun = AimingGO.GetComponent<Animator>();
 
-        playermodel = GameObject.FindGameObjectWithTag ("PlayerModel").GetComponent<PlayerModel> ();
-        ammo = GetComponent<AmmoScript> ();
+        playermodel = GameObject.FindGameObjectWithTag("PlayerModel").GetComponent<PlayerModel>();
+        ammo = GetComponent<AmmoScript>();
         Music.whichMusic = 2;
         Music.playMusic = true;
-        cg = PlayerHUD.GetComponent<CanvasGroup> ();
-        SpriteGORenderer = SpriteGO.GetComponent<SpriteRenderer> ();
-        LivesGOEB = LivesGO.GetComponent<EnergyBar> ();
-        PlayerCanvas = GameObject.Find ("PlayerCanvas").transform;
+        cg = PlayerHUD.GetComponent<CanvasGroup>();
+        SpriteGORenderer = SpriteGO.GetComponent<SpriteRenderer>();
+        LivesGOEB = LivesGO.GetComponent<EnergyBar>();
+        PlayerCanvas = GameObject.Find("PlayerCanvas").transform;
 
-        ControlChoice (PlayerPrefs.GetInt ("Controls", ControlType));
+        ControlChoice(PlayerPrefs.GetInt("Controls", ControlType));
 
     }
 
-    void Start () {
+    void Start()
+    {
         Stats.Kills = 0;
         Stats.Rooms = 0;
         Stats.Buffs = 0;
@@ -189,10 +194,10 @@ public class CharacterStats : MonoBehaviour {
 
         Finished = false;
         // 270
-        AimingGO.transform.rotation = Quaternion.AngleAxis (-180.0f, Vector3.forward);
+        AimingGO.transform.rotation = Quaternion.AngleAxis(-180.0f, Vector3.forward);
         SoundFXController.Check = true;
 
-        Invoke ("AllowToMove", 2);
+        Invoke("AllowToMove", 2);
 
         allowMovement = false;
         HealthStarting = Health;
@@ -201,28 +206,31 @@ public class CharacterStats : MonoBehaviour {
         playermodel.timePlayed = 0;
         playermodel.Health = 100;
         Dead = false;
-        playermodel.FindPlayer ();
-        playermodel.EnemySpawnAmount = PlayerPrefs.GetInt ("SpawnAmount");
+        playermodel.FindPlayer();
+        playermodel.EnemySpawnAmount = PlayerPrefs.GetInt("SpawnAmount");
         playermodel.EnemyAdd = 0;
         Lives = 1;
         //		GameObject.Find ("Fade").GetComponent<Animator> ().SetTrigger ("FadeOut");
-        StartCoroutine (IncrementStamina ());
-        Shadow = GameObject.FindGameObjectWithTag ("shadow");
-        DPB = GetComponent<DPadButtons> ();
+        StartCoroutine(IncrementStamina());
+        Shadow = GameObject.FindGameObjectWithTag("shadow");
+        DPB = GetComponent<DPadButtons>();
         ComboTimerEB.valueMax = 40;
         cg.alpha = 1;
 
         ScoringSceneLevelToLoad = ScoringSceneLevelToLoadForLoadingScreen;
-        UpdateText ();
+        UpdateText();
     }
 
-    void AllowToMove () {
+    void AllowToMove()
+    {
         allowMovement = true;
     }
 
-    void FixedUpdate () {
-        HealthBar.valueCurrent = (int) Health;
-        HealthBar.valueMax = (int) HealthStarting;
+    void FixedUpdate()
+    {
+        UpdateText();
+        HealthBar.valueCurrent = (int)Health;
+        HealthBar.valueMax = (int)HealthStarting;
 
         if (EnemyDelayTimer > 1)
             EnemyDelayTimer = 0;
@@ -232,189 +240,235 @@ public class CharacterStats : MonoBehaviour {
         if (PauseMenu.isPaused)
             return;
 
-        RegenerateHealth ();
+        RegenerateHealth();
 
         // ?
-        isDead (Dead);
+        isDead(Dead);
 
-        ComboHandler ();
+        ComboHandler();
 
-        EnemyCanvas.SetActive (!Dead);
+        EnemyCanvas.SetActive(!Dead);
 
-        PlayerHUD.SetActive (!Blur);
+        PlayerHUD.SetActive(!Blur);
 
         if (!bulletSpawn)
-            bulletSpawn = GameObject.FindGameObjectWithTag ("bulletSpawn");
+            bulletSpawn = GameObject.FindGameObjectWithTag("bulletSpawn");
 
         if (Health <= 0)
-            StartCoroutine (Death ());
+            StartCoroutine(Death());
 
     }
 
-    void isDead (bool yes) {
-        if (yes) {
-            SpriteGORenderer.material.SetFloat ("_GrayScale", greyAmount);
-            DyingGO.transform.rotation = Quaternion.AngleAxis (CharacterAngle - 90, Vector3.forward);
-            if (showgrey) {
+    void isDead(bool yes)
+    {
+        if (yes)
+        {
+            SpriteGORenderer.material.SetFloat("_GrayScale", greyAmount);
+            DyingGO.transform.rotation = Quaternion.AngleAxis(CharacterAngle - 90, Vector3.forward);
+            if (showgrey)
+            {
                 if (greyAmount > 0)
                     greyAmount -= 1 * Time.deltaTime * 2;
-            } else {
+            }
+            else
+            {
                 if (greyAmount < 1)
                     greyAmount += 1 * Time.deltaTime * 2;
             }
 
-            EnemyCanvas.SetActive (false);
-            if (!flipped) {
-                if (CharacterAngle < 90) {
+            EnemyCanvas.SetActive(false);
+            if (!flipped)
+            {
+                if (CharacterAngle < 90)
+                {
                     CharacterAngle += 90 * Time.deltaTime * 2;
-                } else {
-                    BloodPool.SetActive (true);
                 }
-            } else {
-                if (CharacterAngle > -90) {
-                    CharacterAngle -= 90 * Time.deltaTime * 2;
-                } else {
-                    BloodPool.SetActive (true);
+                else
+                {
+                    BloodPool.SetActive(true);
                 }
             }
-        } else {
+            else
+            {
+                if (CharacterAngle > -90)
+                {
+                    CharacterAngle -= 90 * Time.deltaTime * 2;
+                }
+                else
+                {
+                    BloodPool.SetActive(true);
+                }
+            }
+        }
+        else
+        {
             SpriteGORenderer.sprite = CharacterSprites[CharacterSpriteID];
-            if (!stunned) {
-                ProcessEvasion ();
-                MoveForward (); // Player Movement
+            if (!stunned)
+            {
+                ProcessEvasion();
+                MoveForward(); // Player Movement
                 timeplayed += Time.deltaTime;
             }
 
             if (Time.timeScale < 1)
                 Time.timeScale += 1f * Time.deltaTime / 4;
 
-            if (TypeofWeapon != Weapon.Fist && TypeofWeapon != Weapon.Pipe && TypeofWeapon != Weapon.Knife) {
-                Shooting ();
-            } else {
-                Weapons[WeaponID].GetComponent<MeleeWeapon> ().Attack ();
+            if (TypeofWeapon != Weapon.Fist && TypeofWeapon != Weapon.Pipe && TypeofWeapon != Weapon.Knife)
+            {
+                ShootingHandler();
+            }
+            else
+            {
+                
+                if (Weapons[WeaponID].GetComponent<MeleeWeapon>())
+                    Weapons[WeaponID].GetComponent<MeleeWeapon>().Attack();
+                
             }
 
-            WeaponChange ();
+            WeaponChangeHandler();
 
-            PlayerModelHandler ();
+            PlayerModelHandler();
 
             LivesGOEB.valueCurrent = Lives * 33;
 
-            if (Health < HealthStarting / 7) {
-                SteroidEffect.SetActive (true);
+            if (Health < HealthStarting / 7)
+            {
+                SteroidEffect.SetActive(true);
             }
 
-            TypeOfWeaponHandler ();
+            TypeOfWeaponHandler();
 
-            if (shootBurst) {
-                BurstFireHandler ();
+            if (shootBurst)
+            {
+                BurstFireHandler();
             }
         }
     }
 
-    public void UpdateText () {
-        ScoreText.text = Score.ToString ("000000");
-        CashText.text = Cash.ToString ("000000");
+    public void UpdateText()
+    {
+        ScoreText.text = Score.ToString("000000");
+        CashText.text = Cash.ToString();
     }
 
-    void ComboHandler () {
-        ComboText.text = Combo.ToString ();
+    void ComboHandler()
+    {
+        ComboText.text = Combo.ToString();
 
-        if (Combo > highestCombo) {
+        if (Combo > highestCombo)
+        {
             highestCombo = Combo;
         }
         Stats.Combo = highestCombo;
 
-        ComboTimerEB.valueCurrent = (int) ComboTimer;
+        ComboTimerEB.valueCurrent = (int)ComboTimer;
 
-        if (ComboTimer > 0) {
-            ComboGO.SetActive (true);
-            if (Tutorial.AllowComboCountdown) {
+        ComboGO.SetActive(Combo > 1);
+
+        if (ComboTimer > 0)
+        {
+
+            if (Tutorial.AllowComboCountdown)
+            {
                 ComboTimer -= 10 * Time.deltaTime;
 
             }
-        } else {
+        }
+        else
+        {
             Combo = 0;
             ComboText.color = Color.white;
             ComboParent.color = Color.white;
             showkillstreaks = false;
-            ComboGO.SetActive (false);
+            ComboGO.SetActive(false);
         }
 
-        if (Combo == 4 && !showkillstreaks) {
-            Transform temp = KillStreakGO.Spawn (transform.position, transform.rotation) as Transform;
-            temp.GetComponentInChildren<Image> ().sprite = Killstreaks[0];
+        if (Combo == 4 && !showkillstreaks)
+        {
+            Transform temp = KillStreakGO.Spawn(transform.position, transform.rotation) as Transform;
+            temp.GetComponentInChildren<Image>().sprite = Killstreaks[0];
             showkillstreaks = true;
             ComboText.color = OrangeColour;
             ComboParent.color = OrangeColour;
             //conviction
         }
-        if (Combo == 5) {
+        if (Combo == 5)
+        {
             ComboText.color = Color.white;
             ComboParent.color = Color.white;
             showkillstreaks = false;
         }
-        if (Combo == 8 && !showkillstreaks) {
-            Transform temp = KillStreakGO.Spawn (transform.position, transform.rotation) as Transform;
-            temp.GetComponentInChildren<Image> ().sprite = Killstreaks[1];
+        if (Combo == 8 && !showkillstreaks)
+        {
+            Transform temp = KillStreakGO.Spawn(transform.position, transform.rotation) as Transform;
+            temp.GetComponentInChildren<Image>().sprite = Killstreaks[1];
             showkillstreaks = true;
             ComboText.color = OrangeColour;
             ComboParent.color = OrangeColour;
             //mayhem
         }
-        if (Combo == 9) {
+        if (Combo == 9)
+        {
             ComboText.color = Color.white;
             ComboParent.color = Color.white;
             showkillstreaks = false;
         }
-        if (Combo == 12 && !showkillstreaks) {
-            Transform temp = KillStreakGO.Spawn (transform.position, transform.rotation) as Transform;
-            temp.GetComponentInChildren<Image> ().sprite = Killstreaks[2];
+        if (Combo == 12 && !showkillstreaks)
+        {
+            Transform temp = KillStreakGO.Spawn(transform.position, transform.rotation) as Transform;
+            temp.GetComponentInChildren<Image>().sprite = Killstreaks[2];
             showkillstreaks = true;
             ComboText.color = OrangeColour;
             ComboParent.color = OrangeColour;
             //manslaughter
         }
-        if (Combo == 13) {
+        if (Combo == 13)
+        {
             ComboText.color = Color.white;
             ComboParent.color = Color.white;
             showkillstreaks = false;
         }
-        if (Combo == 16 && !showkillstreaks) {
-            Transform temp = KillStreakGO.Spawn (transform.position, transform.rotation) as Transform;
-            temp.GetComponentInChildren<Image> ().sprite = Killstreaks[3];
+        if (Combo == 16 && !showkillstreaks)
+        {
+            Transform temp = KillStreakGO.Spawn(transform.position, transform.rotation) as Transform;
+            temp.GetComponentInChildren<Image>().sprite = Killstreaks[3];
             showkillstreaks = true;
             ComboText.color = OrangeColour;
             ComboParent.color = OrangeColour;
             //bloodbath
         }
-        if (Combo == 17) {
+        if (Combo == 17)
+        {
             ComboText.color = Color.white;
             ComboParent.color = Color.white;
             showkillstreaks = false;
         }
-        if (Combo == 20 && !showkillstreaks) {
-            Transform temp = KillStreakGO.Spawn (transform.position, transform.rotation) as Transform;
-            temp.GetComponentInChildren<Image> ().sprite = Killstreaks[4];
+        if (Combo == 20 && !showkillstreaks)
+        {
+            Transform temp = KillStreakGO.Spawn(transform.position, transform.rotation) as Transform;
+            temp.GetComponentInChildren<Image>().sprite = Killstreaks[4];
             showkillstreaks = true;
             ComboText.color = OrangeColour;
             ComboParent.color = OrangeColour;
             //massacre
         }
-        if (Combo == 21) {
+        if (Combo == 21)
+        {
             ComboText.color = Color.white;
             ComboParent.color = Color.white;
             showkillstreaks = false;
         }
-        if (Combo == 25 && !showkillstreaks) {
-            Transform temp = KillStreakGO.Spawn (transform.position, transform.rotation) as Transform;
-            temp.GetComponentInChildren<Image> ().sprite = Killstreaks[5];
+        if (Combo == 25 && !showkillstreaks)
+        {
+            Transform temp = KillStreakGO.Spawn(transform.position, transform.rotation) as Transform;
+            temp.GetComponentInChildren<Image>().sprite = Killstreaks[5];
             showkillstreaks = true;
             ComboText.color = OrangeColour;
             ComboParent.color = OrangeColour;
             //are you fucking serious
         }
-        if (Combo == 26) {
+        if (Combo == 26)
+        {
             ComboText.color = Color.white;
             ComboParent.color = Color.white;
             showkillstreaks = false;
@@ -422,328 +476,411 @@ public class CharacterStats : MonoBehaviour {
     }
 
 
-    void PlayerModelHandler () {
-        if (playermodel.EnemySpawnAmount >= 35) {
+    void PlayerModelHandler()
+    {
+        if (playermodel.EnemySpawnAmount >= 35)
+        {
             playermodel.EnemySpawnAmount = 35;
         }
-        if (playermodel.EnemySpawnAmount <= 2) {
+        if (playermodel.EnemySpawnAmount <= 2)
+        {
             playermodel.EnemySpawnAmount = 2;
         }
 
-        if (playermodel.Health >= 100) {
+        if (playermodel.Health >= 100)
+        {
             playermodel.Health = 100;
         }
     }
 
-    void BurstFireHandler () {
-        if (shotsfired < 3 && ammo.MachineGunClipLeft > 0) {
-            if (bursttimer > 0) {
+    void BurstFireHandler()
+    {
+        if (shotsfired < 3 && ammo.MachineGunClipLeft > 0)
+        {
+            if (bursttimer > 0)
+            {
                 bursttimer -= 2f * Time.deltaTime;
             }
-            if (bursttimer <= 0) {
-                Transform temp = bulletPrefab.Spawn (bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis (1, Vector3.forward));
+            if (bursttimer <= 0)
+            {
+                Transform temp = bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(1, Vector3.forward));
 
-                if (StaticVariables.MovementMultiply == 1) {
+                if (StaticVariables.MovementMultiply == 1)
+                {
                     shootTime = Time.time + shotInterval;
-                } else {
+                }
+                else
+                {
                     shootTime = Time.time + shotInterval / StaticVariables.MovementMultiply;
                 }
 
                 playermodel.bulletsUsed += 1;
                 ammo.MachineGunClipLeft -= 1;
 
-                WSanim.SetTrigger ("Shoot");
-                GeneralMuzzle.SetTrigger ("Shoot");
+                WSanim.SetTrigger("Shoot");
+                GeneralMuzzle.SetTrigger("Shoot");
 
-                BulletCasing[chosenCasing].Spawn (new Vector3 (transform.position.x + Random.Range (-0.2f, 0.2f), transform.position.y + Random.Range (-0.2f, 0.2f), transform.position.z), transform.rotation * Quaternion.AngleAxis (90, Vector3.forward));
+                BulletCasing[chosenCasing].Spawn(new Vector3(transform.position.x + Random.Range(-0.2f, 0.2f), transform.position.y + Random.Range(-0.2f, 0.2f), transform.position.z), transform.rotation * Quaternion.AngleAxis(90, Vector3.forward));
                 shotsfired += 1;
                 bursttimer = 0.2f;
 
             }
-        } else {
+        }
+        else
+        {
             shotsfired = 0;
             shootBurst = false;
         }
     }
 
-    void RegenerateHealth () {
-        if (StaticVariables.RegenHealth && Health < startingHealth) {
-            if (Health < HealthStarting) {
+    void RegenerateHealth()
+    {
+        if (StaticVariables.RegenHealth && Health < startingHealth)
+        {
+            if (Health < HealthStarting)
+            {
                 Health += 1;
-            } else {
+            }
+            else
+            {
                 Health = startingHealth;
             }
         }
     }
 
-    void TypeOfWeaponHandler () {
+    void TypeOfWeaponHandler()
+    {
         // if type of weapon:
-        if (TypeofWeapon == Weapon.Fist) {
+        if (TypeofWeapon == Weapon.Fist)
+        {
             WeaponID = 0;
             DamageToShow = "5 - 15";
-            Damage = Random.Range (5, 15);
+            Damage = Random.Range(5, 15);
             WeaponGUI.sprite = CurrentWeapon[0];
         }
-        if (TypeofWeapon == Weapon.Pipe) {
+        if (TypeofWeapon == Weapon.Pipe)
+        {
             WeaponID = 1;
             DamageToShow = "20 - 30";
-            Damage = Random.Range (20, 30);
+            Damage = Random.Range(20, 30);
             WeaponGUI.sprite = CurrentWeapon[1];
         }
-        if (TypeofWeapon == Weapon.Knife) {
+        if (TypeofWeapon == Weapon.Knife)
+        {
             WeaponID = 2;
             DamageToShow = "35 - 45";
-            Damage = Random.Range (35, 45);
+            Damage = Random.Range(35, 45);
             WeaponGUI.sprite = CurrentWeapon[2];
         }
-        if (TypeofWeapon == Weapon.Pistol) {
+        if (TypeofWeapon == Weapon.Pistol)
+        {
             chosenCasing = 0;
             WeaponID = 3;
             shotInterval = 0.2f;
             DamageToShow = "15 - 25";
-            Damage = Random.Range (15, 25);
+            Damage = Random.Range(15, 25);
             WeaponGUI.sprite = CurrentWeapon[3];
             WSanim = WeaponShoot[0];
             GeneralMuzzle = animMuzzle[3];
         }
-        if (TypeofWeapon == Weapon.MachineGun) {
+        if (TypeofWeapon == Weapon.MachineGun)
+        {
             chosenCasing = 1;
             WeaponID = 4;
             shotInterval = 0.3f;
             DamageToShow = "45 - 55";
-            Damage = Random.Range (45, 55);
+            Damage = Random.Range(45, 55);
             WeaponGUI.sprite = CurrentWeapon[4];
             WSanim = WeaponShoot[1];
             GeneralMuzzle = animMuzzle[4];
         }
-        if (TypeofWeapon == Weapon.Shotgun) {
+        if (TypeofWeapon == Weapon.Shotgun)
+        {
             chosenCasing = 2;
             WeaponID = 5;
             shotInterval = 1.0f;
             DamageToShow = "25 - 35";
-            Damage = Random.Range (25, 35);
+            Damage = Random.Range(25, 35);
             WeaponGUI.sprite = CurrentWeapon[5];
             WSanim = WeaponShoot[2];
             GeneralMuzzle = animMuzzle[5];
         }
-        if (TypeofWeapon == Weapon.Sniper) {
+        if (TypeofWeapon == Weapon.Sniper)
+        {
             chosenCasing = 3;
             WeaponID = 6;
             shotInterval = 1.0f;
             DamageToShow = "135 - 145";
-            Damage = Random.Range (135, 145);
+            Damage = Random.Range(135, 145);
             WeaponGUI.sprite = CurrentWeapon[6];
             WSanim = WeaponShoot[3];
             GeneralMuzzle = animMuzzle[6];
         }
-        if (TypeofWeapon == Weapon.Minigun) {
+        if (TypeofWeapon == Weapon.Minigun)
+        {
             chosenCasing = 4;
             WeaponID = 7;
             shotInterval = 0.05f;
             DamageToShow = "30 - 45";
-            Damage = Random.Range (30, 45);
+            Damage = Random.Range(30, 45);
             WeaponGUI.sprite = CurrentWeapon[7];
             WSanim = WeaponShoot[4];
             GeneralMuzzle = animMuzzle[7];
 
         }
 
-        for (int i = 0; i < Weapons.Length; i++) {
-            if (i != WeaponID) {
+        for (int i = 0; i < Weapons.Length; i++)
+        {
+            if (i != WeaponID)
+            {
                 if (Weapons[i].activeInHierarchy)
-                    Weapons[i].SetActive (false);
+                    Weapons[i].SetActive(false);
                 if (!Weapons[WeaponID].activeInHierarchy)
-                    Weapons[WeaponID].SetActive (true);
+                    Weapons[WeaponID].SetActive(true);
             }
         }
     }
 
 
-    public void KnifePickup () {
-        if (!ShowKnife) {
-            Transform temp = AmmoCollectedText.Spawn (transform.position, transform.rotation * Quaternion.AngleAxis (90, Vector3.forward));
-            temp.GetComponentInChildren<Text> ().text = "+ Knife";
-            temp.SetParent (PlayerCanvas);
-            temp.GetComponent<RectTransform> ().localPosition = new Vector3 (0, 15, 0);
+    public void KnifePickup()
+    {
+        if (!ShowKnife)
+        {
+            Transform temp = AmmoCollectedText.Spawn(transform.position, transform.rotation * Quaternion.AngleAxis(90, Vector3.forward));
+            temp.GetComponentInChildren<Text>().text = "+ Knife";
+            temp.SetParent(PlayerCanvas);
+            temp.GetComponent<RectTransform>().localPosition = new Vector3(0, 15, 0);
             //            WeaponsPickedUp.Add(hitInfo.transform.gameObject);
             TypeofWeapon = Weapon.Knife;
             ShowKnife = true;
-            Weapons[2].GetComponent<PickedUpCheck> ().pickedUp = true;
+            Weapons[2].GetComponent<PickedUpCheck>().pickedUp = true;
 
         }
     }
 
-    public void PipePickup () {
-        if (!ShowPipe) {
-            Transform temp = AmmoCollectedText.Spawn (transform.position, transform.rotation * Quaternion.AngleAxis (90, Vector3.forward));
-            temp.GetComponentInChildren<Text> ().text = "+ Pipe";
-            temp.SetParent (PlayerCanvas);
-            temp.GetComponent<RectTransform> ().localPosition = new Vector3 (0, 15, 0);
+    public void PipePickup()
+    {
+        if (!ShowPipe)
+        {
+            Transform temp = AmmoCollectedText.Spawn(transform.position, transform.rotation * Quaternion.AngleAxis(90, Vector3.forward));
+            temp.GetComponentInChildren<Text>().text = "+ Pipe";
+            temp.SetParent(PlayerCanvas);
+            temp.GetComponent<RectTransform>().localPosition = new Vector3(0, 15, 0);
             //            WeaponsPickedUp.Add(hitInfo.transform.gameObject);
             TypeofWeapon = Weapon.Pipe;
             ShowPipe = true;
-            Weapons[1].GetComponent<PickedUpCheck> ().pickedUp = true;
+            Weapons[1].GetComponent<PickedUpCheck>().pickedUp = true;
 
         }
     }
 
-    public void PistolPickup (bool purchased, bool pickup) {
-        if (!purchased) {
-            ammo.PistolClipLeft += Random.Range (2, 15);
-        } else {
+    public void PistolPickup(bool purchased, bool pickup)
+    {
+        if (!purchased)
+        {
+            ammo.PistolClipLeft += Random.Range(2, 15);
+        }
+        else
+        {
             ammo.PistolClipLeft += 15;
         }
-        if (!pickup) {
+        if (!pickup)
+        {
             tempAmmoCount = 150;
-        } else {
+        }
+        else
+        {
             tempAmmoCount = 15;
         }
         ammo.PistolMaxAmmo += tempAmmoCount;
-        if (!ShowPistol) {
-            Transform temp = AmmoCollectedText.Spawn (transform.position, transform.rotation * Quaternion.AngleAxis (90, Vector3.forward));
-            temp.GetComponentInChildren<Text> ().text = "+ Pistol";
-            temp.SetParent (PlayerCanvas);
-            temp.GetComponent<RectTransform> ().localPosition = new Vector3 (0, 15, 0);
+        if (!ShowPistol)
+        {
+            Transform temp = AmmoCollectedText.Spawn(transform.position, transform.rotation * Quaternion.AngleAxis(90, Vector3.forward));
+            temp.GetComponentInChildren<Text>().text = "+ Pistol";
+            temp.SetParent(PlayerCanvas);
+            temp.GetComponent<RectTransform>().localPosition = new Vector3(0, 15, 0);
             //                    WeaponsPickedUp.Add(hitInfo.transform.gameObject);
-            Weapons[3].GetComponent<PickedUpCheck> ().pickedUp = true;
+            Weapons[3].GetComponent<PickedUpCheck>().pickedUp = true;
             ShowPistol = true;
 
-        } else {
-            Transform temp = AmmoCollectedText.Spawn (new Vector2 (transform.position.x, transform.position.y - 6), transform.rotation * Quaternion.AngleAxis (90, Vector3.forward)) as Transform;
-            temp.GetComponentInChildren<Text> ().text = "+" + tempAmmoCount;
-            Destroy (temp.gameObject, 1);
-            Transform temp2 = PickUpGUI[0].Spawn (transform.position, transform.rotation * Quaternion.AngleAxis (90, Vector3.forward)) as Transform;
-            temp2.SetParent (PlayerCanvas);
-            temp.SetParent (PlayerCanvas);
-            temp2.localScale = new Vector2 (1, 1);
-            temp.GetComponent<RectTransform> ().localPosition = new Vector3 (0, 15, 0);
+        }
+        else
+        {
+            Transform temp = AmmoCollectedText.Spawn(new Vector2(transform.position.x, transform.position.y - 6), transform.rotation * Quaternion.AngleAxis(90, Vector3.forward)) as Transform;
+            temp.GetComponentInChildren<Text>().text = "+" + tempAmmoCount;
+            Destroy(temp.gameObject, 1);
+            Transform temp2 = PickUpGUI[0].Spawn(transform.position, transform.rotation * Quaternion.AngleAxis(90, Vector3.forward)) as Transform;
+            temp2.SetParent(PlayerCanvas);
+            temp.SetParent(PlayerCanvas);
+            temp2.localScale = new Vector2(1, 1);
+            temp.GetComponent<RectTransform>().localPosition = new Vector3(0, 15, 0);
         }
     }
 
-    public void MachineGunPickup (bool purchased, bool pickup) {
-        if (!purchased) {
-            ammo.MachineGunClipLeft += Random.Range (5, 30);
-        } else {
+    public void MachineGunPickup(bool purchased, bool pickup)
+    {
+        if (!purchased)
+        {
+            ammo.MachineGunClipLeft += Random.Range(5, 30);
+        }
+        else
+        {
             ammo.MachineGunClipLeft += 30;
         }
-        if (!pickup) {
+        if (!pickup)
+        {
             tempAmmoCount = 100;
-        } else {
+        }
+        else
+        {
             tempAmmoCount = 45;
         }
         ammo.MachineGunMaxAmmo += tempAmmoCount;
-        if (!ShowMachineGun) {
-            Transform temp = AmmoCollectedText.Spawn (transform.position, transform.rotation * Quaternion.AngleAxis (90, Vector3.forward));
-            temp.GetComponentInChildren<Text> ().text = "+ Assault Rifle";
-            temp.SetParent (PlayerCanvas);
-            temp.GetComponent<RectTransform> ().localPosition = new Vector3 (0, 15, 0);
+        if (!ShowMachineGun)
+        {
+            Transform temp = AmmoCollectedText.Spawn(transform.position, transform.rotation * Quaternion.AngleAxis(90, Vector3.forward));
+            temp.GetComponentInChildren<Text>().text = "+ Assault Rifle";
+            temp.SetParent(PlayerCanvas);
+            temp.GetComponent<RectTransform>().localPosition = new Vector3(0, 15, 0);
             //            WeaponsPickedUp.Add(hitInfo.transform.gameObject);
-            Weapons[4].GetComponent<PickedUpCheck> ().pickedUp = true;
+            Weapons[4].GetComponent<PickedUpCheck>().pickedUp = true;
             ShowMachineGun = true;
-        } else {
+        }
+        else
+        {
 
-            Transform temp = AmmoCollectedText.Spawn (new Vector2 (transform.position.x, transform.position.y - 6), transform.rotation * Quaternion.AngleAxis (90, Vector3.forward)) as Transform;
-            temp.GetComponentInChildren<Text> ().text = "+" + tempAmmoCount;
-            Destroy (temp.gameObject, 1);
-            Transform temp2 = PickUpGUI[3].Spawn (transform.position, transform.rotation * Quaternion.AngleAxis (90, Vector3.forward)) as Transform;
-            temp2.SetParent (PlayerCanvas);
-            temp.SetParent (PlayerCanvas);
-            temp2.localScale = new Vector2 (1, 1);
-            temp.GetComponent<RectTransform> ().localPosition = new Vector3 (0, 15, 0);
+            Transform temp = AmmoCollectedText.Spawn(new Vector2(transform.position.x, transform.position.y - 6), transform.rotation * Quaternion.AngleAxis(90, Vector3.forward)) as Transform;
+            temp.GetComponentInChildren<Text>().text = "+" + tempAmmoCount;
+            Destroy(temp.gameObject, 1);
+            Transform temp2 = PickUpGUI[3].Spawn(transform.position, transform.rotation * Quaternion.AngleAxis(90, Vector3.forward)) as Transform;
+            temp2.SetParent(PlayerCanvas);
+            temp.SetParent(PlayerCanvas);
+            temp2.localScale = new Vector2(1, 1);
+            temp.GetComponent<RectTransform>().localPosition = new Vector3(0, 15, 0);
         }
     }
 
-    public void ShotgunPickup (bool purchased, bool pickup) {
-        if (!purchased) {
-            ammo.ShotgunClipLeft += Random.Range (1, 7);
-        } else {
+    public void ShotgunPickup(bool purchased, bool pickup)
+    {
+        if (!purchased)
+        {
+            ammo.ShotgunClipLeft += Random.Range(1, 7);
+        }
+        else
+        {
             ammo.ShotgunClipLeft += 7;
         }
-        if (!pickup) {
+        if (!pickup)
+        {
             tempAmmoCount = 50;
-        } else {
+        }
+        else
+        {
             tempAmmoCount = 20;
         }
         ammo.ShotgunMaxAmmo += tempAmmoCount;
-        if (!ShowShotgun) {
-            Transform temp = AmmoCollectedText.Spawn (transform.position, transform.rotation * Quaternion.AngleAxis (90, Vector3.forward));
-            temp.GetComponentInChildren<Text> ().text = "+ Shotgun";
-            temp.SetParent (PlayerCanvas);
-            temp.GetComponent<RectTransform> ().localPosition = new Vector3 (0, 15, 0);
+        if (!ShowShotgun)
+        {
+            Transform temp = AmmoCollectedText.Spawn(transform.position, transform.rotation * Quaternion.AngleAxis(90, Vector3.forward));
+            temp.GetComponentInChildren<Text>().text = "+ Shotgun";
+            temp.SetParent(PlayerCanvas);
+            temp.GetComponent<RectTransform>().localPosition = new Vector3(0, 15, 0);
             //            WeaponsPickedUp.Add(hitInfo.transform.gameObject);
-            Weapons[5].GetComponent<PickedUpCheck> ().pickedUp = true;
+            Weapons[5].GetComponent<PickedUpCheck>().pickedUp = true;
             ShowShotgun = true;
-        } else {
+        }
+        else
+        {
 
-            Transform temp = AmmoCollectedText.Spawn (new Vector2 (transform.position.x, transform.position.y - 6), transform.rotation * Quaternion.AngleAxis (90, Vector3.forward)) as Transform;
-            temp.GetComponentInChildren<Text> ().text = "+" + tempAmmoCount;
-            Destroy (temp.gameObject, 1);
-            Transform temp2 = PickUpGUI[1].Spawn (transform.position, transform.rotation * Quaternion.AngleAxis (90, Vector3.forward)) as Transform;
-            temp2.SetParent (PlayerCanvas);
-            temp.SetParent (PlayerCanvas);
-            temp2.localScale = new Vector2 (1, 1);
-            temp.GetComponent<RectTransform> ().localPosition = new Vector3 (0, 15, 0);
+            Transform temp = AmmoCollectedText.Spawn(new Vector2(transform.position.x, transform.position.y - 6), transform.rotation * Quaternion.AngleAxis(90, Vector3.forward)) as Transform;
+            temp.GetComponentInChildren<Text>().text = "+" + tempAmmoCount;
+            Destroy(temp.gameObject, 1);
+            Transform temp2 = PickUpGUI[1].Spawn(transform.position, transform.rotation * Quaternion.AngleAxis(90, Vector3.forward)) as Transform;
+            temp2.SetParent(PlayerCanvas);
+            temp.SetParent(PlayerCanvas);
+            temp2.localScale = new Vector2(1, 1);
+            temp.GetComponent<RectTransform>().localPosition = new Vector3(0, 15, 0);
         }
     }
 
-    public void SniperPickup (bool purchased, bool pickup) {
-        if (!purchased) {
-            ammo.SniperClipLeft += Random.Range (2, 10);
-        } else {
+    public void SniperPickup(bool purchased, bool pickup)
+    {
+        if (!purchased)
+        {
+            ammo.SniperClipLeft += Random.Range(2, 10);
+        }
+        else
+        {
             ammo.SniperClipLeft += 10;
         }
-        if (!pickup) {
+        if (!pickup)
+        {
             tempAmmoCount = 50;
-        } else {
+        }
+        else
+        {
             tempAmmoCount = 15;
         }
         ammo.SniperMaxAmmo += tempAmmoCount;
-        if (!ShowSniper) {
-            Transform temp = AmmoCollectedText.Spawn (transform.position, transform.rotation * Quaternion.AngleAxis (90, Vector3.forward));
-            temp.GetComponentInChildren<Text> ().text = "+ Sniper Rifle";
-            temp.SetParent (PlayerCanvas);
-            temp.GetComponent<RectTransform> ().localPosition = new Vector3 (0, 15, 0);
+        if (!ShowSniper)
+        {
+            Transform temp = AmmoCollectedText.Spawn(transform.position, transform.rotation * Quaternion.AngleAxis(90, Vector3.forward));
+            temp.GetComponentInChildren<Text>().text = "+ Sniper Rifle";
+            temp.SetParent(PlayerCanvas);
+            temp.GetComponent<RectTransform>().localPosition = new Vector3(0, 15, 0);
             //            WeaponsPickedUp.Add(hitInfo.transform.gameObject);
-            Weapons[6].GetComponent<PickedUpCheck> ().pickedUp = true;
+            Weapons[6].GetComponent<PickedUpCheck>().pickedUp = true;
             ShowSniper = true;
-        } else {
+        }
+        else
+        {
 
-            Transform temp = AmmoCollectedText.Spawn (new Vector2 (transform.position.x, transform.position.y - 6), transform.rotation * Quaternion.AngleAxis (90, Vector3.forward)) as Transform;
-            temp.GetComponentInChildren<Text> ().text = "+" + tempAmmoCount;
-            Destroy (temp.gameObject, 1);
-            Transform temp2 = PickUpGUI[2].Spawn (transform.position, transform.rotation * Quaternion.AngleAxis (90, Vector3.forward)) as Transform;
-            temp2.SetParent (PlayerCanvas);
-            temp.SetParent (PlayerCanvas);
-            temp2.localScale = new Vector2 (1, 1);
-            temp.GetComponent<RectTransform> ().localPosition = new Vector3 (0, 15, 0);
+            Transform temp = AmmoCollectedText.Spawn(new Vector2(transform.position.x, transform.position.y - 6), transform.rotation * Quaternion.AngleAxis(90, Vector3.forward)) as Transform;
+            temp.GetComponentInChildren<Text>().text = "+" + tempAmmoCount;
+            Destroy(temp.gameObject, 1);
+            Transform temp2 = PickUpGUI[2].Spawn(transform.position, transform.rotation * Quaternion.AngleAxis(90, Vector3.forward)) as Transform;
+            temp2.SetParent(PlayerCanvas);
+            temp.SetParent(PlayerCanvas);
+            temp2.localScale = new Vector2(1, 1);
+            temp.GetComponent<RectTransform>().localPosition = new Vector3(0, 15, 0);
         }
     }
 
-    public void MiniGunPickup (bool purchased, bool pickup) {
-        if (!purchased) {
-            ammo.MinigunClipLeft += Random.Range (80, 100);
-        } else {
+    public void MiniGunPickup(bool purchased, bool pickup)
+    {
+        if (!purchased)
+        {
+            ammo.MinigunClipLeft += Random.Range(80, 100);
+        }
+        else
+        {
             ammo.MinigunClipLeft += 100;
         }
-        if (!pickup) {
+        if (!pickup)
+        {
             tempAmmoCount = 300;
-        } else {
+        }
+        else
+        {
             tempAmmoCount = 100;
         }
         ammo.MinigunMaxAmmo += tempAmmoCount;
-        if (!ShowMinigun) {
-            Transform temp = AmmoCollectedText.Spawn (transform.position, transform.rotation * Quaternion.AngleAxis (90, Vector3.forward));
-            temp.GetComponentInChildren<Text> ().text = "+ MiniGun";
-            temp.SetParent (PlayerCanvas);
-            temp.GetComponent<RectTransform> ().localPosition = new Vector3 (0, 15, 0);
+        if (!ShowMinigun)
+        {
+            Transform temp = AmmoCollectedText.Spawn(transform.position, transform.rotation * Quaternion.AngleAxis(90, Vector3.forward));
+            temp.GetComponentInChildren<Text>().text = "+ MiniGun";
+            temp.SetParent(PlayerCanvas);
+            temp.GetComponent<RectTransform>().localPosition = new Vector3(0, 15, 0);
             //            WeaponsPickedUp.Add(hitInfo.transform.gameObject);
-            Weapons[7].GetComponent<PickedUpCheck> ().pickedUp = true;
+            Weapons[7].GetComponent<PickedUpCheck>().pickedUp = true;
             ShowMinigun = true;
-        } else {
+        }
+        else
+        {
 
-            Transform temp = AmmoCollectedText.Spawn (new Vector2 (transform.position.x, transform.position.y - 6), transform.rotation * Quaternion.AngleAxis (90, Vector3.forward)) as Transform;
-            temp.GetComponentInChildren<Text> ().text = "+" + tempAmmoCount;
-            Destroy (temp.gameObject, 1);
+            Transform temp = AmmoCollectedText.Spawn(new Vector2(transform.position.x, transform.position.y - 6), transform.rotation * Quaternion.AngleAxis(90, Vector3.forward)) as Transform;
+            temp.GetComponentInChildren<Text>().text = "+" + tempAmmoCount;
+            Destroy(temp.gameObject, 1);
             //            Transform temp2 = PickUpGUI[3].Spawn(transform.position, transform.rotation * Quaternion.AngleAxis(90, Vector3.forward)) as Transform;
             //            temp2.SetParent(PlayerCanvas);
             //            temp.SetParent(PlayerCanvas);
@@ -752,109 +889,140 @@ public class CharacterStats : MonoBehaviour {
         }
     }
 
-    void Shooting () {
+    void ShootingHandler()
+    {
         if (Dead && PauseMenu.isPaused)
             return;
 
-        if (!stunned) {
-            if (CanShoot) {
-                if (Time.time >= shootTime) {
-                    if (!ammo.reloading) {
+        if (!stunned)
+        {
+            if (CanShoot)
+            {
+                if (Time.time >= shootTime)
+                {
+                    if (!ammo.reloading)
+                    {
 
-                        if (TypeofWeapon == Weapon.Pistol) {
-                            if (ammo.PistolClipLeft > 0) {
-                                bulletPrefab.Spawn (bulletSpawn.transform.position, AimingGO.transform.rotation);
+                        if (TypeofWeapon == Weapon.Pistol)
+                        {
+                            if (ammo.PistolClipLeft > 0)
+                            {
+                                bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation);
 
-                                if (StaticVariables.MovementMultiply == 1) {
+                                if (StaticVariables.MovementMultiply == 1)
+                                {
                                     shootTime = Time.time + shotInterval;
-                                } else {
+                                }
+                                else
+                                {
                                     shootTime = Time.time + shotInterval / StaticVariables.MovementMultiply;
                                 }
 
                                 playermodel.bulletsUsed += 1;
                                 ammo.PistolClipLeft -= 1;
-                                WSanim.SetTrigger ("Shoot");
-                                GeneralMuzzle.SetTrigger ("Shoot");
-                                BulletCasing[chosenCasing].Spawn (new Vector3 (transform.position.x + Random.Range (-0.2f, 0.2f), transform.position.y + Random.Range (-0.2f, 0.2f), transform.position.z), transform.rotation * Quaternion.AngleAxis (90, Vector3.forward));
+                                WSanim.SetTrigger("Shoot");
+                                GeneralMuzzle.SetTrigger("Shoot");
+                                BulletCasing[chosenCasing].Spawn(new Vector3(transform.position.x + Random.Range(-0.2f, 0.2f), transform.position.y + Random.Range(-0.2f, 0.2f), transform.position.z), transform.rotation * Quaternion.AngleAxis(90, Vector3.forward));
 
-                            } else
-                                EmptyClipSound ();
+                            }
+                            else
+                                EmptyClipSound();
 
                         }
-                        if (TypeofWeapon == Weapon.MachineGun) {
-                            if (ammo.MachineGunClipLeft > 0) {
+                        if (TypeofWeapon == Weapon.MachineGun)
+                        {
+                            if (ammo.MachineGunClipLeft > 0)
+                            {
                                 shotsfired = 0;
                                 shootBurst = true;
 
-                            } else
-                                EmptyClipSound ();
+                            }
+                            else
+                                EmptyClipSound();
                         }
-                        if (TypeofWeapon == Weapon.Shotgun) {
-                            if (ammo.ShotgunClipLeft > 0) {
+                        if (TypeofWeapon == Weapon.Shotgun)
+                        {
+                            if (ammo.ShotgunClipLeft > 0)
+                            {
 
-                                bulletPrefab.Spawn (bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis (-16, Vector3.forward)); // -30 on z
-                                bulletPrefab.Spawn (bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis (-7, Vector3.forward)); // -30 on z
-                                bulletPrefab.Spawn (bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis (1, Vector3.forward)); // 0 on z
-                                bulletPrefab.Spawn (bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis (7, Vector3.forward)); // 15 on z
-                                bulletPrefab.Spawn (bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis (16, Vector3.forward)); // 30 on z
+                                bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(-16, Vector3.forward)); // -30 on z
+                                bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(-7, Vector3.forward)); // -30 on z
+                                bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(1, Vector3.forward)); // 0 on z
+                                bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(7, Vector3.forward)); // 15 on z
+                                bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(16, Vector3.forward)); // 30 on z
                                 //										
-                                if (StaticVariables.MovementMultiply == 1) {
+                                if (StaticVariables.MovementMultiply == 1)
+                                {
                                     shootTime = Time.time + shotInterval;
-                                } else {
+                                }
+                                else
+                                {
                                     shootTime = Time.time + shotInterval / StaticVariables.MovementMultiply;
                                 }
                                 playermodel.bulletsUsed += 1;
                                 ammo.ShotgunClipLeft -= 1;
 
-                                WSanim.SetTrigger ("Shoot");
-                                GeneralMuzzle.SetTrigger ("Shoot");
+                                WSanim.SetTrigger("Shoot");
+                                GeneralMuzzle.SetTrigger("Shoot");
 
-                                BulletCasing[chosenCasing].Spawn (new Vector3 (transform.position.x + Random.Range (-0.2f, 0.2f), transform.position.y + Random.Range (-0.2f, 0.2f), transform.position.z), transform.rotation * Quaternion.AngleAxis (90, Vector3.forward));
+                                BulletCasing[chosenCasing].Spawn(new Vector3(transform.position.x + Random.Range(-0.2f, 0.2f), transform.position.y + Random.Range(-0.2f, 0.2f), transform.position.z), transform.rotation * Quaternion.AngleAxis(90, Vector3.forward));
 
-                            } else
-                                EmptyClipSound ();
+                            }
+                            else
+                                EmptyClipSound();
                         }
-                        if (TypeofWeapon == Weapon.Sniper) {
-                            if (ammo.SniperClipLeft > 0) {
+                        if (TypeofWeapon == Weapon.Sniper)
+                        {
+                            if (ammo.SniperClipLeft > 0)
+                            {
 
-                                Transform tempBullet = bulletPrefab.Spawn (bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis (1, Vector3.forward)); // 0 on z
+                                Transform tempBullet = bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(1, Vector3.forward)); // 0 on z
 
-                                tempBullet.GetComponent<bullet> ().SniperBullet = true;
+                                tempBullet.GetComponent<bullet>().SniperBullet = true;
 
-                                if (StaticVariables.MovementMultiply == 1) {
+                                if (StaticVariables.MovementMultiply == 1)
+                                {
                                     shootTime = Time.time + shotInterval;
-                                } else {
+                                }
+                                else
+                                {
                                     shootTime = Time.time + shotInterval / StaticVariables.MovementMultiply;
                                 }
                                 playermodel.bulletsUsed += 1;
                                 ammo.SniperClipLeft -= 1;
 
-                                WSanim.SetTrigger ("Shoot");
-                                GeneralMuzzle.SetTrigger ("Shoot");
+                                WSanim.SetTrigger("Shoot");
+                                GeneralMuzzle.SetTrigger("Shoot");
 
-                                BulletCasing[chosenCasing].Spawn (new Vector3 (transform.position.x + Random.Range (-0.2f, 0.2f), transform.position.y + Random.Range (-0.2f, 0.2f), transform.position.z), transform.rotation * Quaternion.AngleAxis (90, Vector3.forward));
+                                BulletCasing[chosenCasing].Spawn(new Vector3(transform.position.x + Random.Range(-0.2f, 0.2f), transform.position.y + Random.Range(-0.2f, 0.2f), transform.position.z), transform.rotation * Quaternion.AngleAxis(90, Vector3.forward));
 
-                            } else
-                                EmptyClipSound ();
+                            }
+                            else
+                                EmptyClipSound();
 
                         }
-                        if (TypeofWeapon == Weapon.Minigun) {
+                        if (TypeofWeapon == Weapon.Minigun)
+                        {
 
-                            if (ammo.MinigunClipLeft > 0) {
-                                bulletPrefab.Spawn (bulletSpawn.transform.position, AimingGO.transform.rotation);
+                            if (ammo.MinigunClipLeft > 0)
+                            {
+                                bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation);
 
-                                if (StaticVariables.MovementMultiply == 1) {
+                                if (StaticVariables.MovementMultiply == 1)
+                                {
                                     shootTime = Time.time + shotInterval;
-                                } else {
+                                }
+                                else
+                                {
                                     shootTime = Time.time + shotInterval / StaticVariables.MovementMultiply;
                                 }
 
                                 playermodel.bulletsUsed += 1;
                                 ammo.MinigunClipLeft -= 1;
 
-                                WSanim.SetTrigger ("Shoot");
-                                GeneralMuzzle.SetTrigger ("Shoot");
-                                BulletCasing[chosenCasing].Spawn (new Vector3 (transform.position.x + Random.Range (-0.2f, 0.2f), transform.position.y + Random.Range (-0.2f, 0.2f), transform.position.z), transform.rotation * Quaternion.AngleAxis (90, Vector3.forward));
+                                WSanim.SetTrigger("Shoot");
+                                GeneralMuzzle.SetTrigger("Shoot");
+                                BulletCasing[chosenCasing].Spawn(new Vector3(transform.position.x + Random.Range(-0.2f, 0.2f), transform.position.y + Random.Range(-0.2f, 0.2f), transform.position.z), transform.rotation * Quaternion.AngleAxis(90, Vector3.forward));
 
                             }
                         }
@@ -862,102 +1030,124 @@ public class CharacterStats : MonoBehaviour {
                 }
 
             }
-        } else {
+        }
+        else
+        {
             Shake.shake = 1;
             allowMovement = false;
-            Invoke ("RemoveStun", 2);
+            Invoke("RemoveStun", 2);
         }
 
     }
 
-    void EmptyClipSound () {
+    void EmptyClipSound()
+    {
 
     }
 
-    IEnumerator IncrementStamina () {
-        if (!Dead && !PauseMenu.isPaused) {
-            if (!stunned) {
-                if (Stamina < 100) {
+    IEnumerator IncrementStamina()
+    {
+        if (!Dead && !PauseMenu.isPaused)
+        {
+            if (!stunned)
+            {
+                if (Stamina < 100)
+                {
 
-                    if (Stamina == 33) {
-                        yield return new WaitForSeconds (2f);
+                    if (Stamina == 33)
+                    {
+                        yield return new WaitForSeconds(2f);
 
                     }
-                    if (Stamina == 66) {
-                        yield return new WaitForSeconds (2f);
+                    if (Stamina == 66)
+                    {
+                        yield return new WaitForSeconds(2f);
                     }
-                    if (Stamina < 99) {
+                    if (Stamina < 99)
+                    {
                         Stamina++;
                     }
 
                 }
             }
         }
-        yield return new WaitForSeconds (0.05f);
+        yield return new WaitForSeconds(0.05f);
 
-        StartCoroutine (IncrementStamina ());
+        StartCoroutine(IncrementStamina());
     }
 
-    IEnumerator Death () {
-        PostScores ();
+    IEnumerator Death()
+    {
+        PostScores();
 
-        MainPauseParent.SetActive (false);
+        MainPauseParent.SetActive(false);
         cg.alpha = 0;
-        if (!PauseMenu.isPaused) {
-            GetComponent<Collider2D> ().enabled = false;
+        if (!PauseMenu.isPaused)
+        {
+            GetComponent<Collider2D>().enabled = false;
             //            GOEnemyShoots.GetComponent<Collider2D>().enabled = false;
             Dead = true;
-            BloodSplat.SetActive (true);
+            BloodSplat.SetActive(true);
             Health = startingHealth;
             //			PlayerModel.LivesLost += 10;
-            PlayerPrefs.SetInt ("LivesLost", PlayerModel.LivesLost += 10);
+            PlayerPrefs.SetInt("LivesLost", PlayerModel.LivesLost += 10);
             Lives -= 1;
-            AimingGO.SetActive (false);
-            Shadow.SetActive (false);
+            AimingGO.SetActive(false);
+            Shadow.SetActive(false);
             showgrey = true;
-            anim.SetBool ("Walk", false);
-            anim.SetBool ("FastWalk", false);
-            yield return new WaitForSeconds (1);
-            if (Lives == 0) {
-                ActuallyDead ();
+            anim.SetBool("Walk", false);
+            anim.SetBool("FastWalk", false);
+            yield return new WaitForSeconds(1);
+            if (Lives == 0)
+            {
+                ActuallyDead();
             }
         }
     }
 
-    void PostScores () {
-        if (WaveManager.WM.ZombieMode) {
+    void PostScores()
+    {
+        if (WaveManager.WM.ZombieMode)
+        {
             // post score to zombie scoreboard
-            if (Score > HighScoreZombie) {
+            if (Score > HighScoreZombie)
+            {
                 HighScoreZombie = Score;
                 // post
-                Social.ReportScore ((int) HighScoreZombie, "CgkI9OO2ssgEEAIQAQ", (bool success) => { });
-                PlayerPrefs.SetFloat ("HighScoreZombie", HighScoreZombie);
+                Social.ReportScore((int)HighScoreZombie, "CgkI9OO2ssgEEAIQAQ", (bool success) => { });
+                PlayerPrefs.SetFloat("HighScoreZombie", HighScoreZombie);
             }
-        } else {
+        }
+        else
+        {
             // post score to normal scoreboard
-            if (Score > HighScoreNormal) {
+            if (Score > HighScoreNormal)
+            {
                 HighScoreNormal = Score;
                 // post
-                Social.ReportScore ((int) HighScoreZombie, "CgkI9OO2ssgEEAIQAA", (bool success) => { });
-                PlayerPrefs.SetFloat ("HighScoreNormal", HighScoreNormal);
+                Social.ReportScore((int)HighScoreZombie, "CgkI9OO2ssgEEAIQAA", (bool success) => { });
+                PlayerPrefs.SetFloat("HighScoreNormal", HighScoreNormal);
             }
         }
     }
 
-    void ActuallyDead () {
-        GamesPlayed = PlayerPrefs.GetInt ("GamesPlayed");
-        Application.LoadLevelAdditive ("DeathScreen");
+    void ActuallyDead()
+    {
+        GamesPlayed = PlayerPrefs.GetInt("GamesPlayed");
+        Application.LoadLevelAdditive("DeathScreen");
         GamesPlayed += 1;
 
-        if (GamesPlayed == 5) {
-            Application.LoadLevelAdditive ("RateMe");
+        if (GamesPlayed == 5)
+        {
+            Application.LoadLevelAdditive("RateMe");
             GamesPlayed++;
         }
-        PlayerPrefs.SetInt ("GamesPlayed", GamesPlayed);
+        PlayerPrefs.SetInt("GamesPlayed", GamesPlayed);
     }
 
     public static int GamesPlayed;
-    void RemoveStun () {
+    void RemoveStun()
+    {
         stunned = false;
         allowMovement = true;
     }
@@ -965,43 +1155,52 @@ public class CharacterStats : MonoBehaviour {
     [HideInInspector]
     public int WhichWeapon;
 
-    void WeaponChange () {
-        switch (WhichWeapon) {
+    void WeaponChangeHandler()
+    {
+        switch (WhichWeapon)
+        {
             case 0:
                 TypeofWeapon = Weapon.Fist;
                 break;
             case 1:
-                if (ShowPipe) {
+                if (ShowPipe)
+                {
                     TypeofWeapon = Weapon.Pipe;
                 }
                 break;
             case 2:
-                if (ShowKnife) {
+                if (ShowKnife)
+                {
                     TypeofWeapon = Weapon.Knife;
                 }
                 break;
             case 3:
-                if (ShowPistol) {
+                if (ShowPistol)
+                {
                     TypeofWeapon = Weapon.Pistol;
                 }
                 break;
             case 4:
-                if (ShowMachineGun) {
+                if (ShowMachineGun)
+                {
                     TypeofWeapon = Weapon.MachineGun;
                 }
                 break;
             case 5:
-                if (ShowShotgun) {
+                if (ShowShotgun)
+                {
                     TypeofWeapon = Weapon.Shotgun;
                 }
                 break;
             case 6:
-                if (ShowSniper) {
+                if (ShowSniper)
+                {
                     TypeofWeapon = Weapon.Sniper;
                 }
                 break;
             case 7:
-                if (ShowMinigun) {
+                if (ShowMinigun)
+                {
                     TypeofWeapon = Weapon.Minigun;
                 }
                 break;
@@ -1022,49 +1221,61 @@ public class CharacterStats : MonoBehaviour {
     [HideInInspector]
     public bool CanShoot;
 
-    void MoveForward () {
-        if (!Dead && allowMovement) {
-            TestAnalogs ();
-            if (cooldownTimer > 0) {
+    void MoveForward()
+    {
+        if (!Dead && allowMovement)
+        {
+            TestAnalogs();
+            if (cooldownTimer > 0)
+            {
                 cooldownTimer -= Time.deltaTime;
             }
 
-            if (StaticVariables.MovementMultiply == 1) {
-                anim.SetBool ("FastWalk", false);
-                animGun.SetBool ("FastWalk", false);
+            if (StaticVariables.MovementMultiply == 1)
+            {
+                anim.SetBool("FastWalk", false);
+                animGun.SetBool("FastWalk", false);
             }
 
             // Stamina
-            StaminaGO.GetComponent<EnergyBar> ().valueCurrent = Stamina;
-            if (StaticVariables.infStamina) {
+            StaminaGO.GetComponent<EnergyBar>().valueCurrent = Stamina;
+            if (StaticVariables.infStamina)
+            {
                 Stamina = 99;
 
             }
-            if (!evading && cooldownTimer <= 0) {
+            if (!evading && cooldownTimer <= 0)
+            {
                 if (!DodgeButton.interactable)
                     DodgeButton.interactable = true;
-            } else {
+            }
+            else
+            {
                 if (DodgeButton.interactable)
                     DodgeButton.interactable = false;
             }
 
-        } else {
-            anim.SetBool ("Walk", false);
-            anim.SetBool ("FastWalk", false);
-            animGun.SetBool ("Walk", false);
-            animGun.SetBool ("FastWalk", false);
+        }
+        else
+        {
+            anim.SetBool("Walk", false);
+            anim.SetBool("FastWalk", false);
+            animGun.SetBool("Walk", false);
+            animGun.SetBool("FastWalk", false);
         }
     }
 
-    void TestAnalogs () {
+    void TestAnalogs()
+    {
         vel = r.velocity;
-        if (r.velocity.magnitude > maxVel) {
-            r.velocity = Vector3.ClampMagnitude (r.velocity, maxVel);
-            vel = Vector3.ClampMagnitude (vel, maxVel);
+        if (r.velocity.magnitude > maxVel)
+        {
+            r.velocity = Vector3.ClampMagnitude(r.velocity, maxVel);
+            vel = Vector3.ClampMagnitude(vel, maxVel);
         }
 
-        leftJoystickInput = leftJoystick.GetInputDirection ();
-        rightJoystickInput = rightJoystick.GetInputDirection ();
+        leftJoystickInput = leftJoystick.GetInputDirection();
+        rightJoystickInput = rightJoystick.GetInputDirection();
 
         float xMovementLeftJoystick = leftJoystickInput.x; // The horizontal movement from joystick 01
         float zMovementLeftJoystick = leftJoystickInput.y; // The vertical movement from joystick 01    
@@ -1074,60 +1285,72 @@ public class CharacterStats : MonoBehaviour {
 
         xAmount = xMovementRightJoystick;
 
-        if (leftJoystickInput != Vector3.zero) {
+        if (leftJoystickInput != Vector3.zero)
+        {
             smokeTimer += Time.deltaTime;
-            if (smokeTimer > 0.1f) {
-                Transform temp = DodgeHorizontal.Spawn (new Vector2 (transform.position.x, transform.position.y - 0.4f), transform.rotation) as Transform;
+            if (smokeTimer > 0.1f)
+            {
+                Transform temp = DodgeHorizontal.Spawn(new Vector2(transform.position.x, transform.position.y - 0.4f), transform.rotation) as Transform;
                 smokeTimer = 0;
             }
-        } else {
+        }
+        else
+        {
             smokeTimer = 0;
         }
 
         // if there is only input from the left joystick
-        if (leftJoystickInput != Vector3.zero && rightJoystickInput == Vector3.zero) {
+        if (leftJoystickInput != Vector3.zero && rightJoystickInput == Vector3.zero)
+        {
             // calculate the player's direction based on angle
-            float tempAngle = Mathf.Atan2 (zMovementLeftJoystick, xMovementLeftJoystick);
-            xMovementLeftJoystick *= Mathf.Abs (Mathf.Cos (tempAngle));
-            zMovementLeftJoystick *= Mathf.Abs (Mathf.Sin (tempAngle));
+            float tempAngle = Mathf.Atan2(zMovementLeftJoystick, xMovementLeftJoystick);
+            xMovementLeftJoystick *= Mathf.Abs(Mathf.Cos(tempAngle));
+            zMovementLeftJoystick *= Mathf.Abs(Mathf.Sin(tempAngle));
 
-            leftJoystickInput = new Vector3 (xMovementLeftJoystick, zMovementLeftJoystick, 0);
-            leftJoystickInput = transform.TransformDirection (-leftJoystickInput);
-            leftJoystickInput *= PlayerSettings.MoveSpeed* StaticVariables.MovementMultiply;
+            leftJoystickInput = new Vector3(xMovementLeftJoystick, zMovementLeftJoystick, 0);
+            leftJoystickInput = transform.TransformDirection(-leftJoystickInput);
+            leftJoystickInput *= PlayerSettings.MoveSpeed * StaticVariables.MovementMultiply;
 
-            if (!evading) {
+            if (!evading)
+            {
 
-                if (StaticVariables.MovementMultiply == 1) {
-                    anim.SetBool ("Walk", true);
-                    animGun.SetBool ("Walk", true);
-                } else if (StaticVariables.MovementMultiply == 2) {
-                    anim.SetBool ("FastWalk", true);
-                    animGun.SetBool ("FastWalk", true);
+                if (StaticVariables.MovementMultiply == 1)
+                {
+                    anim.SetBool("Walk", true);
+                    animGun.SetBool("Walk", true);
+                }
+                else if (StaticVariables.MovementMultiply == 2)
+                {
+                    anim.SetBool("FastWalk", true);
+                    animGun.SetBool("FastWalk", true);
                 }
             }
 
             if (WeaponID != 0 && WeaponID != 1 && WeaponID != 2)
-                AimingGO.transform.rotation = Quaternion.AngleAxis (90.0f, Vector3.forward);
-            else {
-                AimingGO.transform.rotation = Quaternion.AngleAxis (-180.0f, Vector3.forward);
+                AimingGO.transform.rotation = Quaternion.AngleAxis(90.0f, Vector3.forward);
+            else
+            {
+                AimingGO.transform.rotation = Quaternion.AngleAxis(-180.0f, Vector3.forward);
             }
 
             // move the player
 
-            r.AddForce (leftJoystickInput * Time.deltaTime * (MoveForce * 1000));
+            r.AddForce(leftJoystickInput * Time.deltaTime * (MoveForce * 1000));
             //            r.velocity = new Vector2(Mathf.Clamp(r.velocity.x, -10, 10), Mathf.Clamp(r.velocity.y, -10, 10));
             //            print(r.velocity);
             //            transform.Translate(leftJoystickInput * Time.deltaTime  * MoveForce);
         }
 
         // if there is only input from the right joystick
-        if (leftJoystickInput == Vector3.zero && rightJoystickInput != Vector3.zero) {
-            if (ControlType == 1) {
+        if (leftJoystickInput == Vector3.zero && rightJoystickInput != Vector3.zero)
+        {
+            if (ControlType == 1)
+            {
                 //            CanShoot = true;
                 // calculate the player's direction based on angle
-                float tempAngle = Mathf.Atan2 (zMovementRightJoystick, xMovementRightJoystick);
-                xMovementRightJoystick *= Mathf.Abs (Mathf.Cos (tempAngle));
-                zMovementRightJoystick *= Mathf.Abs (Mathf.Sin (tempAngle));
+                float tempAngle = Mathf.Atan2(zMovementRightJoystick, xMovementRightJoystick);
+                xMovementRightJoystick *= Mathf.Abs(Mathf.Cos(tempAngle));
+                zMovementRightJoystick *= Mathf.Abs(Mathf.Sin(tempAngle));
                 zMovementRightJoystick = -zMovementRightJoystick;
 
                 // Joystick Aiming
@@ -1135,11 +1358,14 @@ public class CharacterStats : MonoBehaviour {
                 var x = xMovementRightJoystick;
                 //          var y = Input.GetAxis("Xbox360ControllerRightY");
                 var y = zMovementRightJoystick;
-                if (x != 0.0f || y != 0.0f) {
-                    var angle = Mathf.Atan2 (y, x) * Mathf.Rad2Deg;
-                    AimingGO.transform.rotation = Quaternion.AngleAxis (-90.0f - angle, Vector3.forward);
-                } else {
-                    AimingGO.transform.rotation = Quaternion.AngleAxis (-180.0f, Vector3.forward);
+                if (x != 0.0f || y != 0.0f)
+                {
+                    var angle = Mathf.Atan2(y, x) * Mathf.Rad2Deg;
+                    AimingGO.transform.rotation = Quaternion.AngleAxis(-90.0f - angle, Vector3.forward);
+                }
+                else
+                {
+                    AimingGO.transform.rotation = Quaternion.AngleAxis(-180.0f, Vector3.forward);
                 }
 
             }
@@ -1147,169 +1373,207 @@ public class CharacterStats : MonoBehaviour {
         }
 
         // if there is input from both joysticks (Left And Right)
-        if (leftJoystickInput != Vector3.zero && rightJoystickInput != Vector3.zero) {
+        if (leftJoystickInput != Vector3.zero && rightJoystickInput != Vector3.zero)
+        {
             // calculate the player's direction based on angle
-            float tempAngleInputRightJoystick = Mathf.Atan2 (zMovementRightJoystick, xMovementRightJoystick);
-            xMovementRightJoystick *= Mathf.Abs (Mathf.Cos (tempAngleInputRightJoystick));
-            zMovementRightJoystick *= Mathf.Abs (Mathf.Sin (tempAngleInputRightJoystick));
+            float tempAngleInputRightJoystick = Mathf.Atan2(zMovementRightJoystick, xMovementRightJoystick);
+            xMovementRightJoystick *= Mathf.Abs(Mathf.Cos(tempAngleInputRightJoystick));
+            zMovementRightJoystick *= Mathf.Abs(Mathf.Sin(tempAngleInputRightJoystick));
             zMovementRightJoystick = -zMovementRightJoystick;
 
             //          var x = Input.GetAxis("Xbox360ControllerRightX");
             var x = xMovementRightJoystick;
             //          var y = Input.GetAxis("Xbox360ControllerRightY");
             var y = zMovementRightJoystick;
-            if (Tutorial.allowAim) {
-                if (x != 0.0f || y != 0.0f) {
-                    var angle = Mathf.Atan2 (y, x) * Mathf.Rad2Deg;
-                    AimingGO.transform.rotation = Quaternion.AngleAxis (-90.0f - angle, Vector3.forward);
-                } else {
-                    AimingGO.transform.rotation = Quaternion.AngleAxis (-180.0f, Vector3.forward);
+            if (Tutorial.allowAim)
+            {
+                if (x != 0.0f || y != 0.0f)
+                {
+                    var angle = Mathf.Atan2(y, x) * Mathf.Rad2Deg;
+                    AimingGO.transform.rotation = Quaternion.AngleAxis(-90.0f - angle, Vector3.forward);
+                }
+                else
+                {
+                    AimingGO.transform.rotation = Quaternion.AngleAxis(-180.0f, Vector3.forward);
                 }
             }
 
             // calculate the player's direction based on angle
-            float tempAngleLeftJoystick = Mathf.Atan2 (zMovementLeftJoystick, xMovementLeftJoystick);
-            xMovementLeftJoystick *= Mathf.Abs (Mathf.Cos (tempAngleLeftJoystick));
-            zMovementLeftJoystick *= Mathf.Abs (Mathf.Sin (tempAngleLeftJoystick));
+            float tempAngleLeftJoystick = Mathf.Atan2(zMovementLeftJoystick, xMovementLeftJoystick);
+            xMovementLeftJoystick *= Mathf.Abs(Mathf.Cos(tempAngleLeftJoystick));
+            zMovementLeftJoystick *= Mathf.Abs(Mathf.Sin(tempAngleLeftJoystick));
 
-            leftJoystickInput = new Vector3 (xMovementLeftJoystick, zMovementLeftJoystick, 0);
-            leftJoystickInput = transform.TransformDirection (-leftJoystickInput);
+            leftJoystickInput = new Vector3(xMovementLeftJoystick, zMovementLeftJoystick, 0);
+            leftJoystickInput = transform.TransformDirection(-leftJoystickInput);
             leftJoystickInput *= PlayerSettings.MoveSpeed * StaticVariables.MovementMultiply;
 
-            if (!evading) {
+            if (!evading)
+            {
 
-                if (StaticVariables.MovementMultiply == 1) {
-                    anim.SetBool ("Walk", true);
-                    animGun.SetBool ("Walk", true);
-                } else if (StaticVariables.MovementMultiply == 2) {
-                    anim.SetBool ("FastWalk", true);
-                    animGun.SetBool ("FastWalk", true);
+                if (StaticVariables.MovementMultiply == 1)
+                {
+                    anim.SetBool("Walk", true);
+                    animGun.SetBool("Walk", true);
+                }
+                else if (StaticVariables.MovementMultiply == 2)
+                {
+                    anim.SetBool("FastWalk", true);
+                    animGun.SetBool("FastWalk", true);
                 }
             }
 
             // move the player
-            r.AddForce (leftJoystickInput * Time.deltaTime * (MoveForce * 1000));
+            r.AddForce(leftJoystickInput * Time.deltaTime * (MoveForce * 1000));
 
             //            print(r.velocity);
             //            transform.Translate(leftJoystickInput * Time.deltaTime * MoveForce);
         }
 
-        if (leftJoystickInput == Vector3.zero && rightJoystickInput == Vector3.zero) {
+        if (leftJoystickInput == Vector3.zero && rightJoystickInput == Vector3.zero)
+        {
             if (WeaponID != 0 && WeaponID != 1 && WeaponID != 2)
-                AimingGO.transform.rotation = Quaternion.AngleAxis (90.0f, Vector3.forward);
-            else {
-                AimingGO.transform.rotation = Quaternion.AngleAxis (-180.0f, Vector3.forward);
+                AimingGO.transform.rotation = Quaternion.AngleAxis(90.0f, Vector3.forward);
+            else
+            {
+                AimingGO.transform.rotation = Quaternion.AngleAxis(-180.0f, Vector3.forward);
             }
         }
 
-        if (ControlType == 1) {
-            if (rightJoystickInput == Vector3.zero) {
+        if (ControlType == 1)
+        {
+            if (rightJoystickInput == Vector3.zero)
+            {
                 //            Debug.Log("Cant Shoot " + rightJoystickInput);
                 Aiming.enabled = false;
                 CanShoot = false;
                 shootdelay = 0;
-            } else {
+            }
+            else
+            {
                 Aiming.enabled = true;
                 CanShoot = true;
             }
         }
-        if (leftJoystickInput == Vector3.zero) {
-            if (StaticVariables.MovementMultiply == 1) {
-                anim.SetBool ("Walk", false);
-                animGun.SetBool ("Walk", false);
-            } else if (StaticVariables.MovementMultiply == 2) {
-                anim.SetBool ("FastWalk", false);
-                animGun.SetBool ("FastWalk", false);
+        if (leftJoystickInput == Vector3.zero)
+        {
+            if (StaticVariables.MovementMultiply == 1)
+            {
+                anim.SetBool("Walk", false);
+                animGun.SetBool("Walk", false);
+            }
+            else if (StaticVariables.MovementMultiply == 2)
+            {
+                anim.SetBool("FastWalk", false);
+                animGun.SetBool("FastWalk", false);
             }
         }
     }
 
-    public void ShootButton (bool pushed) {
+    public void ShootButton(bool pushed)
+    {
         CanShoot = pushed;
     }
 
     public Text ControlChoiceText;
 
-    public void ControlChoice (int i) {
+    public void ControlChoice(int i)
+    {
         ControlType = i;
-        PlayerPrefs.SetInt ("Controls", ControlType);
+        PlayerPrefs.SetInt("Controls", ControlType);
 
-        if (ControlType == 0) {
+        if (ControlType == 0)
+        {
             ControlChoiceText.text = "Aim Controls: Button";
-            Controls[0].SetActive (true);
-            Controls[1].SetActive (false);
-        } else {
+            Controls[0].SetActive(true);
+            Controls[1].SetActive(false);
+        }
+        else
+        {
             ControlChoiceText.text = "Aim Controls: Analog";
-            Controls[0].SetActive (false);
-            Controls[1].SetActive (true);
+            Controls[0].SetActive(false);
+            Controls[1].SetActive(true);
         }
     }
 
-    public void Dodge () {
-        if (Stamina >= 33) {
-            if (cooldownTimer <= 0) {
+    public void Dodge()
+    {
+        if (Stamina >= 33)
+        {
+            if (cooldownTimer <= 0)
+            {
 
-                if (!evading) {
+                if (!evading)
+                {
                     cooldownTimer = 2;
                     evading = true;
                     evadeTimer = 0.3f;
                 }
 
-                if (!StaticVariables.infStamina) {
+                if (!StaticVariables.infStamina)
+                {
                     Stamina -= 33;
                 }
             }
         }
-        if (Stamina < 0) {
+        if (Stamina < 0)
+        {
             Stamina = 0;
         }
     }
 
-    void ProcessEvasion () {
-        leftJoystickInput = leftJoystick.GetInputDirection ();
-        rightJoystickInput = rightJoystick.GetInputDirection ();
+    void ProcessEvasion()
+    {
+        leftJoystickInput = leftJoystick.GetInputDirection();
+        rightJoystickInput = rightJoystick.GetInputDirection();
 
         float xMovementLeftJoystick = leftJoystickInput.x; // The horizontal movement from joystick 01
         float zMovementLeftJoystick = leftJoystickInput.y; // The vertical movement from joystick 01    
 
-        if (evading) {
+        if (evading)
+        {
 
-            anim.SetBool ("Walk", false);
-            animGun.SetBool ("Walk", false);
+            anim.SetBool("Walk", false);
+            animGun.SetBool("Walk", false);
 
-            float tempAngleLeftJoystick = Mathf.Atan2 (zMovementLeftJoystick, xMovementLeftJoystick);
-            xMovementLeftJoystick *= Mathf.Abs (Mathf.Cos (tempAngleLeftJoystick));
-            zMovementLeftJoystick *= Mathf.Abs (Mathf.Sin (tempAngleLeftJoystick));
+            float tempAngleLeftJoystick = Mathf.Atan2(zMovementLeftJoystick, xMovementLeftJoystick);
+            xMovementLeftJoystick *= Mathf.Abs(Mathf.Cos(tempAngleLeftJoystick));
+            zMovementLeftJoystick *= Mathf.Abs(Mathf.Sin(tempAngleLeftJoystick));
 
-            leftJoystickInput = new Vector3 (xMovementLeftJoystick, zMovementLeftJoystick, 0);
-            leftJoystickInput = transform.TransformDirection (-leftJoystickInput);
+            leftJoystickInput = new Vector3(xMovementLeftJoystick, zMovementLeftJoystick, 0);
+            leftJoystickInput = transform.TransformDirection(-leftJoystickInput);
             leftJoystickInput *= PlayerSettings.MoveSpeed;
 
-            transform.Translate (leftJoystickInput * Time.fixedDeltaTime);
+            transform.Translate(leftJoystickInput * Time.fixedDeltaTime);
 
-            Transform temp = DodgeHorizontal.Spawn (new Vector2 (transform.position.x, transform.position.y - 0.4f), transform.rotation) as Transform;
-            temp.transform.rotation = Quaternion.AngleAxis (0, Vector3.forward);
+            Transform temp = DodgeHorizontal.Spawn(new Vector2(transform.position.x, transform.position.y - 0.4f), transform.rotation) as Transform;
+            temp.transform.rotation = Quaternion.AngleAxis(0, Vector3.forward);
 
-            if (evadeTimer <= 0) {
+            if (evadeTimer <= 0)
+            {
                 evading = false;
                 evadeTimer = 0;
-            } else {
+            }
+            else
+            {
                 evadeTimer -= Time.deltaTime;
             }
         }
     }
 
-    void CheckEnemies () {
+    void CheckEnemies()
+    {
         playermodel.checkingEnemiesInList = true;
 
     }
 
-    public void Damaged (float dmg) {
+    public void Damaged(float dmg)
+    {
         Health -= dmg;
-        SpriteGO.GetComponent<Animator> ().SetTrigger ("GetHurt");
+        SpriteGO.GetComponent<Animator>().SetTrigger("GetHurt");
     }
 
-    public static void AddScore (int score) {
+    public static void AddScore(int score)
+    {
         Score += score;
     }
 }

@@ -82,6 +82,7 @@ public class EnergyBarFollowObject : MonoBehaviour {
     }
 
     void Update() {
+        print(gameObject.name);
         if (followObject != null) {
             if (!Application.isPlaying || canvas == null) {
                 canvas = GetComponentInParent<Canvas>();

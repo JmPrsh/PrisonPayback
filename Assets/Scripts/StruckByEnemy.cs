@@ -17,15 +17,15 @@ public class StruckByEnemy : MonoBehaviour {
 
 	public IEnumerator Knockback(float knockDur,float knockbackPwr,Vector2 knockbackDir){
 
-		float timer = 0;
-		ParentGORigidbody2D.velocity = new Vector2 (ParentGORigidbody2D.velocity.x, 0);
-		while (knockDur > timer) {
+		// float timer = 0;
+		// ParentGORigidbody2D.velocity = new Vector2 (ParentGORigidbody2D.velocity.x, 0);
+		// while (knockDur > timer) {
 
-			timer += Time.deltaTime;
+		// 	timer += Time.deltaTime;
 
-			ParentGORigidbody2D.AddForce(new Vector2(knockbackDir.x * -100, knockbackDir.y * knockbackPwr));
+		// 	ParentGORigidbody2D.AddForce(new Vector2(knockbackDir.x * -100, knockbackDir.y * knockbackPwr));
 
-		}
+		// }
 
 		yield return null;
 	}

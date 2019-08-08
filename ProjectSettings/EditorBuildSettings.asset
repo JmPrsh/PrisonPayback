@@ -6,33 +6,33 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Using/SplashScreen.unity
+    path: Assets/_Scenes/Using/SplashScreen.unity
     guid: 15ce19cdce5484804aa5663bb0ba8043
   - enabled: 1
-    path: Assets/Scenes/Using/TitleScreen.unity
+    path: Assets/_Scenes/Using/TitleScreen.unity
     guid: 62ebdee3c9fe2cb4e87594c0ed7fc8d5
   - enabled: 1
-    path: Assets/Scenes/Using/Main.unity
+    path: Assets/_Scenes/Using/Main.unity
     guid: 7ced3701372d53c40a240979deb00914
   - enabled: 1
-    path: Assets/Scenes/Using/LoadingScreen.unity
+    path: Assets/_Scenes/Using/LoadingScreen.unity
     guid: 9f3eb05127dcacd47960576c14486f2b
   - enabled: 1
-    path: Assets/Scenes/Using/CharacterSelection.unity
+    path: Assets/_Scenes/Using/CharacterSelection.unity
     guid: 7d7963a841c9c42978dac5049f7064a2
   - enabled: 1
-    path: Assets/Scenes/Using/DeathScreen.unity
+    path: Assets/_Scenes/Using/DeathScreen.unity
     guid: edff66c4b24a7da43a87f74bd0d50368
   - enabled: 1
-    path: Assets/Scenes/Using/GameMode.unity
+    path: Assets/_Scenes/Using/GameMode.unity
     guid: e41b977341f84c2489bf3a872f1755fa
   - enabled: 1
-    path: Assets/Scenes/Using/Unlocks.unity
+    path: Assets/_Scenes/Using/Unlocks.unity
     guid: 491d8c6d4376b4a4688e662ac0f99138
   - enabled: 1
-    path: Assets/Scenes/NEW/RateMe.unity
+    path: Assets/_Scenes/NEW/RateMe.unity
     guid: 4abf354b4a1245c47921330085f2af45
   - enabled: 0
-    path: Assets/Scenes/Using/Zombie.unity
+    path: Assets/_Scenes/Using/Zombie.unity
     guid: b91f02b6ab5bb024f8045d820d233904
   m_configObjects: {}

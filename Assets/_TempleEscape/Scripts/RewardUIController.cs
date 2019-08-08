@@ -70,7 +70,6 @@ namespace SgLib
                 yield return new WaitForSeconds(0.03f);
             }
 
-            // Actually store the rewards.
             CoinManager.Instance.AddCoins(rewardValue);
             yield return new WaitForSeconds(0.2f);
 

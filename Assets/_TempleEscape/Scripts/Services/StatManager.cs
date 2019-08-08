@@ -9,11 +9,18 @@ public class StatManager : MonoBehaviour
 
     public int KillsHighscore;
     public int ComboHighscore;
-    public int HighestWave;
+ 
     public int CriticalsHighscore;
     public int BuffsHighscore;
     public int BrutesHighscore;
     public int BossesHighscore;
+
+    [Header("Special Character Objective Stats")]
+    public int ZombieKills;
+    public int BrutesKilled;
+    public int BossesKilled;
+       public int HighestWave;
+
 
 
     void Awake()

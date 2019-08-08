@@ -4,33 +4,25 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class attackPlayer : MonoBehaviour {
+public class attackPlayer : MonoBehaviour
+{
     public Enemy EnemyType;
     [HideInInspector]
-    public Vector3 targetPosition = new Vector3 ();
+    public Vector3 targetPosition = new Vector3();
     public Animator anim;
     [HideInInspector]
     public bool seenPlayer = true;
 
-    // [HideInInspector]
+    [HideInInspector]
+
     public float health = 100;
     [HideInInspector]
     float shootTime = 0.0f;
-    public Transform[] ShootFrom;
-    public int SpawnWeapon;
+    Transform ShootFrom;
     public int WeaponChanceMax;
-    public GameObject[] WeaponOfChoice;
-    [HideInInspector]
-    public int chooseEnemyAtStartUp;
-
-    public Transform childRandom;
+    public GameObject ChosenWeapon;
     public Transform ChildSprite;
-    public Sprite[] EnemySprite;
     float Damage;
-    [HideInInspector]
-    public List<GameObject> WeaponInt;
-    public Sprite[] EnemyBullets;
-    public Transform[] EnemyBulletCasing;
     [HideInInspector]
     public bool reload;
     [HideInInspector]
@@ -38,18 +30,14 @@ public class attackPlayer : MonoBehaviour {
     public float bursttimer = 0.2f;
     bool shootBurst;
     int shotsfired;
-    public AudioClip[] fire;
-    public Animator[] WeaponShoot;
     int WeaponID;
     Animator WSanim;
     Collider2D MeleeCollider;
-    public Animator[] WeaponMuzzleFlash;
     Animator WMFanim;
     public GameObject Shadow;
     bool showgrey;
     public GameObject DyingGO;
     public GameObject BloodSplat;
-    public GameObject BloodPool;
     [HideInInspector]
     public bool flipped;
     [HideInInspector]
@@ -78,272 +66,267 @@ public class attackPlayer : MonoBehaviour {
     [HideInInspector]
     public SpriteRenderer ChildSpriteRenderer;
     public LayerMask ObstacleLayer;
+    EnergyBar healthBar;
 
-    void Awake () {
-        ChildSpriteRenderer = ChildSprite.GetComponent<SpriteRenderer> ();
-        audiosource = GetComponent<AudioSource> ();
-        rg2d = GetComponent<Rigidbody2D> ();
+    void Awake()
+    {
+        ChildSpriteRenderer = ChildSprite.GetComponent<SpriteRenderer>();
+        audiosource = GetComponent<AudioSource>();
+        rg2d = GetComponent<Rigidbody2D>();
 
-        ChildCol = ChildSprite.GetComponent<Collider2D> ();
-        Col = GetComponent<Collider2D> ();
+        ChildCol = ChildSprite.GetComponent<Collider2D>();
+        Col = GetComponent<Collider2D>();
 
-        ChildAnimator = ChildSprite.GetComponent<Animator> ();
+        ChildAnimator = ChildSprite.GetComponent<Animator>();
 
         if (!CharacterStats.CS)
             return;
 
-        CSScoreCollected = CharacterStats.CS.ScoreCollectedText.GetComponent<Text> ();
-        hitSpawnText = CharacterStats.CS.hittext.GetComponentInChildren<Text> ();
-        ScoreGO = CharacterStats.CS.ScoreGO.GetComponent<Text> ();
-        ScoreGOAnim = CharacterStats.CS.ScoreGO.GetComponent<Animator> ();
+        CSScoreCollected = CharacterStats.CS.ScoreCollectedText.GetComponent<Text>();
+        hitSpawnText = CharacterStats.CS.hittext.GetComponentInChildren<Text>();
+        ScoreGO = CharacterStats.CS.ScoreGO.GetComponent<Text>();
+        ScoreGOAnim = CharacterStats.CS.ScoreGO.GetComponent<Animator>();
+
+        WSanim = ChosenWeapon.GetComponent<Animator>();
+        healthBar = transform.GetChild(0).GetChild(0).GetComponent<EnergyBar>();
+        healthBar.valueMax = (int)EnemyType.Health;
+        healthBar.valueCurrent = (int)EnemyType.Health;
     }
 
-    void OnEnable () {
-        ResetEnemy ();
+    void OnEnable()
+    {
+        ResetEnemy();
         if (BossIcon)
-            BossIcon.SetActive (EnemyType.enemyType == Enemy.EnemyType.Boss);
+            BossIcon.SetActive(EnemyType.enemyType == Enemy.EnemyType.Boss);
 
-        FindClosestPlayer ();
-        RandomSwingTime = Random.Range (1.6f, 2.5f);
+        FindClosestPlayer();
+        RandomSwingTime = Random.Range(1.6f, 2.5f);
 
-        transform.position = new Vector3 (transform.position.x + Random.Range (3, -3), transform.position.y + Random.Range (3, -3), transform.position.z);
+        transform.position = new Vector3(transform.position.x + Random.Range(3, -3), transform.position.y + Random.Range(3, -3), transform.position.z);
         shootTime = 0;
 
-        Quaternion randomRot = Quaternion.Euler (0, 0, Random.Range (0, 360));
-        childRandom.transform.rotation = randomRot;
+        ChooseEnemyType();
 
-        ChooseEnemyType ();
-
-        for (var i = 0; i < WeaponInt.Count; i++) {
-            WeaponInt[i].SetActive (true);
-        }
-
-        AimingGO.GetComponent<LookTowardsPlayer> ().Target = Target;
+        AimingGO.GetComponent<LookTowardsPlayer>().Target = Target;
 
     }
 
-    void ChooseEnemyType () {
+    void ChooseEnemyType()
+    {
         health = EnemyType.Health * WaveManager.HealthMultiplier;
-        Damage = EnemyType.Damage + Random.Range ((EnemyType.Damage - EnemyType.Damage / 10), (EnemyType.Damage + EnemyType.Damage / 10)) * WaveManager.DamageMultiplier;
-        ChildSpriteRenderer.sprite = EnemyType.EnemySprite;
+        Damage = EnemyType.Damage + Random.Range((EnemyType.Damage - EnemyType.Damage / 10), (EnemyType.Damage + EnemyType.Damage / 10)) * WaveManager.DamageMultiplier;
+        ChildSpriteRenderer.sprite = EnemyType.EnemySprite[Random.Range(0, EnemyType.EnemySprite.Length)];
+        DyingGO.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = ChildSpriteRenderer.sprite;
+        WMFanim = ChosenWeapon.GetComponent<Animator>();
+        ShootFrom = EnemyType.enemyAttackType == Enemy.EnemyAttackType.Melee ? null : ChosenWeapon.transform.GetChild(1);
 
-        if (EnemyType.name == "StandardGuard") {
-            ChildSpriteRenderer.sprite = EnemySprite[Random.Range (0, 3)];
-            if (EnemyType.enemyAttackType == Enemy.EnemyAttackType.Melee) {
-                WeaponHandler (0);
-                AssignMeleeCollider (0);
-            } else if (EnemyType.enemyAttackType == Enemy.EnemyAttackType.Gun) {
-                WeaponHandler (1);
-                WSanim = WeaponShoot[0];
-                WMFanim = WeaponMuzzleFlash[0];
-            }
-        } else if (EnemyType.name == "StandardGuardMelee") {
+        if (EnemyType.name == "StandardGuardMelee")
+        {
+            AssignMeleeCollider(0);
+        }
+        else if (EnemyType.name == "StandardGuardBrute")
+        {
+            AssignMeleeCollider(0);
+        }
 
-            ChildSpriteRenderer.sprite = EnemySprite[Random.Range (0, 3)];
-            WeaponHandler (0);
-            AssignMeleeCollider (0);
+        else if (EnemyType.name == "Riot")
+        {
+            AssignMeleeCollider(6);
+        }
+        else if (EnemyType.name == "RiotStun")
+        {
+            AssignMeleeCollider(7);
+        }
+        else if (EnemyType.enemyType == Enemy.EnemyType.Dog)
+        {
+            AssignMeleeCollider(0);
+        }
 
-        } else if (EnemyType.name == "StandardGuardBrute") {
-            ChildSpriteRenderer.sprite = EnemySprite[Random.Range (0, 3)];
+        if (EnemyType.enemyType == Enemy.EnemyType.MiniBoss)
+        {
             ChildSprite.transform.localScale = ChildSprite.transform.localScale * 1.3f;
-            ChildSprite.transform.position = new Vector2 (ChildSprite.transform.position.x, ChildSprite.transform.position.y + 0.2f);
-            chooseEnemyAtStartUp = Random.Range (0, 2);
-            WeaponHandler (0);
-            AssignMeleeCollider (0);
-
-        } else if (EnemyType.name == "Captain") {
-            WeaponHandler (3);
-            WSanim = WeaponShoot[1];
-            WMFanim = WeaponMuzzleFlash[1];
-        } else if (EnemyType.name == "CaptainBrute") {
-            ChildSprite.transform.localScale = ChildSprite.transform.localScale * 1.3f;
-            WeaponHandler (3);
-            WSanim = WeaponShoot[1];
-            WMFanim = WeaponMuzzleFlash[1];
-        } else if (EnemyType.name == "Riot") {
-            WeaponHandler (6); // shield
-            AssignMeleeCollider (6);
-        } else if (EnemyType.name == "RiotStun") {
-            WeaponHandler (7); // stun wand
-            AssignMeleeCollider (7);
-        } else if (EnemyType.name == "RiotBrute") {
-            ChildSprite.transform.localScale = ChildSprite.transform.localScale * 1.3f;
-            WeaponHandler (6);
-        } else if (EnemyType.name == "Swat") {
-            WeaponHandler (2);
-            WSanim = WeaponShoot[2];
-            WMFanim = WeaponMuzzleFlash[2];
-        } else if (EnemyType.name == "SwatDemolition") { } else if (EnemyType.name == "SwatBrute") {
-            ChildSprite.transform.localScale = ChildSprite.transform.localScale * 1.3f;
-            WeaponHandler (2);
-            WSanim = WeaponShoot[2];
-            WMFanim = WeaponMuzzleFlash[2];
-        } else if (EnemyType.name == "Sniper") {
-            WeaponHandler (4);
-            WSanim = WeaponShoot[3];
-            WMFanim = WeaponMuzzleFlash[3];
-        } else if (EnemyType.name == "Warden") {
-            WeaponHandler (5);
-            WSanim = WeaponShoot[4];
-            WMFanim = WeaponMuzzleFlash[4];
-        } else if (EnemyType.enemyType == Enemy.EnemyType.Zombie) {
-            WeaponHandler (0);
-        } else if (EnemyType.enemyType == Enemy.EnemyType.Dog) {
-            AssignMeleeCollider (0);
-            WeaponHandler (0);
+            ChildSprite.transform.position = new Vector2(ChildSprite.transform.position.x, ChildSprite.transform.position.y + 0.2f);
         }
     }
-
-    void WeaponHandler (int ID) {
-        WeaponID = ID;
-        foreach (GameObject weapons in WeaponOfChoice) {
-            WeaponInt.Add (WeaponOfChoice[ID]);
-            weapons.SetActive (false);
-        }
-    }
-
-    void AssignMeleeCollider (int i) {
-        MeleeCollider = WeaponOfChoice[i].GetComponent<Collider2D> ();
-        WeaponOfChoice[i].GetComponent<MeleeWeapon> ().isStunWand = EnemyType.enemyType == Enemy.EnemyType.StunWand;
+    void AssignMeleeCollider(int i)
+    {
+        MeleeCollider = ChosenWeapon.GetComponent<Collider2D>();
+        ChosenWeapon.GetComponent<MeleeWeapon>().isStunWand = EnemyType.enemyType == Enemy.EnemyType.StunWand;
     }
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         StaticVariables.EnemySpeed = 1;
     }
 
     // Update is called once per frame
     bool RemovedSelf;
 
-    void UpdateSpriteSortingOrder () {
-        ChildSpriteRenderer.sortingOrder = Mathf.RoundToInt (transform.position.y * 100f) * -1;
-    }
-
-    void FixedUpdate () {
+    void FixedUpdate()
+    {
 
         if (!CharacterStats.CS)
             return;
 
-        CheckifAlive ();
+        CheckifAlive();
 
-        if (!CharacterStats.CS.Dead) {
-            UpdateSpriteSortingOrder ();
-            // InvokeRepeating ("UpdateSpriteSortingOrder", 0.2f, 1f);
-            if (!PauseMenu.isPaused && CharacterStats.allowMovement) {
-                ChildSpriteRenderer.material.SetFloat ("_GrayScale", greyAmount);
-                if (EnemyType.enemyType == Enemy.EnemyType.Dog) {
-                    Tail.GetComponent<SpriteRenderer> ().material.SetFloat ("_GrayScale", greyAmount);
+        if (!CharacterStats.CS.Dead)
+        {
+            if (!PauseMenu.isPaused && CharacterStats.allowMovement)
+            {
+                ChildSpriteRenderer.material.SetFloat("_GrayScale", greyAmount);
+                if (EnemyType.enemyType == Enemy.EnemyType.Dog)
+                {
+                    Tail.GetComponent<SpriteRenderer>().material.SetFloat("_GrayScale", greyAmount);
                 }
-                if (showgrey) {
-                    if (greyAmount > 0) {
+                if (showgrey)
+                {
+                    if (greyAmount > 0)
+                    {
                         greyAmount -= 1 * Time.deltaTime * 2;
                     }
-                } else {
-                    if (greyAmount < 1) {
+                }
+                else
+                {
+                    if (greyAmount < 1)
+                    {
                         greyAmount += 1 * Time.deltaTime * 2;
                     }
                 }
 
-                if (Target != null) {
-                    DyingGO.transform.rotation = Quaternion.AngleAxis (CharacterAngle, Vector3.forward);
+                if (Target != null)
+                {
+                    DyingGO.transform.rotation = Quaternion.AngleAxis(CharacterAngle, Vector3.forward);
 
-                    if (bulletsused >= EnemyType.bulletsinclip) {
+                    if (bulletsused >= EnemyType.bulletsinclip)
+                    {
                         bulletsused = 0;
-                        StartCoroutine (Reload ());
+                        StartCoroutine(Reload());
                     }
 
-                    if (!Dead) {
-                        CheckAttackDistance ();
-                        Shoot ();
-                    } else {
-                        anim.SetBool ("Walk", false);
+                    if (!Dead)
+                    {
+                        CheckAttackDistance();
+                        Shoot();
+                    }
+                    else
+                    {
+                        anim.SetBool("Walk", false);
                     }
                 }
             }
-        } else {
-            anim.SetBool ("Walk", false);
+        }
+        else
+        {
+            anim.SetBool("Walk", false);
 
         }
     }
 
-    void dmg (int amt) {
+    void dmg(int amt)
+    {
         health -= amt;
-        CheckifAlive ();
+        CheckifAlive();
     }
 
-    void ResetEnemy () {
-
+    void ResetEnemy()
+    {
         CharacterAngle = 0;
         startDeath = false;
-        AimingGO.SetActive (true);
-        BloodSplat.SetActive (false);
-        BloodPool.SetActive (false);
+        AimingGO.SetActive(true);
+        BloodSplat.SetActive(false);
         Col.enabled = true;
         ChildCol.enabled = true;
-        Shadow.SetActive (true);
+        Shadow.SetActive(true);
         showgrey = false;
 
-        ChildSpriteRenderer.material.SetFloat ("_EffectAmount", 0);
+        ChildSpriteRenderer.material.SetFloat("_EffectAmount", 0);
 
         if (EnemyType.enemyType == Enemy.EnemyType.Dog)
-            Tail.GetComponent<SpriteRenderer> ().material.SetFloat ("_EffectAmount", 0);
+            Tail.GetComponent<SpriteRenderer>().material.SetFloat("_EffectAmount", 0);
 
         Dead = false;
     }
 
-    void CheckObstacle (bool inPosition) {
-        RaycastHit2D hit = Physics2D.Raycast (transform.position, (transform.position - Target.transform.position), 5, ObstacleLayer);
-
-        if (hit.transform != null) {
-            if (hit.collider.CompareTag ("Wall"))
-                anim.SetBool ("Walk", false);
-        } else
-            anim.SetBool ("Walk", !inPosition);
+    void CheckObstacle(bool inPosition)
+    {
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, (transform.position - Target.transform.position), 5, ObstacleLayer);
+        if (inPosition)
+        {
+            anim.SetBool("Walk", false);
+        }
+        else
+        {
+            if (hit.transform != null)
+            {
+                if (hit.collider.CompareTag("Wall"))
+                    anim.SetBool("Walk", false);
+            }
+            else
+                anim.SetBool("Walk", true);
+        }
     }
+public bool InPosition;
+    void CheckAttackDistance()
+    {
+        InPosition = Vector2.Distance(transform.position, targetPosition) < 1;
+        if (Vector2.Distance(transform.position, targetPosition) > 1)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, EnemyType.MoveSpeed * Time.deltaTime);
+            CheckObstacle(false);
+        }
+        else
+            CheckObstacle(true);
 
-    void CheckAttackDistance () {
-        if (Vector2.Distance (transform.position, targetPosition) > 1) {
-            transform.position = Vector3.MoveTowards (transform.position, targetPosition, EnemyType.MoveSpeed * Time.deltaTime);
-            CheckObstacle (false);
-        } else
-            CheckObstacle (true);
-
-        if (Vector2.Distance (transform.position, Target.transform.position) <= (EnemyType.AttackDistance + 1.1f)) {
+        if (Vector2.Distance(transform.position, Target.transform.position) <= (EnemyType.AttackDistance + 1.1f))
+        {
             shootTime += 1 * Time.deltaTime;
 
-            if (EnemyType.enemyAttackType == Enemy.EnemyAttackType.Melee) {
-                if (shootTime >= RandomSwingTime) {
-                    MeleeAttack ();
+            if (EnemyType.enemyAttackType == Enemy.EnemyAttackType.Melee)
+            {
+                if (shootTime >= RandomSwingTime)
+                {
+                    MeleeAttack();
                 }
-            } else if (EnemyType.enemyAttackType == Enemy.EnemyAttackType.Gun) {
+            }
+            else if (EnemyType.enemyAttackType == Enemy.EnemyAttackType.Gun)
+            {
                 // if gun enemy
-                if (shootTime >= EnemyType.ShootRate && !reload) {
-                    if (EnemyType.name == "StandardGuard" || EnemyType.name == "StandardGuardBrute") {
-                        PistolAttack ();
+                if (shootTime >= EnemyType.ShootRate && !reload)
+                {
+                    if (EnemyType.name == "StandardGuard" || EnemyType.name == "StandardGuardBrute")
+                    {
+                        PistolAttack();
                     }
 
-                    if (EnemyType.name == "Captain" || EnemyType.name == "CaptainBrute") {
-                        ShotgunAttack ();
+                    if (EnemyType.name == "Captain" || EnemyType.name == "CaptainBrute")
+                    {
+                        ShotgunAttack();
                     }
 
-                    if (EnemyType.name == "Swat" || EnemyType.name == "SwatBrute") {
-                        MachineGunAttack ();
+                    if (EnemyType.name == "Swat" || EnemyType.name == "SwatBrute")
+                    {
+                        MachineGunAttack();
                     }
 
-                    if (EnemyType.name == "SwatDemolition") {
-                        GrenadeAttack ();
+                    if (EnemyType.name == "SwatDemolition")
+                    {
+                        GrenadeAttack();
                     }
 
-                    if (EnemyType.name == "Sniper") {
-                        SniperAttack ();
+                    if (EnemyType.name == "Sniper")
+                    {
+                        SniperAttack();
                     }
 
-                    if (EnemyType.name == "Boss") {
-                        MiniGunAttack ();
+                    if (EnemyType.name == "Warden")
+                    {
+                        MiniGunAttack();
                     }
 
                     shootTime = 0;
-                    audiosource.Play ();
+                    audiosource.Play();
                     bulletsused += 1;
                 }
 
@@ -351,107 +334,122 @@ public class attackPlayer : MonoBehaviour {
         }
     }
 
-    void MeleeAttack () {
-        MeleeWeapon meleeScript = WeaponOfChoice[WeaponID].GetComponent<MeleeWeapon> ();
-        meleeScript.Attack ();
+    void MeleeAttack()
+    {
+        MeleeWeapon meleeScript = ChosenWeapon.GetComponent<MeleeWeapon>();
+        meleeScript.Attack();
         shootTime = 0;
     }
 
-    void PistolAttack () {
-        EnemyBullet temp = EnemyType.bulletPrefab.Spawn (ShootFrom[0].transform.position, ShootFrom[0].transform.rotation * Quaternion.AngleAxis (-90, Vector3.forward * flipLook));
+    void PistolAttack()
+    {
+        EnemyBullet temp = EnemyType.bulletPrefab.Spawn(ShootFrom.transform.position, ShootFrom.transform.rotation * Quaternion.AngleAxis(90, Vector3.forward));
 
-        temp.transform.SetParent (null);
-        temp.gameObject.SetActive (true);
+        temp.transform.SetParent(null);
+        temp.gameObject.SetActive(true);
         temp.Damage = Damage;
-        temp.spriterenderer.sprite = EnemyBullets[0];
-        audiosource.clip = fire[0];
+        temp.spriterenderer.sprite = EnemyType.BulletSprite;
+        audiosource.clip = EnemyType.AttackSound;
 
-        EnemyBulletCasing[0].Spawn (new Vector3 (transform.position.x + Random.Range (-0.2f, 0.2f), transform.position.y + Random.Range (-0.2f, 0.2f), transform.position.z), transform.rotation);
+        EnemyType.BulletCasing.Spawn(new Vector3(transform.position.x + Random.Range(-0.2f, 0.2f), transform.position.y + Random.Range(-0.2f, 0.2f), transform.position.z), transform.rotation);
 
-        WSanim.SetTrigger ("Shoot");
-        WMFanim.SetTrigger ("Shoot");
+        WSanim.SetTrigger("Shoot");
+        WMFanim.SetTrigger("Shoot");
     }
 
-    void ShotgunAttack () {
-        EnemyBullet temp = EnemyType.bulletPrefab.Spawn (ShootFrom[1].transform.position, ShootFrom[1].transform.rotation * Quaternion.AngleAxis (-60, Vector3.forward * flipLook)); // -30 on z
-        EnemyBullet temp2 = EnemyType.bulletPrefab.Spawn (ShootFrom[1].transform.position, ShootFrom[1].transform.rotation * Quaternion.AngleAxis (-75, Vector3.forward * flipLook)); // -30 on z
-        EnemyBullet temp3 = EnemyType.bulletPrefab.Spawn (ShootFrom[1].transform.position, ShootFrom[1].transform.rotation * Quaternion.AngleAxis (-90, Vector3.forward * flipLook)); // 0 on z
-        EnemyBullet temp4 = EnemyType.bulletPrefab.Spawn (ShootFrom[1].transform.position, ShootFrom[1].transform.rotation * Quaternion.AngleAxis (-105, Vector3.forward * flipLook)); // 15 on z
-        EnemyBullet temp5 = EnemyType.bulletPrefab.Spawn (ShootFrom[1].transform.position, ShootFrom[1].transform.rotation * Quaternion.AngleAxis (-120, Vector3.forward * flipLook)); // 30 on z
+    void ShotgunAttack()
+    {
+        EnemyBullet temp = EnemyType.bulletPrefab.Spawn(ShootFrom.transform.position, ShootFrom.transform.rotation * Quaternion.AngleAxis(-60, Vector3.forward * flipLook)); // -30 on z
+        EnemyBullet temp2 = EnemyType.bulletPrefab.Spawn(ShootFrom.transform.position, ShootFrom.transform.rotation * Quaternion.AngleAxis(-75, Vector3.forward * flipLook)); // -30 on z
+        EnemyBullet temp3 = EnemyType.bulletPrefab.Spawn(ShootFrom.transform.position, ShootFrom.transform.rotation * Quaternion.AngleAxis(-90, Vector3.forward * flipLook)); // 0 on z
+        EnemyBullet temp4 = EnemyType.bulletPrefab.Spawn(ShootFrom.transform.position, ShootFrom.transform.rotation * Quaternion.AngleAxis(-105, Vector3.forward * flipLook)); // 15 on z
+        EnemyBullet temp5 = EnemyType.bulletPrefab.Spawn(ShootFrom.transform.position, ShootFrom.transform.rotation * Quaternion.AngleAxis(-120, Vector3.forward * flipLook)); // 30 on z
         temp.Damage = Damage;
         temp2.Damage = Damage;
         temp3.Damage = Damage;
         temp4.Damage = Damage;
         temp5.Damage = Damage;
-        temp.spriterenderer.sprite = EnemyBullets[1];
-        temp2.spriterenderer.sprite = EnemyBullets[1];
-        temp3.spriterenderer.sprite = EnemyBullets[1];
-        temp4.spriterenderer.sprite = EnemyBullets[1];
-        temp5.spriterenderer.sprite = EnemyBullets[1];
-        EnemyBulletCasing[1].Spawn (new Vector3 (transform.position.x + Random.Range (-0.2f, 0.2f), transform.position.y + Random.Range (-0.2f, 0.2f), transform.position.z), transform.rotation);
+        temp.spriterenderer.sprite = EnemyType.BulletSprite;
+        temp2.spriterenderer.sprite = EnemyType.BulletSprite;
+        temp3.spriterenderer.sprite = EnemyType.BulletSprite;
+        temp4.spriterenderer.sprite = EnemyType.BulletSprite;
+        temp5.spriterenderer.sprite = EnemyType.BulletSprite;
+        EnemyType.BulletCasing.Spawn(new Vector3(transform.position.x + Random.Range(-0.2f, 0.2f), transform.position.y + Random.Range(-0.2f, 0.2f), transform.position.z), transform.rotation);
 
-        WSanim.SetTrigger ("Shoot");
-        WMFanim.SetTrigger ("Shoot");
-        audiosource.clip = fire[1];
+        WSanim.SetTrigger("Shoot");
+        WMFanim.SetTrigger("Shoot");
+        audiosource.clip = EnemyType.AttackSound;
     }
 
-    void MachineGunAttack () {
-        audiosource.clip = fire[2];
+    void MachineGunAttack()
+    {
+        audiosource.clip = EnemyType.AttackSound;
         shotsfired = 0;
         shootBurst = true;
-        Shoot ();
+        Shoot();
     }
 
-    void GrenadeAttack () {
-        EnemyBullet temp = Grenade.Spawn (new Vector3 (transform.position.x + Random.Range (-0.2f, 0.2f), transform.position.y + 0.2f, transform.position.z), transform.rotation);
+    void GrenadeAttack()
+    {
+        EnemyBullet temp = Grenade.Spawn(new Vector3(transform.position.x + Random.Range(-0.2f, 0.2f), transform.position.y + 0.2f, transform.position.z), transform.rotation);
         temp.Grenade = true;
         temp.Damage = Damage;
     }
 
-    void SniperAttack () {
-        EnemyBullet temp = EnemyType.bulletPrefab.Spawn (ShootFrom[3].transform.position, ShootFrom[3].transform.rotation * Quaternion.AngleAxis (-90, Vector3.forward * flipLook));
+    void SniperAttack()
+    {
+        EnemyBullet temp = EnemyType.bulletPrefab.Spawn(ShootFrom.transform.position, ShootFrom.transform.rotation * Quaternion.AngleAxis(-90, Vector3.forward * flipLook));
         temp.Damage = Damage;
-        temp.spriterenderer.sprite = EnemyBullets[3];
-        EnemyBulletCasing[3].Spawn (new Vector3 (transform.position.x + Random.Range (-0.2f, 0.2f), transform.position.y + Random.Range (-0.2f, 0.2f), transform.position.z), transform.rotation);
+        temp.spriterenderer.sprite = EnemyType.BulletSprite;
+        EnemyType.BulletCasing.Spawn(new Vector3(transform.position.x + Random.Range(-0.2f, 0.2f), transform.position.y + Random.Range(-0.2f, 0.2f), transform.position.z), transform.rotation);
 
-        WSanim.SetTrigger ("Shoot");
-        WMFanim.SetTrigger ("Shoot");
-        audiosource.clip = fire[3];
+        WSanim.SetTrigger("Shoot");
+        WMFanim.SetTrigger("Shoot");
+        audiosource.clip = EnemyType.AttackSound;
     }
 
-    void MiniGunAttack () {
-        EnemyBullet temp = EnemyType.bulletPrefab.Spawn (ShootFrom[4].transform.position, ShootFrom[4].transform.rotation * Quaternion.AngleAxis (-90, Vector3.forward * flipLook));
+    void MiniGunAttack()
+    {
+        EnemyBullet temp = EnemyType.bulletPrefab.Spawn(ShootFrom.transform.position, ShootFrom.transform.rotation * Quaternion.AngleAxis(-90, Vector3.forward * flipLook));
         temp.Damage = Damage;
-        temp.spriterenderer.sprite = EnemyBullets[4];
-        EnemyBulletCasing[3].Spawn (new Vector3 (transform.position.x + Random.Range (-0.2f, 0.2f), transform.position.y + Random.Range (-0.2f, 0.2f), transform.position.z), transform.rotation);
+        temp.spriterenderer.sprite = EnemyType.BulletSprite;
+        EnemyType.BulletCasing.Spawn(new Vector3(transform.position.x + Random.Range(-0.2f, 0.2f), transform.position.y + Random.Range(-0.2f, 0.2f), transform.position.z), transform.rotation);
 
-        WSanim.SetTrigger ("Shoot");
-        WMFanim.SetTrigger ("Shoot");
-        audiosource.clip = fire[4];
+        WSanim.SetTrigger("Shoot");
+        WMFanim.SetTrigger("Shoot");
+        audiosource.clip = EnemyType.AttackSound;
     }
 
     public float RandomSwingTime;
 
-    void Shoot () {
-        if (!Dead) {
-            if (shootBurst) {
-                if (shotsfired < 3) {
-                    if (bursttimer > 0) {
+    void Shoot()
+    {
+        if (!Dead)
+        {
+            if (shootBurst)
+            {
+                if (shotsfired < 3)
+                {
+                    if (bursttimer > 0)
+                    {
                         bursttimer -= 2f * Time.deltaTime;
                     }
-                    if (bursttimer <= 0) {
-                        EnemyBullet temp = EnemyType.bulletPrefab.Spawn (ShootFrom[2].transform.position, ShootFrom[2].transform.rotation * Quaternion.AngleAxis (-90, Vector3.forward * flipLook));
+                    if (bursttimer <= 0)
+                    {
+                        EnemyBullet temp = EnemyType.bulletPrefab.Spawn(ShootFrom.transform.position, ShootFrom.transform.rotation * Quaternion.AngleAxis(-90, Vector3.forward * flipLook));
                         temp.Damage = EnemyType.Damage;
-                        temp.spriterenderer.sprite = EnemyBullets[2];
-                        audiosource.Play ();
-                        EnemyBulletCasing[2].Spawn (new Vector3 (transform.position.x + Random.Range (-0.2f, 0.2f), transform.position.y + Random.Range (-0.2f, 0.2f), transform.position.z), transform.rotation);
+                        temp.spriterenderer.sprite = EnemyType.BulletSprite;
+                        audiosource.Play();
+                        EnemyType.BulletCasing.Spawn(new Vector3(transform.position.x + Random.Range(-0.2f, 0.2f), transform.position.y + Random.Range(-0.2f, 0.2f), transform.position.z), transform.rotation);
                         shotsfired += 1;
 
                         bursttimer = 0.2f;
-                        WSanim.SetTrigger ("Shoot");
-                        WMFanim.SetTrigger ("Shoot");
+                        WSanim.SetTrigger("Shoot");
+                        WMFanim.SetTrigger("Shoot");
                     }
-                } else {
+                }
+                else
+                {
                     shootBurst = false;
                 }
             }
@@ -461,98 +459,112 @@ public class attackPlayer : MonoBehaviour {
 
     bool startDeath;
 
-    void CheckifAlive () {
-        if (Dead) {
-            if (!flipped) {
+    void CheckifAlive()
+    {
+
+        healthBar.valueCurrent = (int)health;
+        healthBar.gameObject.SetActive(healthBar.valueCurrent < healthBar.valueMax && health > 0);
+        if (Dead)
+        {
+            if (!flipped)
+            {
                 if (CharacterAngle < 90)
                     CharacterAngle += 90 * Time.deltaTime * 2;
-                else
-                    BloodPool.SetActive (true);
-            } else {
+
+            }
+            else
+            {
                 if (CharacterAngle > -90)
                     CharacterAngle -= 90 * Time.deltaTime * 2;
-                else
-                    BloodPool.SetActive (true);
+
             }
             if (EnemyType.enemyType == Enemy.EnemyType.Dog)
-                Tail.gameObject.SetActive (false);
+                Tail.gameObject.SetActive(false);
         }
     }
 
-    IEnumerator Death () {
-        if (EnemyType.enemyType == Enemy.EnemyType.Boss) {
+    IEnumerator Death()
+    {
+        CharacterStats.CS.Cash += EnemyType.CashToGive;
+        if (EnemyType.enemyType == Enemy.EnemyType.Boss)
+        {
             Stats.BossesKilled += 1;
             CharacterStats.CS.Cash += 30;
-        } else if (EnemyType.enemyType == Enemy.EnemyType.MiniBoss) {
+        }
+        else if (EnemyType.enemyType == Enemy.EnemyType.MiniBoss)
+        {
             Stats.BrutesKilled += 1;
             CharacterStats.CS.Cash += 10;
         }
 
-        foreach (GameObject weapons in WeaponOfChoice)
-            weapons.SetActive (false);
+        AimingGO.SetActive(false);
 
-        AimingGO.SetActive (false);
-
-        if (EnemyType.AllowWeaponDrop) {
-            SpawnWeapon = Random.Range (0, WeaponChanceMax);
-            if (SpawnWeapon == 2) {
-                EnemyType.WeaponToSpawn.Spawn (transform.position, transform.rotation);
+        if (EnemyType.AllowWeaponDrop)
+        {
+            if (Random.Range(0, WeaponChanceMax) == 2)
+            {
+                EnemyType.WeaponToSpawn.Spawn(transform.position, transform.rotation);
             }
         }
 
-        PlayerComboHandler ();
-        ColliderHandler ();
+        PlayerComboHandler();
+        ColliderHandler();
 
-        BloodSplat.SetActive (true);
-        Shadow.SetActive (false);
+        BloodSplat.SetActive(true);
+        BloodSplat.GetComponentInChildren<SpriteRenderer>().sortingOrder = ChildSpriteRenderer.sortingOrder - 1;
+        Shadow.SetActive(false);
         showgrey = true;
 
-        Transform temp = BloodStain.Spawn (transform.position, transform.rotation) as Transform;
-        temp.transform.rotation = Quaternion.AngleAxis (Random.Range (0, 360), Vector3.forward);
-        temp.localScale = temp.localScale * Random.Range (0.5f, 1);
+        Transform temp = BloodStain.Spawn(transform.position, transform.rotation) as Transform;
+        temp.transform.rotation = Quaternion.AngleAxis(Random.Range(0, 360), Vector3.forward);
+        temp.localScale = temp.localScale * Random.Range(0.5f, 1);
 
         Stats.Kills += 1;
-        yield return new WaitForSeconds (5);
-        this.Recycle ();
+        yield return new WaitForSeconds(5);
+        this.Recycle();
     }
 
-    void ColliderHandler () {
+    void ColliderHandler()
+    {
         Col.enabled = false;
         ChildCol.enabled = false;
     }
 
-    void PlayerComboHandler () {
+    void PlayerComboHandler()
+    {
         CharacterStats.CS.ComboTimer = 40;
         CharacterStats.Combo += 1;
         float ScoreGiven = (10 * CharacterStats.Combo) * WaveManager.ScoreMultiplier;
-        Transform Scoretemp = CharacterStats.CS.ScoreCollectedText.Spawn (new Vector3 (transform.position.x + Random.Range (-0.2f, 0.2f), transform.position.y + 0.4f, transform.position.z), transform.rotation) as Transform;
-        CSScoreCollected.text = ScoreGiven.ToString ();
+        Transform Scoretemp = CharacterStats.CS.ScoreCollectedText.Spawn(new Vector3(transform.position.x + Random.Range(-0.2f, 0.2f), transform.position.y + 0.4f, transform.position.z), transform.rotation) as Transform;
+        CSScoreCollected.text = ScoreGiven.ToString();
         CSScoreCollected.color = Color.white;
-        Scoretemp.SetParent (GameObject.Find ("PlayersHUD").transform);
-        Scoretemp.transform.localScale = new Vector2 (1f, 1f);
-        CharacterStats.Score += (int) ScoreGiven;
+        Scoretemp.SetParent(GameObject.Find("PlayersHUD").transform);
+        Scoretemp.transform.localScale = new Vector2(1f, 1f);
+        CharacterStats.Score += (int)ScoreGiven;
         CharacterStats.CS.Cash += 1;
     }
 
-    IEnumerator Reload () {
+    IEnumerator Reload()
+    {
         reload = true;
-        yield return new WaitForSeconds (EnemyType.reloadtime);
+        yield return new WaitForSeconds(EnemyType.reloadtime);
         reload = false;
 
     }
 
-    GameObject FindClosestPlayer () {
-
+    GameObject FindClosestPlayer()
+    {
         GameObject gos;
 
-        gos = GameObject.FindGameObjectWithTag ("Player");
+        gos = GameObject.FindGameObjectWithTag("Player");
 
         float distance = float.MaxValue;
         Vector3 position = transform.position;
 
         Vector3 diff = gos.transform.position - position;
         float curDistance = diff.sqrMagnitude;
-        if (curDistance < distance) {
+        if (curDistance < distance)
+        {
 
             Target = gos;
             distance = curDistance;
@@ -562,33 +574,39 @@ public class attackPlayer : MonoBehaviour {
 
     }
 
-    public void DamagedByPlayer (float dmg, bool crit, bool dmgBoost) {
+    public void DamagedByPlayer(float dmg, bool crit, bool dmgBoost)
+    {
         health -= dmg;
-        ChildAnimator.SetTrigger ("GetHurt");
+        ChildAnimator.SetTrigger("GetHurt");
 
-        Transform temp = CharacterStats.CS.hittext.Spawn (new Vector3 (WorldCanvas.transform.position.x + Random.Range (-0.2f, 0.2f), WorldCanvas.transform.position.y + 0.8f, WorldCanvas.transform.position.z), transform.rotation);
-        temp.SetParent (WorldCanvas.transform, false);
+        Transform temp = CharacterStats.CS.hittext.Spawn(new Vector3(WorldCanvas.transform.position.x + Random.Range(-0.2f, 0.2f), WorldCanvas.transform.position.y + 0.8f, WorldCanvas.transform.position.z), transform.rotation);
+        temp.SetParent(WorldCanvas.transform, false);
         temp.localPosition = Vector3.zero;
 
-        if (!crit) {
-            hitSpawnText.text = dmg.ToString ();
+        if (!crit)
+        {
+            hitSpawnText.text = dmg.ToString();
             if (!dmgBoost)
                 hitSpawnText.color = Color.white;
             else
                 hitSpawnText.color = Color.yellow;
-        } else {
-            hitSpawnText.text = "CRITICAL\n " + dmg.ToString ();
+        }
+        else
+        {
+            hitSpawnText.text = "CRITICAL\n " + dmg.ToString();
             hitSpawnText.color = Color.red;
         }
 
-        if (health <= 0) {
-            if (EnemyType.enemyType != Enemy.EnemyType.Dog) {
-                BossIcon.SetActive (BossIcon.activeInHierarchy);
+        if (health <= 0)
+        {
+            if (EnemyType.enemyType != Enemy.EnemyType.Dog)
+            {
+                BossIcon.SetActive(BossIcon.activeInHierarchy);
             }
             Dead = true;
             rg2d.isKinematic = true;
-            StartCoroutine (Death ());
-            WaveManager.WM.RemoveEnemyFromList ();
+            StartCoroutine(Death());
+            WaveManager.WM.RemoveEnemyFromList();
             return;
         }
     }

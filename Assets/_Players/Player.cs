@@ -8,4 +8,5 @@ public class Player : ScriptableObject
     public float Health;
     public float MoveSpeed;
     public float ColliderSize;
+    
 }

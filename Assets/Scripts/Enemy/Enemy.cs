@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu]
 public class Enemy : ScriptableObject
 {
+    public float CashToGive;
     public enum EnemyType
     {
         Normal,
@@ -30,7 +31,9 @@ public class Enemy : ScriptableObject
     public float AimSpeed;
     public int bulletsinclip;
     public EnemyBullet bulletPrefab;
-    public Sprite EnemySprite, BulletSprite;
+    public Sprite[] EnemySprite;
+    public Sprite BulletSprite;
     public bool AllowWeaponDrop;
-    public Transform WeaponToSpawn;
+    public Transform WeaponToSpawn, BulletCasing;
+    public AudioClip AttackSound;
 }

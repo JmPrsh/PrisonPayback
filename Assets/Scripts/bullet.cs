@@ -8,17 +8,11 @@ public class bullet : MonoBehaviour
 	public GameObject bulletImpact;
 	public GameObject bulletImpact2;
 	float timer;
-	//	public List<GameObject> ZombieDead;
-	PlayerModel PM;
-//	EnemyManager eg;
-	Vector2 Target;
 	public Sprite[] BulletSprite;
 	int criticalHit;
 	public Transform hittext;
 	public bool SniperBullet;
 	int peopleHit;
-	public AudioSource audiosource;
-	public Vector3 localScale;
 	public SpriteRenderer spriterenderer;
 
 	void Awake()
@@ -39,14 +33,7 @@ public class bullet : MonoBehaviour
 	{
 		GameObject audiosource = new GameObject();
 		audiosource.AddComponent<AudioSource>();
-		audiosource.name = "bullet audio";
         audiosource.AddComponent<destroyafterseconds>();
-
-
-		//		Vector2 dir = Input.mousePosition - Camera.main.WorldToScreenPoint (transform.position);
-		//		float angle = Mathf.Atan2 (dir.y, dir.x) * Mathf.Rad2Deg;
-		//		transform.rotation = Quaternion.AngleAxis (angle, transform.forward);
-		//		Target = dir;
 
 		if (CharacterStats.CS.TypeofWeapon == CharacterStats.Weapon.Pistol)
 		{
@@ -97,13 +84,13 @@ public class bullet : MonoBehaviour
 
 	void Update()
 	{
-        if (peopleHit == 3)
+        if (peopleHit >= 3)
         {
             this.Recycle();
         }
         transform.Translate(Vector3.up * 30f * Time.deltaTime);
 		//RaycastHit2D hitInfo;
-		RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.right, 0.5f, 1 << LayerMask.NameToLayer("Collisions"));
+		RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.right, 0.5f, 1 << LayerMask.NameToLayer("Enemy"));
 		if (hitInfo.collider != null)
 		{
 			criticalHit = Random.Range(1, 10);
@@ -112,28 +99,29 @@ public class bullet : MonoBehaviour
 
             if (hitInfo.transform.CompareTag("Enemy"))
 			{
-				hitInfo.transform.GetComponent<attackPlayer>().seenPlayer = true;
-				if (hitInfo.transform.GetComponent<attackPlayer>().health > 0)
+				attackPlayer EnemyScript = hitInfo.transform.GetComponent<attackPlayer>();
+				EnemyScript.seenPlayer = true;
+				if (EnemyScript.health > 0)
 				{
 					bulletImpact2.transform.Spawn(transform.position, hitInfo.transform.rotation);
 				}
-                hitInfo.transform.GetComponent<attackPlayer>().Target = CharacterStats.CS.gameObject;
+                EnemyScript.Target = CharacterStats.CS.gameObject;
 
 				if (criticalHit == 1)
 				{
 					Stats.Criticals += 1;
-					if (hitInfo.transform.GetComponent<attackPlayer>().health < 1)
+					if (EnemyScript.health < 1)
 					{
 						Time.timeScale = 0.3f;
 					}
 
-					hitInfo.transform.GetComponent<attackPlayer>().DamagedByPlayer(criticaldmg, true, false);
+					EnemyScript.DamagedByPlayer(criticaldmg, true, false);
 
 				}
 				else
 				{
 
-					hitInfo.transform.GetComponent<attackPlayer>().DamagedByPlayer(dmg, false, false);
+					EnemyScript.DamagedByPlayer(dmg, false, false);
 
 				}
 
@@ -146,12 +134,12 @@ public class bullet : MonoBehaviour
 				{
 					peopleHit += 1;
 				}
-				if (hitInfo.transform.GetComponent<attackPlayer>().health <= 0)
+				if (EnemyScript.health <= 0)
 				{
 
 					if (this.transform.position.x < hitInfo.transform.position.x)
 					{
-						hitInfo.transform.GetComponent<attackPlayer>().flipped = true;
+						EnemyScript.flipped = true;
 					}
 				}
 			}
