@@ -71,7 +71,6 @@ public class UIManager : MonoBehaviour
     {
         uim = this;
         scoreAnimator = score.GetComponent<Animator>();
-        dailyRewardAnimator = dailyRewardBtn.GetComponent<Animator>();
 
         //        Reset();
         ShowStartUI();
@@ -90,13 +89,12 @@ public class UIManager : MonoBehaviour
             if (DailyRewardController.Instance.CanRewardNow())
             {
                 dailyRewardBtnText.text = "GRAB YOUR REWARD!";
-                dailyRewardAnimator.SetTrigger("activate");
             }
             else
             {
                 TimeSpan timeToReward = DailyRewardController.Instance.TimeUntilReward;
                 dailyRewardBtnText.text = string.Format("{0:00}:{1:00}:{2:00}", timeToReward.Hours, timeToReward.Minutes, timeToReward.Seconds);
-                dailyRewardAnimator.SetTrigger("deactivate");
+                // dailyRewardAnimator.SetTrigger("deactivate");
             }
         }
 

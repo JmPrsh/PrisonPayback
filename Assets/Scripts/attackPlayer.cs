@@ -144,8 +144,13 @@ public class attackPlayer : MonoBehaviour
 
         if (EnemyType.enemyType == Enemy.EnemyType.MiniBoss)
         {
-            ChildSprite.transform.localScale = ChildSprite.transform.localScale * 1.3f;
-            ChildSprite.transform.position = new Vector2(ChildSprite.transform.position.x, ChildSprite.transform.position.y + 0.2f);
+            ChildSprite.transform.localScale = ChildSprite.transform.localScale * 2f;
+            ChildSprite.transform.position = new Vector2(ChildSprite.transform.position.x, ChildSprite.transform.position.y + 0.4f);
+        }
+         if (EnemyType.enemyType == Enemy.EnemyType.Boss)
+        {
+            ChildSprite.transform.localScale = ChildSprite.transform.localScale * 3f;
+            ChildSprite.transform.position = new Vector2(ChildSprite.transform.position.x, ChildSprite.transform.position.y + 0.6f);
         }
     }
     void AssignMeleeCollider(int i)
