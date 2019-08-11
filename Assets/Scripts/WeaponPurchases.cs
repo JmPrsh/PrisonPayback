@@ -94,14 +94,15 @@ public class WeaponPurchases : MonoBehaviour {
             case Weapon.Knife:
                 if(!CharacterStats.CS.ShowKnife){
                     CharacterStats.CS.KnifePickup();
-                    this.gameObject.SetActive(false);
+                   
                 }
+                 this.gameObject.SetActive(false);
                 break;
             case Weapon.Pipe:
                 if(!CharacterStats.CS.ShowPipe){
                     CharacterStats.CS.PipePickup();
-                    this.gameObject.SetActive(false);
                 }
+                this.gameObject.SetActive(false);
                 break;
             case Weapon.Pistol:
                 CharacterStats.CS.PistolPickup(true, false);

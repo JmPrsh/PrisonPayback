@@ -61,7 +61,7 @@ public class Stats : MonoBehaviour
 
     void OnEnable()
     {
-        Rooms = (WaveManager.WM.CurrentWave - 1);
+        Rooms = WaveManager.WM.WavesCleared;
         TimePlayed = (int)CharacterStats.timeplayed;
     }
 

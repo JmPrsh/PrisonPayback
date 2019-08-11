@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357ea14a322789a4a86b90c8c5f7bf06, type: 3}
   m_Name: Sniper
   m_EditorClassIdentifier: 
-  CashToGive: 10
+  CashToGive: 6
   enemyType: 0
   enemyAttackType: 1
   Damage: 20
   Health: 80
-  MoveSpeed: 5
+  MoveSpeed: 4
   ShootRate: 4
   AttackDistance: 9
   reloadtime: 4
@@ -31,3 +31,4 @@ MonoBehaviour:
   WeaponToSpawn: {fileID: 400002, guid: 17bedcd3a4883904ba3ba4626aa6d280, type: 3}
   BulletCasing: {fileID: 405830, guid: 8822add0c2ca0524d8ed4f305f852ca8, type: 3}
   AttackSound: {fileID: 8300000, guid: 328e1a7431dd0864690b4b1f7ac55a16, type: 3}
+  DroppedItem: {fileID: 400000, guid: 75d3d64b734914754b87fcd6cd94f053, type: 3}

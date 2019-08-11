@@ -11,7 +11,8 @@ public class CopyStats : MonoBehaviour {
         criticals,
         buffs,
         brutes,
-        bosses
+        bosses,
+        wavesCleared
     }
     public WhichStat whichstat;
 
@@ -39,6 +40,9 @@ public class CopyStats : MonoBehaviour {
                 break;
             case WhichStat.bosses:
                 t.text = StatManager.Instance.BossesHighscore.ToString();
+                break;
+            case WhichStat.wavesCleared:
+                t.text = StatManager.Instance.WavesCleared.ToString();
                 break;
         }
 	}

@@ -561,15 +561,15 @@ public class CharacterStats : MonoBehaviour
         if (TypeofWeapon == Weapon.Pipe)
         {
             WeaponID = 1;
-            DamageToShow = "20 - 30";
-            Damage = Random.Range(20, 30);
+            DamageToShow = "10 - 15";
+            Damage = Random.Range(10, 15);
             WeaponGUI.sprite = CurrentWeapon[1];
         }
         if (TypeofWeapon == Weapon.Knife)
         {
             WeaponID = 2;
-            DamageToShow = "35 - 45";
-            Damage = Random.Range(35, 45);
+            DamageToShow = "15 - 20";
+            Damage = Random.Range(15, 20);
             WeaponGUI.sprite = CurrentWeapon[2];
         }
         if (TypeofWeapon == Weapon.Pistol)
@@ -577,8 +577,8 @@ public class CharacterStats : MonoBehaviour
             chosenCasing = 0;
             WeaponID = 3;
             shotInterval = 0.2f;
-            DamageToShow = "15 - 25";
-            Damage = Random.Range(15, 25);
+            DamageToShow = "15 - 20";
+            Damage = Random.Range(15, 20);
             WeaponGUI.sprite = CurrentWeapon[3];
             WSanim = WeaponShoot[0];
             GeneralMuzzle = animMuzzle[3];
@@ -588,8 +588,8 @@ public class CharacterStats : MonoBehaviour
             chosenCasing = 1;
             WeaponID = 4;
             shotInterval = 0.3f;
-            DamageToShow = "45 - 55";
-            Damage = Random.Range(45, 55);
+            DamageToShow = "15 - 25";
+            Damage = Random.Range(15, 25);
             WeaponGUI.sprite = CurrentWeapon[4];
             WSanim = WeaponShoot[1];
             GeneralMuzzle = animMuzzle[4];
@@ -599,8 +599,8 @@ public class CharacterStats : MonoBehaviour
             chosenCasing = 2;
             WeaponID = 5;
             shotInterval = 1.0f;
-            DamageToShow = "25 - 35";
-            Damage = Random.Range(25, 35);
+            DamageToShow = "25 - 30";
+            Damage = Random.Range(25, 30);
             WeaponGUI.sprite = CurrentWeapon[5];
             WSanim = WeaponShoot[2];
             GeneralMuzzle = animMuzzle[5];
@@ -610,8 +610,8 @@ public class CharacterStats : MonoBehaviour
             chosenCasing = 3;
             WeaponID = 6;
             shotInterval = 1.0f;
-            DamageToShow = "135 - 145";
-            Damage = Random.Range(135, 145);
+            DamageToShow = "40 - 50";
+            Damage = Random.Range(40, 50);
             WeaponGUI.sprite = CurrentWeapon[6];
             WSanim = WeaponShoot[3];
             GeneralMuzzle = animMuzzle[6];
@@ -621,8 +621,8 @@ public class CharacterStats : MonoBehaviour
             chosenCasing = 4;
             WeaponID = 7;
             shotInterval = 0.05f;
-            DamageToShow = "30 - 45";
-            Damage = Random.Range(30, 45);
+            DamageToShow = "15 - 20";
+            Damage = Random.Range(15, 20);
             WeaponGUI.sprite = CurrentWeapon[7];
             WSanim = WeaponShoot[4];
             GeneralMuzzle = animMuzzle[7];
@@ -1125,7 +1125,7 @@ public class CharacterStats : MonoBehaviour
             {
                 HighScoreNormal = Score;
                 // post
-                Social.ReportScore((int)HighScoreZombie, "CgkI9OO2ssgEEAIQAA", (bool success) => { });
+                Social.ReportScore((int)HighScoreNormal, "CgkI9OO2ssgEEAIQAA", (bool success) => { });
                 PlayerPrefs.SetFloat("HighScoreNormal", HighScoreNormal);
             }
         }

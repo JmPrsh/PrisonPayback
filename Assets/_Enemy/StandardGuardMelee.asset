@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357ea14a322789a4a86b90c8c5f7bf06, type: 3}
   m_Name: StandardGuardMelee
   m_EditorClassIdentifier: 
-  CashToGive: 5
+  CashToGive: 1
   enemyType: 0
   enemyAttackType: 0
   Damage: 5
   Health: 100
-  MoveSpeed: 6
+  MoveSpeed: 4
   ShootRate: 1
   AttackDistance: 1
   reloadtime: 4
@@ -33,3 +33,4 @@ MonoBehaviour:
   WeaponToSpawn: {fileID: 465662, guid: e9a449dbf85c3054c972ebe69056fb49, type: 3}
   BulletCasing: {fileID: 0}
   AttackSound: {fileID: 8300000, guid: 4affb74f211bde04e98aa165106fa574, type: 3}
+  DroppedItem: {fileID: 400000, guid: 75d3d64b734914754b87fcd6cd94f053, type: 3}

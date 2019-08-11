@@ -1,16 +1,16 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using EasyButtons;
+using UnityEngine;
 using UnityEngine.UI;
 
-public class GameOver : MonoBehaviour
-{
+public class GameOver : MonoBehaviour {
     public static GameOver GO;
     bool quit;
     public GameObject[] Buttons;
     public Text Scoreboard;
     public Text Cigs;
-
+    public Text[] BonusText;
     public GameObject Stats;
 
     public bool transfer;
@@ -23,166 +23,146 @@ public class GameOver : MonoBehaviour
     float savedScore;
     // Use this for initialization
 
-    void Start()
-    {
+    void Start () {
         GO = this;
-        PlayerPrefs.SetInt("AreaProgress", 1);
-        if (CharacterStats.CS)
-        {
+        PlayerPrefs.SetInt ("AreaProgress", 1);
+        if (CharacterStats.CS) {
             CharacterStats.CS.Blur = true;
         }
 
-
     }
 
-    void OnEnable()
-    {
+    void OnEnable () {
         allowTransfer = true;
-        adButton.gameObject.SetActive(true);
+        adButton.gameObject.SetActive (true);
 
-        savedScore = (Mathf.Ceil(CharacterStats.Score / 100));
+        savedScore = (Mathf.Ceil ((CharacterStats.Score * BonusManager.multiplier) / 100));
         TargetScore = savedScore;
 
-        Invoke("TransferMoney", 5);
-        Invoke("ShowStats", 2);
+        Invoke ("TransferMoney", 5);
+        Invoke ("ShowStats", 2);
     }
 
-    void ShowStats()
-    {
-        Stats.SetActive(true);
+    void ShowStats () {
+        Stats.SetActive (true);
     }
     public bool testAdSuccess;
     // Update is called once per frame
-    void Update()
-    {
-        if (testAdSuccess)
-        {
-            DoubleReward();
+    void Update () {
+        if (testAdSuccess) {
+            DoubleReward ();
             testAdSuccess = false;
         }
 
-        if (CoinManager.Instance)
-        {
-            Cigs.text = CoinManager.Instance.Coins.ToString("00");
+        if (CoinManager.Instance) {
+            Cigs.text = CoinManager.Instance.Coins.ToString ("00");
         }
 
-        Scoreboard.text = CharacterStats.Score.ToString("000000");
-        if (transfer)
-        {
-            StartCoroutine(AdjustScore());
-            transferCigs();
+        Scoreboard.text = CharacterStats.Score.ToString ("000000");
+        if (transfer) {
+            StartCoroutine (AdjustScore ());
+            transferCigs ();
         }
-        if (allowContinue)
-        {
-            if (Input.GetButtonUp("Cancel") && !quit)
-            {
-                PlayerPrefs.SetString("LevelToLoad", "Menu");
-                GetComponent<Animator>().SetTrigger("quit");
-                Invoke("LoadScene", 2);
+        if (allowContinue) {
+            if (Input.GetButtonUp ("Cancel") && !quit) {
+                PlayerPrefs.SetString ("LevelToLoad", "Menu");
+                GetComponent<Animator> ().SetTrigger ("quit");
+                Invoke ("LoadScene", 2);
                 quit = true;
 
             }
-            if (Input.GetButton("Submit"))
-            {
-                PlayerPrefs.SetString("LevelToLoad", "GameMode");
-                Invoke("LoadScene", 2);
+            if (Input.GetButton ("Submit")) {
+                PlayerPrefs.SetString ("LevelToLoad", "GameMode");
+                Invoke ("LoadScene", 2);
             }
         }
     }
 
-    public void Restart()
-    {
-        if (!quit)
-        {
-            PlayerPrefs.SetString("LevelToLoad", "GameMode");
-            Invoke("LoadScene", 2);
+    [Button]
+    public void Restart () {
+        if (!quit) {
+            PlayerPrefs.SetString ("LevelToLoad", "GameMode");
+            Invoke ("LoadScene", 2);
         }
     }
 
-    public void Quit()
-    {
-        if (!quit)
-        {
-            PlayerPrefs.SetString("LevelToLoad", "Main");
-            GetComponent<Animator>().SetTrigger("quit");
-            Invoke("LoadScene", 2);
+    [Button]
+    public void WatchAd () {
+        AdvertHandler.instance.SearchAgainUsingAdvert ();
+    }
+
+    [Button]
+    public void Quit () {
+        if (!quit) {
+            PlayerPrefs.SetString ("LevelToLoad", "Main");
+            GetComponent<Animator> ().SetTrigger ("quit");
+            Invoke ("LoadScene", 2);
             quit = true;
         }
     }
 
-    public void DoubleReward()
-    {
-        adButton.gameObject.SetActive(false);
-         if (CoinManager.Instance)
-        CoinManager.Instance.AddCoins((int)savedScore);
-        
+    public void DoubleReward () {
+        adButton.gameObject.SetActive (false);
+        if (CoinManager.Instance)
+            CoinManager.Instance.AddCoins ((int) savedScore);
+
+        BonusText[0].GetComponent<Animator> ().SetTrigger ("Show");
     }
 
-    public void LoadScene()
-    {
+    public void LoadScene () {
         allowTransfer = false;
         if (CoinManager.Instance)
-            CoinManager.Instance.AddCoins((int)(TargetScore - tempReward));
-        Application.LoadLevel("LoadingScreen");
+            CoinManager.Instance.AddCoins ((int) (TargetScore - tempReward));
+        Application.LoadLevel ("LoadingScreen");
     }
 
-    void TransferMoney()
-    {
+    void TransferMoney () {
         transfer = true;
 
     }
-
-    void transferCigs()
-    {
-        if (transfer)
-        {
-            if (tempReward < TargetScore)
-            {
+    public void UpdateBonusCoins () {
+        BonusText[0].text = $"+{CoinsEarned}";
+        BonusText[1].text = $"+{CoinsEarned}";
+    }
+    public float CoinsEarned;
+    void transferCigs () {
+        if (transfer) {
+            if (tempReward < TargetScore) {
                 tempReward += 1;
-                 if (CoinManager.Instance)
-                CoinManager.Instance.AddCoins(1);
+                if (CoinManager.Instance) {
+                    CoinManager.Instance.AddCoins (1);
+                    CoinsEarned += 1;
+                }
 
                 //              MoneyTick.clip = TickUp;
                 //              MoneyTick.GetComponent<AudioSource>().Play ();
-            }
-            else
-            {
+            } else {
                 tempReward = TargetScore;
             }
         }
     }
 
-    void AllowContinue()
-    {
-        foreach (GameObject buttons in Buttons)
-        {
-            buttons.SetActive(true);
+    void AllowContinue () {
+        foreach (GameObject buttons in Buttons) {
+            buttons.SetActive (true);
         }
         allowContinue = true;
     }
 
-    IEnumerator AdjustScore()
-    {
-        while (CharacterStats.Score != 0)
-        {
-            if (CharacterStats.Score > 0)
-            {
+    IEnumerator AdjustScore () {
+        while (CharacterStats.Score != 0) {
+            if (CharacterStats.Score > 0) {
                 CharacterStats.Score -= 5;
-
 
                 //				MoneyTick.clip = TickUp;
                 //				MoneyTick.GetComponent<AudioSource>().Play ();
-            }
-            else
-            {
+            } else {
                 CharacterStats.Score = 0;
             }
             yield return null;
 
         }
 
-
-
-        Invoke("AllowContinue", 1);
+        Invoke ("AllowContinue", 1);
     }
 }

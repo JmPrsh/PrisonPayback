@@ -205,7 +205,7 @@ public class MeleeWeapon : MonoBehaviour {
                             CharacterStats.flipped = true;
                         }
                     }
-                    Time.timeScale = 0.3f;
+                    // Time.timeScale = 0.3f;
                 }
             }
 
@@ -248,7 +248,7 @@ public class MeleeWeapon : MonoBehaviour {
                 if (criticalHit == 1) {
                     Stats.Criticals += 1;
                     if (enemyScript.health < 1) {
-                        Time.timeScale = 0.3f;
+                        // Time.timeScale = 0.3f;
                         //Debug.Log("SLOW MOTION");
                     }
                     if (CharacterStats.CS.Stamina > 5) {

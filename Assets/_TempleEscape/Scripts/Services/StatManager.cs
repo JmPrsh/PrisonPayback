@@ -19,7 +19,7 @@ public class StatManager : MonoBehaviour
     public int ZombieKills;
     public int BrutesKilled;
     public int BossesKilled;
-       public int HighestWave;
+       public int WavesCleared;
 
 
 
@@ -41,7 +41,7 @@ public class StatManager : MonoBehaviour
     {
         KillsHighscore = PlayerPrefs.GetInt("KillsHighscore");
         ComboHighscore = PlayerPrefs.GetInt("ComboHighscore");
-        HighestWave = PlayerPrefs.GetInt("RoomsHighscore");
+        WavesCleared = PlayerPrefs.GetInt("RoomsHighscore");
         CriticalsHighscore = PlayerPrefs.GetInt("CriticalsHighscore");
         BuffsHighscore = PlayerPrefs.GetInt("BuffsHighscore");
         BrutesHighscore = PlayerPrefs.GetInt("BrutesKilledHighscore");

@@ -13,7 +13,8 @@ public class Enemy : ScriptableObject
         MiniBoss,
         Dog,
         Zombie,
-        StunWand
+        StunWand,
+        Demolition
     }
     public EnemyType enemyType;
     public enum EnemyAttackType
@@ -36,4 +37,5 @@ public class Enemy : ScriptableObject
     public bool AllowWeaponDrop;
     public Transform WeaponToSpawn, BulletCasing;
     public AudioClip AttackSound;
+    public Transform DroppedItem;
 }

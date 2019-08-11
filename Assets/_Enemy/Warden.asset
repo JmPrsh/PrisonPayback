@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357ea14a322789a4a86b90c8c5f7bf06, type: 3}
   m_Name: Warden
   m_EditorClassIdentifier: 
-  CashToGive: 10
+  CashToGive: 100
   enemyType: 1
   enemyAttackType: 1
   Damage: 5
   Health: 1000
   MoveSpeed: 3
-  ShootRate: 0.2
+  ShootRate: 0.05
   AttackDistance: 6
   reloadtime: 8
   AimSpeed: 10
@@ -31,3 +31,4 @@ MonoBehaviour:
   WeaponToSpawn: {fileID: 400002, guid: 829999d9ad5864d64aafc51e1b4c881b, type: 3}
   BulletCasing: {fileID: 405830, guid: 8822add0c2ca0524d8ed4f305f852ca8, type: 3}
   AttackSound: {fileID: 8300000, guid: ef3dbb899f8bb3e44b7452bf986b7875, type: 3}
+  DroppedItem: {fileID: 400000, guid: 75d3d64b734914754b87fcd6cd94f053, type: 3}

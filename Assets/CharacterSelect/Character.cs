@@ -76,7 +76,7 @@ public class Character : MonoBehaviour
 
             case 1:
                 // cyborg objective
-                return StatManager.Instance.HighestWave >= 50;
+                return StatManager.Instance.WavesCleared >= 50;
 
             case 2:
                 // gun slinger objective

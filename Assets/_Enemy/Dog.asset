@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357ea14a322789a4a86b90c8c5f7bf06, type: 3}
   m_Name: Dog
   m_EditorClassIdentifier: 
-  CashToGive: 5
+  CashToGive: 1
   enemyType: 3
   enemyAttackType: 0
   Damage: 2
   Health: 20
-  MoveSpeed: 8
+  MoveSpeed: 6
   ShootRate: 4
   AttackDistance: 1
   reloadtime: 1
@@ -31,3 +31,4 @@ MonoBehaviour:
   WeaponToSpawn: {fileID: 465662, guid: e9a449dbf85c3054c972ebe69056fb49, type: 3}
   BulletCasing: {fileID: 0}
   AttackSound: {fileID: 8300000, guid: 352e9f115dbf289418d816ed99b7e05e, type: 3}
+  DroppedItem: {fileID: 400000, guid: 75d3d64b734914754b87fcd6cd94f053, type: 3}
