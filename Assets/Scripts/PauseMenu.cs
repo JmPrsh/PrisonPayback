@@ -70,12 +70,14 @@ public class PauseMenu : MonoBehaviour
         Character.sprite = CharacterSprites[CSSpriteID];
         CharactersName.text = CharacterNames[CSSpriteID];
         WeaponName.text = WeaponNames[CSWeaponID];
+        // PlayerHUDWeapon = CharacterStats.CS.WeaponGUI;
     }
 
     // Update is called once per frame
     void Update()
     {
-        WeaponSprite.sprite = PlayerHUDWeapon.sprite;
+        if (CharacterStats.CS.WeaponGUI)
+            WeaponSprite.sprite = CharacterStats.CS.WeaponGUI.sprite;// PlayerHUDWeapon.sprite;
         if (isPaused)
         {
             EnemyCanvas.SetActive(false);
@@ -194,8 +196,8 @@ public class PauseMenu : MonoBehaviour
         aboutToLeave = false;
         GetComponent<AudioSource>().clip = Menu.staticPressedsound;
         GetComponent<AudioSource>().Play();
-		ShowScreens(PauseScreens[0]);
-		}
+        ShowScreens(PauseScreens[0]);
+    }
 
     public void LoadScene()
     {

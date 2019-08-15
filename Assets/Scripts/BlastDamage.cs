@@ -27,8 +27,7 @@ public class BlastDamage : MonoBehaviour
             col.enabled = false;
             try
             {
-
-                CharacterStats.CS.Health -= Damage;
+                CharacterStats.CS.Damaged(Damage * WaveManager.DamageMultiplier);
                 Shake.shake = 1;
                 if (CharacterStats.CS.Health <= 0)
                 {
@@ -48,18 +47,14 @@ public class BlastDamage : MonoBehaviour
         }
         if (other.gameObject.GetComponent<Collider2D>().CompareTag("enemytarget"))
         {
-            Debug.Log("Hit target");
-            //			GetComponent<CircleCollider2D> ().enabled = false;
-            Debug.Log("Damage " + Damage);
             try
             {
-
-                Debug.Log("Damage " + Damage);
-                other.GetComponentInParent<attackPlayer>().SendMessage("dmg", (Damage / 2));
+                attackPlayer enemy = other.GetComponentInParent<attackPlayer>();
+                enemy.DamagedByPlayer(Damage, false, false);
                 Shake.shake = 1;
-                if (other.GetComponentInParent<attackPlayer>().health <= 0)
+                if (enemy.health <= 0)
                 {
-                    CharacterStats.Combo += 1;
+                    // CharacterStats.Combo += 1;
                     int ScoreGiven = 10 * CharacterStats.Combo;
                     CharacterStats.Score += ScoreGiven;
 
@@ -67,9 +62,10 @@ public class BlastDamage : MonoBehaviour
                     {
                         Time.timeScale = 0.3f;
 
-                        other.GetComponentInParent<attackPlayer>().flipped = true;
+                        enemy.flipped = true;
                     }
                 }
+                // CharacterStats.Combo += 1;
 
             }
             catch

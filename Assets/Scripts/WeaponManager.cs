@@ -59,10 +59,10 @@ public class WeaponManager : MonoBehaviour
 	void  NextWeapon ()
 	{
 		currentWeaponIndex += 1;
-		if (currentWeaponIndex >= CS.Weapons.Length) {
+		if (currentWeaponIndex >= CS.Weapons.Count) {
 			currentWeaponIndex = 0;	
 		}
-		for (int i = 0; i < CS.Weapons.Length-1; i++) {
+		for (int i = 0; i < CS.Weapons.Count-1; i++) {
 
 			if (CS.Weapons [currentWeaponIndex].GetComponent<PickedUpCheck> ().pickedUp == false) {
 				NextWeapon ();
@@ -76,9 +76,9 @@ public class WeaponManager : MonoBehaviour
 	{
 		currentWeaponIndex -= 1;
 		if (currentWeaponIndex < 0) {
-			currentWeaponIndex = CS.Weapons.Length - 1;	
+			currentWeaponIndex = CS.Weapons.Count - 1;	
 		}
-		for (int i = 0; i < CS.Weapons.Length-1; i++) {
+		for (int i = 0; i < CS.Weapons.Count-1; i++) {
 
 			if (CS.Weapons [currentWeaponIndex].GetComponent<PickedUpCheck> ().pickedUp == false) {
 				PreviousWeapon ();

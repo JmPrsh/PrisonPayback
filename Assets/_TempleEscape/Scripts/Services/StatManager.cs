@@ -46,6 +46,7 @@ public class StatManager : MonoBehaviour
         BuffsHighscore = PlayerPrefs.GetInt("BuffsHighscore");
         BrutesHighscore = PlayerPrefs.GetInt("BrutesKilledHighscore");
         BossesHighscore = PlayerPrefs.GetInt("BossesKilledHighscore");
+        ZombieKills = PlayerPrefs.GetInt("ZombiesKilled");
     }
 
     public void SaveStats(string saveName,int id)

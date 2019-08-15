@@ -350,7 +350,7 @@ public class BossScript : MonoBehaviour
 		if (Tutorial.AllowCombo) {
 			CS.ComboTimer = 40;
 			
-			CharacterStats.Combo += 1;
+			// CharacterStats.Combo += 1;
 			int ScoreGiven = 10 * CharacterStats.Combo;
 			Transform Scoretemp = CS.ScoreCollectedText.Spawn (new Vector3 (transform.position.x + Random.Range (-0.2f, 0.2f), transform.position.y + 0.4f, transform.position.z), transform.rotation) as Transform;
 			Scoretemp.GetComponentInChildren<Text> ().text = ScoreGiven.ToString ();

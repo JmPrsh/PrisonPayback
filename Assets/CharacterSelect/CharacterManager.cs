@@ -21,6 +21,8 @@ public class CharacterManager : MonoBehaviour
         }
     }
 
+    public static int SpecialsUnlocked = 0;
+
     public GameObject[] characters;
 
     void Awake()
@@ -34,6 +36,9 @@ public class CharacterManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
+        SpecialsUnlocked = PlayerPrefs.GetInt("SpecialsUnlocked");
+       
     }
+
 }
 

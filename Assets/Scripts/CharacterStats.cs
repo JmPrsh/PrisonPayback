@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.ImageEffects;
+using EasyButtons;
 
 public class CharacterStats : MonoBehaviour
 {
@@ -52,11 +53,22 @@ public class CharacterStats : MonoBehaviour
         MachineGun,
         Shotgun,
         Sniper,
-        Minigun
+        Minigun,
+        ZombieHand,
+        Cannon,
+        Revolver,
+        PistolAgent,
+        Sword
     };
-    [HideInInspector]
+    // [HideInInspector]
     public Weapon TypeofWeapon;
-    public GameObject[] Weapons, Controls;
+
+    public Image[] WeaponUIParent;
+    public GameObject RevolverSecondGun;
+    public GameObject WeaponSwitches;
+    public int WhichWeapon;
+    public List<GameObject> Weapons;
+    public GameObject[] Controls;
     public int Stamina;
     EnergyBar LivesGOEB;
     int Lives;
@@ -124,12 +136,16 @@ public class CharacterStats : MonoBehaviour
     [HideInInspector]
     public string DamageToShow;
     public static int WeaponID;
+
     public static bool allowMovement;
     public static bool Finished;
     public static string ScoringSceneLevelToLoad;
     public string ScoringSceneLevelToLoadForLoadingScreen;
-    [HideInInspector]
+    [Space]
     public bool stunned;
+    public GameObject ShockScreen;
+    public float StunDelay;
+    [Space]
     public float evadeTimer;
     // this tells us how far player will evade
     public float cooldownTimer;
@@ -151,6 +167,10 @@ public class CharacterStats : MonoBehaviour
     public float maxVel;
 
     float smokeTimer;
+    [HideInInspector]
+    public bool Special, zombie, cyborg, gunslinger, agent, samurai;
+
+    public EnergyBar Shield;
 
     public static float EnemyDelayTimer;
 
@@ -165,6 +185,11 @@ public class CharacterStats : MonoBehaviour
 
         anim = GetComponent<Animator>();
         animGun = AimingGO.GetComponent<Animator>();
+
+        for (int i = 0; i < AimingGO.transform.GetChild(0).childCount-1; i++)
+        {
+            Weapons.Add(AimingGO.transform.GetChild(0).GetChild(i).gameObject);
+        }
 
         playermodel = GameObject.FindGameObjectWithTag("PlayerModel").GetComponent<PlayerModel>();
         ammo = GetComponent<AmmoScript>();
@@ -219,6 +244,44 @@ public class CharacterStats : MonoBehaviour
 
         ScoringSceneLevelToLoad = ScoringSceneLevelToLoadForLoadingScreen;
         UpdateText();
+        CheckSpecial();
+
+    }
+
+    void CheckSpecial()
+    {
+        Special = CharacterSpriteID == (Mathf.Clamp(CharacterSpriteID, 40, 44));
+        if (Special)
+        {
+            WeaponSwitches.SetActive(false);
+            // check switch for what special and decide what type of weapon they are using
+            switch (CharacterSpriteID)
+            {
+
+                case 40:
+                    WhichWeapon = 8;
+                    zombie = true; // done
+                    break;
+                case 41:
+                    WhichWeapon = 9;
+                    cyborg = true; // done
+                    Shield.gameObject.SetActive(true);
+                    break;
+                case 42:
+                    WhichWeapon = 10;
+                    gunslinger = true;
+                    break;
+                case 43:
+                    WhichWeapon = 11;
+                    agent = true;
+                    break;
+                case 44:
+                    WhichWeapon = 12;
+                    samurai = true;
+                    break;
+
+            }
+        }
     }
 
     void AllowToMove()
@@ -310,20 +373,25 @@ public class CharacterStats : MonoBehaviour
                 timeplayed += Time.deltaTime;
             }
 
+            if (StunDelay > 0)
+                StunDelay -= Time.deltaTime;
+
             if (Time.timeScale < 1)
                 Time.timeScale += 1f * Time.deltaTime / 4;
 
-            if (TypeofWeapon != Weapon.Fist && TypeofWeapon != Weapon.Pipe && TypeofWeapon != Weapon.Knife)
+            if (TypeofWeapon != Weapon.Fist && TypeofWeapon != Weapon.Pipe && TypeofWeapon != Weapon.Knife && TypeofWeapon != Weapon.ZombieHand && TypeofWeapon != Weapon.Sword)
             {
                 ShootingHandler();
             }
             else
             {
-                
+
                 if (Weapons[WeaponID].GetComponent<MeleeWeapon>())
                     Weapons[WeaponID].GetComponent<MeleeWeapon>().Attack();
-                
+
             }
+
+            CheckSpecial();
 
             WeaponChangeHandler();
 
@@ -533,9 +601,10 @@ public class CharacterStats : MonoBehaviour
         }
     }
 
+    float ShieldRegenDelay;
     void RegenerateHealth()
     {
-        if (StaticVariables.RegenHealth && Health < startingHealth)
+        if (StaticVariables.RegenHealth && Health < startingHealth || zombie)
         {
             if (Health < HealthStarting)
             {
@@ -546,6 +615,37 @@ public class CharacterStats : MonoBehaviour
                 Health = startingHealth;
             }
         }
+
+        if (Shield.valueCurrent < Shield.valueMax)
+        {
+            if (ShieldRegenDelay <= 0)
+            {
+                Shield.valueCurrent++;
+            }
+            else
+            {
+                ShieldRegenDelay -= Time.deltaTime;
+            }
+        }
+    }
+
+    [Button]
+    public void Stun()
+    {
+        if (StunDelay > 0)
+            return;
+        stunned = true;
+        anim.SetBool("Stunned", true);
+        StartCoroutine(ShowShock(ShockScreen));
+        StunDelay = 4;
+    }
+
+    IEnumerator ShowShock(GameObject shockscreen)
+    {
+        shockscreen.SetActive(true);
+        Invoke("RemoveStun", 2);
+        yield return new WaitForSeconds(1);
+        shockscreen.SetActive(false);
     }
 
     void TypeOfWeaponHandler()
@@ -556,22 +656,20 @@ public class CharacterStats : MonoBehaviour
             WeaponID = 0;
             DamageToShow = "5 - 15";
             Damage = Random.Range(5, 15);
-            WeaponGUI.sprite = CurrentWeapon[0];
         }
         if (TypeofWeapon == Weapon.Pipe)
         {
             WeaponID = 1;
             DamageToShow = "10 - 15";
             Damage = Random.Range(10, 15);
-            WeaponGUI.sprite = CurrentWeapon[1];
         }
         if (TypeofWeapon == Weapon.Knife)
         {
             WeaponID = 2;
             DamageToShow = "15 - 20";
             Damage = Random.Range(15, 20);
-            WeaponGUI.sprite = CurrentWeapon[2];
         }
+
         if (TypeofWeapon == Weapon.Pistol)
         {
             chosenCasing = 0;
@@ -579,7 +677,6 @@ public class CharacterStats : MonoBehaviour
             shotInterval = 0.2f;
             DamageToShow = "15 - 20";
             Damage = Random.Range(15, 20);
-            WeaponGUI.sprite = CurrentWeapon[3];
             WSanim = WeaponShoot[0];
             GeneralMuzzle = animMuzzle[3];
         }
@@ -590,7 +687,6 @@ public class CharacterStats : MonoBehaviour
             shotInterval = 0.3f;
             DamageToShow = "15 - 25";
             Damage = Random.Range(15, 25);
-            WeaponGUI.sprite = CurrentWeapon[4];
             WSanim = WeaponShoot[1];
             GeneralMuzzle = animMuzzle[4];
         }
@@ -601,7 +697,6 @@ public class CharacterStats : MonoBehaviour
             shotInterval = 1.0f;
             DamageToShow = "25 - 30";
             Damage = Random.Range(25, 30);
-            WeaponGUI.sprite = CurrentWeapon[5];
             WSanim = WeaponShoot[2];
             GeneralMuzzle = animMuzzle[5];
         }
@@ -612,7 +707,6 @@ public class CharacterStats : MonoBehaviour
             shotInterval = 1.0f;
             DamageToShow = "40 - 50";
             Damage = Random.Range(40, 50);
-            WeaponGUI.sprite = CurrentWeapon[6];
             WSanim = WeaponShoot[3];
             GeneralMuzzle = animMuzzle[6];
         }
@@ -623,21 +717,70 @@ public class CharacterStats : MonoBehaviour
             shotInterval = 0.05f;
             DamageToShow = "15 - 20";
             Damage = Random.Range(15, 20);
-            WeaponGUI.sprite = CurrentWeapon[7];
             WSanim = WeaponShoot[4];
             GeneralMuzzle = animMuzzle[7];
 
         }
-
-        for (int i = 0; i < Weapons.Length; i++)
+        if (TypeofWeapon == Weapon.ZombieHand)
+        {
+            WeaponID = 8;
+            DamageToShow = "15 - 20";
+            Damage = Random.Range(15, 20);
+        }
+        if (TypeofWeapon == Weapon.Cannon)
+        {
+            chosenCasing = 5;
+            WeaponID = 9;
+            shotInterval = 1f;
+            DamageToShow = "50 - 60";
+            Damage = Random.Range(50, 60);
+            WSanim = WeaponShoot[5];
+            GeneralMuzzle = animMuzzle[8];
+        }
+        if (TypeofWeapon == Weapon.Revolver)
+        {
+            chosenCasing = 6;
+            WeaponID = 10;
+            shotInterval = 0.3f;
+            DamageToShow = "30 - 60";
+            Damage = Random.Range(30, 60);
+            WSanim = WeaponShoot[6];
+            GeneralMuzzle = animMuzzle[9];
+            RevolverSecondGun.SetActive(true);
+        }
+        if (TypeofWeapon == Weapon.PistolAgent)
+        {
+            chosenCasing = 7;
+            WeaponID = 11;
+            shotInterval = 0.7f;
+            DamageToShow = "40 - 60";
+            Damage = Random.Range(40, 60);
+            WSanim = WeaponShoot[7];
+            GeneralMuzzle = animMuzzle[10];
+        }
+        if (TypeofWeapon == Weapon.Sword)
+        {
+            WeaponID = 12;
+            DamageToShow = "30 - 40"; // add critical hit chance
+            Damage = Random.Range(30, 40);
+        }
+        WeaponGUI = WeaponUIParent[WeaponID];
+        // WeaponGUI.sprite = CurrentWeapon[WeaponID];
+        for (int i = 0; i < Weapons.Count; i++)
         {
             if (i != WeaponID)
             {
                 if (Weapons[i].activeInHierarchy)
                     Weapons[i].SetActive(false);
-                if (!Weapons[WeaponID].activeInHierarchy)
-                    Weapons[WeaponID].SetActive(true);
+
+                if (WeaponUIParent[i].gameObject.activeInHierarchy)
+                    WeaponUIParent[i].gameObject.SetActive(false);
+
             }
+            if (!Weapons[WeaponID].activeInHierarchy)
+                Weapons[WeaponID].SetActive(true);
+            if (!WeaponUIParent[WeaponID].gameObject.activeInHierarchy)
+                WeaponUIParent[WeaponID].gameObject.SetActive(true);
         }
     }
 
@@ -1026,6 +1169,63 @@ public class CharacterStats : MonoBehaviour
 
                             }
                         }
+                        if (TypeofWeapon == Weapon.Cannon)
+                        {
+                            Transform tempBullet = bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(1, Vector3.forward)); // 0 on z
+
+                            if (StaticVariables.MovementMultiply == 1)
+                            {
+                                shootTime = Time.time + shotInterval;
+                            }
+                            else
+                            {
+                                shootTime = Time.time + shotInterval / StaticVariables.MovementMultiply;
+                            }
+                            playermodel.bulletsUsed += 1;
+
+                            WSanim.SetTrigger("Shoot");
+                            GeneralMuzzle.SetTrigger("Shoot");
+                        }
+                        if (TypeofWeapon == Weapon.Revolver)
+                        {
+                            Transform tempBullet = bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(1, Vector3.forward)); // 0 on z
+
+                            if (StaticVariables.MovementMultiply == 1)
+                            {
+                                shootTime = Time.time + shotInterval;
+                            }
+                            else
+                            {
+                                shootTime = Time.time + shotInterval / StaticVariables.MovementMultiply;
+                            }
+                            playermodel.bulletsUsed += 1;
+
+                            WSanim.SetTrigger("Shoot");
+                            GeneralMuzzle.SetTrigger("Shoot");
+
+                 
+
+                            RevolverSecondGun.gameObject.SetActive(true);
+                            Transform tempBullet2 = bulletPrefab.Spawn(RevolverSecondGun.transform.GetChild(1).transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(180, Vector3.forward ) ); // 0 on z
+                            RevolverSecondGun.transform.GetChild(0).GetComponent<Animator>().SetTrigger("Shoot");
+                        }
+                        if (TypeofWeapon == Weapon.PistolAgent)
+                        {
+                            Transform tempBullet = bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(1, Vector3.forward)); // 0 on z
+                            tempBullet.GetComponent<bullet>().SniperBullet = true;
+                            if (StaticVariables.MovementMultiply == 1)
+                            {
+                                shootTime = Time.time + shotInterval;
+                            }
+                            else
+                            {
+                                shootTime = Time.time + shotInterval / StaticVariables.MovementMultiply;
+                            }
+                            playermodel.bulletsUsed += 1;
+
+                            WSanim.SetTrigger("Shoot");
+                            GeneralMuzzle.SetTrigger("Shoot");
+                        }
                     }
                 }
 
@@ -1035,7 +1235,7 @@ public class CharacterStats : MonoBehaviour
         {
             Shake.shake = 1;
             allowMovement = false;
-            Invoke("RemoveStun", 2);
+
         }
 
     }
@@ -1114,7 +1314,8 @@ public class CharacterStats : MonoBehaviour
             {
                 HighScoreZombie = Score;
                 // post
-                Social.ReportScore((int)HighScoreZombie, "CgkI9OO2ssgEEAIQAQ", (bool success) => { });
+                if (Social.localUser.authenticated)
+                    Social.ReportScore((int)HighScoreZombie, "CgkI9OO2ssgEEAIQAQ", (bool success) => { });
                 PlayerPrefs.SetFloat("HighScoreZombie", HighScoreZombie);
             }
         }
@@ -1125,7 +1326,8 @@ public class CharacterStats : MonoBehaviour
             {
                 HighScoreNormal = Score;
                 // post
-                Social.ReportScore((int)HighScoreNormal, "CgkI9OO2ssgEEAIQAA", (bool success) => { });
+                if (Social.localUser.authenticated)
+                    Social.ReportScore((int)HighScoreNormal, "CgkI9OO2ssgEEAIQAA", (bool success) => { });
                 PlayerPrefs.SetFloat("HighScoreNormal", HighScoreNormal);
             }
         }
@@ -1150,10 +1352,11 @@ public class CharacterStats : MonoBehaviour
     {
         stunned = false;
         allowMovement = true;
+        anim.SetBool("Stunned", false);
     }
 
-    [HideInInspector]
-    public int WhichWeapon;
+
+
 
     void WeaponChangeHandler()
     {
@@ -1203,6 +1406,21 @@ public class CharacterStats : MonoBehaviour
                 {
                     TypeofWeapon = Weapon.Minigun;
                 }
+                break;
+            case 8:
+                TypeofWeapon = Weapon.ZombieHand;
+                break;
+            case 9:
+                TypeofWeapon = Weapon.Cannon;
+                break;
+            case 10:
+                TypeofWeapon = Weapon.Revolver;
+                break;
+            case 11:
+                TypeofWeapon = Weapon.PistolAgent;
+                break;
+            case 12:
+                TypeofWeapon = Weapon.Sword;
                 break;
 
         }
@@ -1267,6 +1485,8 @@ public class CharacterStats : MonoBehaviour
 
     void TestAnalogs()
     {
+        float GeneralSpeed = samurai ? PlayerSettings.MoveSpeed * 3 : PlayerSettings.MoveSpeed;
+
         vel = r.velocity;
         if (r.velocity.magnitude > maxVel)
         {
@@ -1309,7 +1529,7 @@ public class CharacterStats : MonoBehaviour
 
             leftJoystickInput = new Vector3(xMovementLeftJoystick, zMovementLeftJoystick, 0);
             leftJoystickInput = transform.TransformDirection(-leftJoystickInput);
-            leftJoystickInput *= PlayerSettings.MoveSpeed * StaticVariables.MovementMultiply;
+            leftJoystickInput *= GeneralSpeed * StaticVariables.MovementMultiply;
 
             if (!evading)
             {
@@ -1405,7 +1625,7 @@ public class CharacterStats : MonoBehaviour
 
             leftJoystickInput = new Vector3(xMovementLeftJoystick, zMovementLeftJoystick, 0);
             leftJoystickInput = transform.TransformDirection(-leftJoystickInput);
-            leftJoystickInput *= PlayerSettings.MoveSpeed * StaticVariables.MovementMultiply;
+            leftJoystickInput *= GeneralSpeed * StaticVariables.MovementMultiply;
 
             if (!evading)
             {
@@ -1523,6 +1743,7 @@ public class CharacterStats : MonoBehaviour
 
     void ProcessEvasion()
     {
+        float GeneralSpeed = samurai ? PlayerSettings.MoveSpeed * 3 : PlayerSettings.MoveSpeed;
         leftJoystickInput = leftJoystick.GetInputDirection();
         rightJoystickInput = rightJoystick.GetInputDirection();
 
@@ -1541,7 +1762,7 @@ public class CharacterStats : MonoBehaviour
 
             leftJoystickInput = new Vector3(xMovementLeftJoystick, zMovementLeftJoystick, 0);
             leftJoystickInput = transform.TransformDirection(-leftJoystickInput);
-            leftJoystickInput *= PlayerSettings.MoveSpeed;
+            leftJoystickInput *= GeneralSpeed;
 
             transform.Translate(leftJoystickInput * Time.fixedDeltaTime);
 
@@ -1565,10 +1786,26 @@ public class CharacterStats : MonoBehaviour
         playermodel.checkingEnemiesInList = true;
 
     }
+    bool DamageShield()
+    {
+        return cyborg && Shield.valueCurrent > 0;
+    }
 
     public void Damaged(float dmg)
     {
-        Health -= dmg;
+        if (DamageShield())
+        {
+            Shield.valueCurrent -= (int)dmg;
+        }
+        else
+        {
+            Health -= dmg;
+
+        }
+
+        if (cyborg)
+            ShieldRegenDelay = 5;
+
         SpriteGO.GetComponent<Animator>().SetTrigger("GetHurt");
     }
 

@@ -171,7 +171,7 @@ public class AmmoScript : MonoBehaviour
         
 
         if (CharacterStats.CS.TypeofWeapon != CharacterStats.Weapon.Fist && CharacterStats.CS.TypeofWeapon != CharacterStats.Weapon.Knife
-            && CharacterStats.CS.TypeofWeapon != CharacterStats.Weapon.Pipe)
+            && CharacterStats.CS.TypeofWeapon != CharacterStats.Weapon.Pipe && !CharacterStats.CS.Special)
         {
             Infinite.SetActive(false);
             GeneralClipGUI.GetComponent<Text>().text = GeneralClipLeft.ToString();

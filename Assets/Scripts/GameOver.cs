@@ -121,8 +121,9 @@ public class GameOver : MonoBehaviour {
 
     }
     public void UpdateBonusCoins () {
-        BonusText[0].text = $"+{CoinsEarned}";
-        BonusText[1].text = $"+{CoinsEarned}";
+        BonusText[0].text = $"+{TargetScore}";
+        BonusText[0].gameObject.SetActive(true);
+        BonusText[1].text = $"+{TargetScore}";
     }
     public float CoinsEarned;
     void transferCigs () {
@@ -138,6 +139,7 @@ public class GameOver : MonoBehaviour {
                 //              MoneyTick.GetComponent<AudioSource>().Play ();
             } else {
                 tempReward = TargetScore;
+                UpdateBonusCoins();
             }
         }
     }

@@ -32,7 +32,7 @@ public class CharacterScroller : MonoBehaviour
     public Button selectButon;
     public Button unlockButton;
     public Button lockButton;
-    public Color lockColor = Color.black;
+    public Color lockColor;
     public Material m;
 
     List<GameObject> listCharacter = new List<GameObject>();
@@ -50,7 +50,8 @@ public class CharacterScroller : MonoBehaviour
     public Button[] Arrows;
 
     // Use this for initialization
-    void Awake(){
+    void Awake()
+    {
         CS = this;
     }
 
@@ -58,10 +59,10 @@ public class CharacterScroller : MonoBehaviour
 
     void Start()
     {
-        lockColor.a = 0;    // need this for later setting material colors to work
-      
+        // lockColor.a = 0;    // need this for later setting material colors to work
+
         int currentCharacterIndex = CharacterManager.Instance.CurrentCharacterIndex;
-    
+
         currentCharacterIndex = Mathf.Clamp(currentCharacterIndex, 0, CharacterManager.Instance.characters.Length - 1);
 
         for (int i = 0; i < CharacterManager.Instance.characters.Length; i++)
@@ -72,20 +73,20 @@ public class CharacterScroller : MonoBehaviour
             Transform character = CharacterManager.Instance.characters[i].transform.Spawn(centerPoint, Quaternion.Euler(originalRotation.x, originalRotation.y, originalRotation.z));
             Character charData = character.GetComponent<Character>();
             charData.characterSequenceNumber = i;
-            listCharacter.Add(character.gameObject);        
+            listCharacter.Add(character.gameObject);
             character.localScale = originalScale;
             character.position = centerPoint + new Vector3(deltaIndex * characterSpace, 0, 0);
 
-//            for (int a = 0; a < character.childCount; a++)
-//            {
-////                Renderer charRender = character.transform.GetChild(a).GetComponent<Renderer>();  
-//                SpriteRenderer charRender = character.GetChild(a).GetComponent<SpriteRenderer>();
-//                if (charData.IsUnlocked)
-//                    charRender.material.SetColor("_Color", Color.white);
-//                else
-//                    charRender.material.SetColor("_Color", lockColor);               
-//            }
-            
+            //            for (int a = 0; a < character.childCount; a++)
+            //            {
+            ////                Renderer charRender = character.transform.GetChild(a).GetComponent<Renderer>();  
+            //                SpriteRenderer charRender = character.GetChild(a).GetComponent<SpriteRenderer>();
+            //                if (charData.IsUnlocked)
+            //                    charRender.material.SetColor("_Color", Color.white);
+            //                else
+            //                    charRender.material.SetColor("_Color", lockColor);               
+            //            }
+
             // set as child of this object
             character.parent = transform;
         }
@@ -101,25 +102,33 @@ public class CharacterScroller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
-        if(delay >0){
+
+        if (delay > 0)
+        {
             delay -= Time.deltaTime;
             Directions.SetActive(false);
-        }else{
+        }
+        else
+        {
             Directions.SetActive(true);
         }
 
-        if(currentCharacter == listCharacter[0]){
+        if (currentCharacter == listCharacter[0])
+        {
             Arrows[0].interactable = false;
             Arrows[2].interactable = false;
             Arrows[3].interactable = true;
             Arrows[1].interactable = true;
-        }else if(currentCharacter == listCharacter[(listCharacter.Count-1)]){
+        }
+        else if (currentCharacter == listCharacter[(listCharacter.Count - 1)])
+        {
             Arrows[1].interactable = false;
             Arrows[3].interactable = false;
             Arrows[2].interactable = true;
             Arrows[0].interactable = true;
-        }else{
+        }
+        else
+        {
             Arrows[0].interactable = true;
             Arrows[1].interactable = true;
             Arrows[2].interactable = true;
@@ -148,7 +157,7 @@ public class CharacterScroller : MonoBehaviour
 
                 if (isCurrentCharacterRotating)
                     StopRotateCurrentCharacter(true);
-                
+
                 float speed = deltaX / (endTime - startTime);
                 Vector3 dir = (startPos.x - endPos.x < 0) ? Vector3.right : Vector3.left;
                 Vector3 moveVector = dir * (speed / 10) * scrollSpeedFactor * Time.deltaTime;
@@ -175,9 +184,9 @@ public class CharacterScroller : MonoBehaviour
 
 
                 // Update current character to the one nearest to center point
-//                for(int i = 0;i < listCharacter.Count;i++){
-//                    listCharacter[i].GetComponent<Animator>().SetBool(bounce)
-//                }
+                //                for(int i = 0;i < listCharacter.Count;i++){
+                //                    listCharacter[i].GetComponent<Animator>().SetBool(bounce)
+                //                }
                 currentCharacter = FindCharacterNearestToCenter();
 
                 // Snap
@@ -191,8 +200,20 @@ public class CharacterScroller : MonoBehaviour
         // Update UI
         totalCoins.text = CoinManager.Instance.Coins.ToString();
         Character charData = currentCharacter.GetComponent<Character>();
-
-        if (!charData.isFree && !charData.IsUnlocked)
+        if (charData.Special)
+        {
+            if (charData.IsUnlockedSPECIAL)
+            {
+                priceText.gameObject.SetActive(false);
+            }
+            else
+            {
+                priceText.text = $"{charData.Objective} \n{charData.progress}/{charData.ObjectiveMax}" ;
+                priceText.gameObject.SetActive(true);
+            }
+            priceImg.gameObject.SetActive(false);
+        }
+        else if (!charData.isFree && !charData.IsUnlocked)
         {
             priceText.gameObject.SetActive(true);
             priceText.text = charData.price.ToString();
@@ -204,65 +225,84 @@ public class CharacterScroller : MonoBehaviour
             priceImg.gameObject.SetActive(false);
         }
 
-//        for (int i = 0; i < CharacterManager.Instance.characters.Length; i++)
-//        {
-//            if (CharacterManager.Instance.characters[i].GetComponent<Character>().IsUnlocked)
-//            {
-//                CharacterManager.Instance.characters[i].transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.white;
-//            }else{
-//                CharacterManager.Instance.characters[i].transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color(0,0,0,1);
-//            }
-//        }
+        //        for (int i = 0; i < CharacterManager.Instance.characters.Length; i++)
+        //        {
+        //            if (CharacterManager.Instance.characters[i].GetComponent<Character>().IsUnlocked)
+        //            {
+        //                CharacterManager.Instance.characters[i].transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.white;
+        //            }else{
+        //                CharacterManager.Instance.characters[i].transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color(0,0,0,1);
+        //            }
+        //        }
 
-       
+
         if (currentCharacter != lastCurrentCharacter)
         {
             if (charData.IsUnlocked)
-            { 
-               
+            {
+
                 unlockButton.gameObject.SetActive(false);
                 lockButton.gameObject.SetActive(false);
                 selectButon.gameObject.SetActive(true);
             }
             else
-            {   
-                
+            {
+
                 selectButon.gameObject.SetActive(false);
-                if (CoinManager.Instance.Coins >= charData.price)
+                if (CoinManager.Instance.Coins >= charData.price && !charData.Special)
                 {
                     unlockButton.gameObject.SetActive(true);
                     lockButton.gameObject.SetActive(false);
+                }
+                else if (charData.Special)
+                {
+                    if (charData.IsUnlockedSPECIAL)
+                    {
+                        unlockButton.gameObject.SetActive(false);
+                        lockButton.gameObject.SetActive(false);
+                        selectButon.gameObject.SetActive(true);
+                    }
+                    else
+                    {
+                        unlockButton.gameObject.SetActive(false);
+                        lockButton.gameObject.SetActive(true);
+                        selectButon.gameObject.SetActive(false);
+                    }
                 }
                 else
                 {
                     unlockButton.gameObject.SetActive(false);
                     lockButton.gameObject.SetActive(true);
-                }    
+                }
             }
         }
     }
     GameObject test;
-    public void Left(){
+    public void Left()
+    {
 
         int currentCharacterIndex = listCharacter.IndexOf(currentCharacter);
 
         if (currentCharacterIndex >= 10)
         {
             currentCharacterIndex -= 10;
-            currentCharacter = listCharacter[listCharacter.IndexOf(currentCharacter)-10];
-        }else{
+            currentCharacter = listCharacter[listCharacter.IndexOf(currentCharacter) - 10];
+        }
+        else
+        {
             currentCharacterIndex = 0;
             currentCharacter = listCharacter[0];
         }
 
-        test = FindCharacterNearestToCenter() ;
+        test = FindCharacterNearestToCenter();
 
         float snapDistance = centerPoint.x - listCharacter[currentCharacterIndex].transform.position.x;
         StartCoroutine(SnapAndRotate(snapDistance));
         delay = 0.5f;
     }
 
-    public void LeftEnd(){
+    public void LeftEnd()
+    {
 
         int currentCharacterIndex = listCharacter.IndexOf(currentCharacter);
 
@@ -272,44 +312,48 @@ public class CharacterScroller : MonoBehaviour
             currentCharacter = listCharacter[0];
         }
 
-        test = FindCharacterNearestToCenter() ;
+        test = FindCharacterNearestToCenter();
 
         float snapDistance = centerPoint.x - listCharacter[currentCharacterIndex].transform.position.x;
         StartCoroutine(SnapAndRotate(snapDistance));
         delay = 0.5f;
     }
 
-    public void Right(){
+    public void Right()
+    {
 
         int currentCharacterIndex = listCharacter.IndexOf(currentCharacter);
 
-        if (currentCharacterIndex <= (listCharacter.Count-11))
+        if (currentCharacterIndex <= (listCharacter.Count - 11))
         {
             currentCharacterIndex += 10;
-            currentCharacter = listCharacter[listCharacter.IndexOf(currentCharacter)+10];
-        }else{
-            currentCharacterIndex = (listCharacter.Count-1);
-            currentCharacter = listCharacter[listCharacter.Count-1];
+            currentCharacter = listCharacter[listCharacter.IndexOf(currentCharacter) + 10];
+        }
+        else
+        {
+            currentCharacterIndex = (listCharacter.Count - 1);
+            currentCharacter = listCharacter[listCharacter.Count - 1];
         }
 
-        test = FindCharacterNearestToCenter() ;
+        test = FindCharacterNearestToCenter();
 
         float snapDistance = centerPoint.x - listCharacter[currentCharacterIndex].transform.position.x;
         StartCoroutine(SnapAndRotate(snapDistance));
         delay = 0.5f;
     }
 
-    public void RightEnd(){
+    public void RightEnd()
+    {
 
         int currentCharacterIndex = listCharacter.IndexOf(currentCharacter);
 
-        if (currentCharacterIndex != (listCharacter.Count-1))
+        if (currentCharacterIndex != (listCharacter.Count - 1))
         {
-            currentCharacterIndex = (listCharacter.Count-1);
-            currentCharacter = listCharacter[(listCharacter.Count-1)];
+            currentCharacterIndex = (listCharacter.Count - 1);
+            currentCharacter = listCharacter[(listCharacter.Count - 1)];
         }
 
-        test = FindCharacterNearestToCenter() ;
+        test = FindCharacterNearestToCenter();
 
         float snapDistance = centerPoint.x - listCharacter[currentCharacterIndex].transform.position.x;
         StartCoroutine(SnapAndRotate(snapDistance));
@@ -362,10 +406,10 @@ public class CharacterScroller : MonoBehaviour
     }
 
     IEnumerator SnapAndRotate(float snapDistance)
-    {       
+    {
         float snapDistanceAbs = Mathf.Abs(snapDistance);
         float snapSpeed = snapDistanceAbs / snapTime;
-        float sign = snapDistance / snapDistanceAbs; 
+        float sign = snapDistance / snapDistanceAbs;
         float movedDistance = 0;
 
         SoundManager.Instance.PlaySound(SoundManager.Instance.tick);
@@ -384,8 +428,8 @@ public class CharacterScroller : MonoBehaviour
 
             movedDistance += d;
             yield return null;
-        } 
-            
+        }
+
         if (currentCharacter != lastCurrentCharacter || !isCurrentCharacterRotating)
         {
             // Stop rotating the last current character
@@ -414,7 +458,7 @@ public class CharacterScroller : MonoBehaviour
         isCurrentCharacterRotating = false;
 
         if (resetRotation)
-            StartCoroutine(CRResetCharacterRotation(currentCharacter.transform));        
+            StartCoroutine(CRResetCharacterRotation(currentCharacter.transform));
     }
 
     IEnumerator CRRotateCharacter(Transform charTf)
@@ -448,11 +492,11 @@ public class CharacterScroller : MonoBehaviour
         bool unlockSucceeded = currentCharacter.GetComponent<Character>().Unlock();
         if (unlockSucceeded)
         {
-            for(int i = 0; i < currentCharacter.transform.childCount; i++)
+            for (int i = 0; i < currentCharacter.transform.childCount; i++)
             {
                 currentCharacter.transform.GetChild(i).GetComponent<Renderer>().material.SetColor("_Color", Color.white);
             }
-            
+
             unlockButton.gameObject.SetActive(false);
             selectButon.gameObject.SetActive(true);
 
@@ -466,12 +510,14 @@ public class CharacterScroller : MonoBehaviour
         if (UIManager.levelID == 0)
         {
             UIManager.ZombieMode = false;
-        }else{
+        }
+        else
+        {
             UIManager.ZombieMode = true;
         }
         PlayerPrefs.SetString("LevelToLoad", "GameMode");
         SceneManager.LoadScene("LoadingScreen");
-//        Exit();
+        //        Exit();
     }
 
     public void Exit()

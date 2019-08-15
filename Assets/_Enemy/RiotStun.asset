@@ -18,7 +18,7 @@ MonoBehaviour:
   Damage: 5
   Health: 250
   MoveSpeed: 3
-  ShootRate: 1.2
+  ShootRate: 4
   AttackDistance: 1
   reloadtime: 1
   AimSpeed: 9

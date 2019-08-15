@@ -43,15 +43,20 @@ public class FlipSprite : MonoBehaviour
             x = CharacterStats.CS.rightJoystick.GetInputDirection().x;
             float direction = x > 0 ? defaultScale : -defaultScale;
             transform.localScale = new Vector3(defaultScale, direction, defaultScale);
+
+            if (TypeofWeapon == Weapon.Gun)
+                sr.sortingOrder = (int)(CharacterStats.CS.SpriteGORenderer.sortingOrder + 1);
         }
         else
         {
-           
+
 
             x = CharacterStats.CS.transform.position.x > enemy.ChildSprite.transform.position.x ? 1 : -1;
             float direction = x > 0 ? defaultScale : -defaultScale;
             enemy.flipLook = x;
             transform.localScale = new Vector3(defaultScale, direction, defaultScale);
+            if (TypeofWeapon == Weapon.Gun)
+                sr.sortingOrder = (int)(enemy.ChildSpriteRenderer.sortingOrder + 1);
         }
     }
 

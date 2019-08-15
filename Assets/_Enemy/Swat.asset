@@ -15,7 +15,7 @@ MonoBehaviour:
   CashToGive: 6
   enemyType: 0
   enemyAttackType: 1
-  Damage: 5
+  Damage: 10
   Health: 125
   MoveSpeed: 5
   ShootRate: 0.5

@@ -14,6 +14,7 @@ public class InAppPurchases : MonoBehaviour, IStoreListener
 
 
     public static string removeAds = "removeAds";
+    public static string special = "special";
     public static string cigs1 = "cigs1";
     public static string cigs2 = "cigs2";
     public static string cigs3 = "cigs3";
@@ -53,6 +54,11 @@ public class InAppPurchases : MonoBehaviour, IStoreListener
 
     }
 
+    private void OnEnable()
+    {
+          GameObject.Find("SpecialButton").SetActive(CharacterManager.SpecialsUnlocked < 1);
+    }
+
     void Update()
     {
 
@@ -71,6 +77,7 @@ public class InAppPurchases : MonoBehaviour, IStoreListener
         var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
 
         builder.AddProduct(removeAds, ProductType.NonConsumable);
+        builder.AddProduct(special, ProductType.NonConsumable);
         builder.AddProduct(cigs1, ProductType.Consumable);
         builder.AddProduct(cigs2, ProductType.Consumable);
         builder.AddProduct(cigs3, ProductType.Consumable);
@@ -178,9 +185,9 @@ public class InAppPurchases : MonoBehaviour, IStoreListener
             // the Action<bool> below, and ProcessPurchase if there are previously purchased products to restore.
             apple.RestoreTransactions((result) =>
                 {
-                   // The first phase of restoration. If no more responses are received on ProcessPurchase then 
-                   // no purchases are available to be restored.
-                   Debug.Log("RestorePurchases continuing: " + result + ". If no further messages, no purchases available to restore.");
+                    // The first phase of restoration. If no more responses are received on ProcessPurchase then 
+                    // no purchases are available to be restored.
+                    Debug.Log("RestorePurchases continuing: " + result + ". If no further messages, no purchases available to restore.");
                     if (result)
                     {
                         PlayerPrefs.SetInt("Adverts", 1);
@@ -251,6 +258,13 @@ public class InAppPurchases : MonoBehaviour, IStoreListener
             CoinManager.Instance.AddCoins(16000);
             PlayerPrefs.SetInt("Adverts", 1);
         }
+        else if (String.Equals(args.purchasedProduct.definition.id, special, StringComparison.Ordinal))
+        {
+            CharacterManager.SpecialsUnlocked = 1;
+            PlayerPrefs.SetInt("SpecialsUnlocked", 1);
+            GameObject.Find("SpecialButton").SetActive(CharacterManager.SpecialsUnlocked < 1);
+            PlayerPrefs.SetInt("Adverts", 1);
+        }
 
 
 
@@ -296,6 +310,9 @@ public class InAppPurchases : MonoBehaviour, IStoreListener
                 break;
             case 5:
                 BuyProductID(cigs6);
+                break;
+            case 6:
+                BuyProductID(special);
                 break;
         }
 

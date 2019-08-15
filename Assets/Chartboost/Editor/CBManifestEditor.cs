@@ -59,12 +59,12 @@ namespace ChartboostSDK
 				return false;
 			}
 
-			XmlElement unityActivityElement = FindElementWithAndroidName("activity", "name", ns, unityNativeActivityName, dict);
-			if (unityActivityElement == null)
-			{
-				Debug.LogError(string.Format("{0} activity is missing from your android manifest. Add \"<meta-data android:name=\"unityplayer.ForwardNativeEventsToDalvik\" android:value=\"true\" />\" to your activity tag so that Chartboost can forward touch events to the advertisements.", unityNativeActivityName));
-				return false;
-			}
+			//XmlElement unityActivityElement = FindElementWithAndroidName("activity", "name", ns, unityNativeActivityName, dict);
+			//if (unityActivityElement == null)
+			//{
+			//	Debug.LogError(string.Format("{0} activity is missing from your android manifest. Add \"<meta-data android:name=\"unityplayer.ForwardNativeEventsToDalvik\" android:value=\"true\" />\" to your activity tag so that Chartboost can forward touch events to the advertisements.", unityNativeActivityName));
+			//	return false;
+			//}
 
 			XmlElement usesSDKElement = FindChildNode(manNode, "uses-sdk") as XmlElement;
 			if (usesSDKElement == null)
@@ -79,22 +79,22 @@ namespace ChartboostSDK
 				return false;
 			}
 
-			XmlElement forwardNativeEventsToDalvikElement = FindElementWithAndroidName("meta-data", "name", ns, "unityplayer.ForwardNativeEventsToDalvik", unityActivityElement);
-			if (forwardNativeEventsToDalvikElement == null)
-			{
-				// Add the forwardNativesToDalvik meta tag with the valueCurrenttrue
-				forwardNativeEventsToDalvikElement = doc.CreateElement("meta-data");
-				forwardNativeEventsToDalvikElement.SetAttribute("name", ns, "unityplayer.ForwardNativeEventsToDalvik");
-				forwardNativeEventsToDalvikElement.SetAttribute("value", ns,"true");
-				unityActivityElement.AppendChild(forwardNativeEventsToDalvikElement);
-				doc.Save(outputFile);
-			}
-			else if(forwardNativeEventsToDalvikElement.GetAttribute("value",ns).Equals("false"))
-			{
-				// Set the valueCurrentof this tag to true
-				forwardNativeEventsToDalvikElement.SetAttribute("value", ns,"true");
-				doc.Save(outputFile);
-			}
+			//XmlElement forwardNativeEventsToDalvikElement = FindElementWithAndroidName("meta-data", "name", ns, "unityplayer.ForwardNativeEventsToDalvik", unityActivityElement);
+			//if (forwardNativeEventsToDalvikElement == null)
+			//{
+			//	// Add the forwardNativesToDalvik meta tag with the valueCurrenttrue
+			//	forwardNativeEventsToDalvikElement = doc.CreateElement("meta-data");
+			//	forwardNativeEventsToDalvikElement.SetAttribute("name", ns, "unityplayer.ForwardNativeEventsToDalvik");
+			//	forwardNativeEventsToDalvikElement.SetAttribute("value", ns,"true");
+			//	unityActivityElement.AppendChild(forwardNativeEventsToDalvikElement);
+			//	doc.Save(outputFile);
+			//}
+			//else if(forwardNativeEventsToDalvikElement.GetAttribute("value",ns).Equals("false"))
+			//{
+			//	// Set the valueCurrentof this tag to true
+			//	forwardNativeEventsToDalvikElement.SetAttribute("value", ns,"true");
+			//	doc.Save(outputFile);
+			//}
 			return true;
 		}
 		

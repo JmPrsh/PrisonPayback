@@ -13,6 +13,8 @@ public class Aim : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+
+
 //			if (Input.GetAxis ("LT") > 0) {
 //			if (Tutorial.allowFineAim) {
 //				LR.enabled = true;

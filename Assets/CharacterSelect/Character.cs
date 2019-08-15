@@ -9,13 +9,23 @@ public class Character : MonoBehaviour
     public bool Special;
     public int SpecialCharacterID;
     SpriteRenderer sr;
+    public string Objective;
+    public string progress;
+    public int ObjectiveMax;
     public bool Unlocked;
 
     public bool IsUnlocked
     {
         get
         {
-            return (isFree || PlayerPrefs.GetInt(characterName, 0) == 1);
+            return (isFree || PlayerPrefs.GetInt(characterName, 0) == 1 );
+        }
+    }
+    public bool IsUnlockedSPECIAL
+    {
+        get
+        {
+            return (Special && CharacterManager.SpecialsUnlocked == 1 || Special && ObjectiveComplete());
         }
     }
 
@@ -35,13 +45,13 @@ public class Character : MonoBehaviour
     {
         Unlocked = IsUnlocked;
 
-        if (IsUnlocked)
+        if (IsUnlocked || IsUnlockedSPECIAL)
         {
             sr.color = Color.white;
         }
         else
         {
-            sr.color = Color.black;
+            sr.color = CharacterScroller.CS.lockColor;
         }
     }
 
@@ -50,11 +60,14 @@ public class Character : MonoBehaviour
         if (Special)
         {
             // add objective check unlocks here
+            if (CharacterManager.SpecialsUnlocked == 1)
+                return true;
         }
-        if (IsUnlocked)
+        else if (IsUnlocked)
             return true;
 
-        if (CoinManager.Instance.Coins >= price)
+        
+        else if (CoinManager.Instance.Coins >= price)
         {
             PlayerPrefs.SetInt(characterName, 1);
             PlayerPrefs.Save();
@@ -72,23 +85,28 @@ public class Character : MonoBehaviour
         {
             case 0:
                 // zombie objective
-                return StatManager.Instance.ZombieKills >= 1000;
+                ObjectiveMax = 5000;
+                return StatManager.Instance.ZombieKills >= 5000;
 
             case 1:
                 // cyborg objective
+                ObjectiveMax = 50;
                 return StatManager.Instance.WavesCleared >= 50;
 
             case 2:
                 // gun slinger objective
-                return StatManager.Instance.BrutesKilled >= 50;
+                ObjectiveMax = 100;
+                return StatManager.Instance.BrutesKilled >= 100;
 
             case 3:
                 // agent objective
-                return StatManager.Instance.BossesKilled >= 20;
+                ObjectiveMax = 10;
+                return StatManager.Instance.BossesKilled >= 10;
 
             case 4:
                 // samurai objective
-                return StatManager.Instance.CriticalsHighscore >= 50;
+                ObjectiveMax = 5000;
+                return StatManager.Instance.CriticalsHighscore >= 5000;
 
         }
         return false;

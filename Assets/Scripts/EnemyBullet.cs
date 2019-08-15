@@ -77,7 +77,7 @@ public class EnemyBullet : MonoBehaviour
         if (Vector2.Distance(Player.position, transform.position) < CharacterStats.CS.PlayerSettings.ColliderSize)
         {
             this.Recycle();
-            CharacterStats.CS.Health -= Damage;
+             CharacterStats.CS.Damaged (Damage * WaveManager.DamageMultiplier);
             
             if (CharacterStats.CS.Health > CharacterStats.CS.HealthStarting / 7)
             {

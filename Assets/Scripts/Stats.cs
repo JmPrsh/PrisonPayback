@@ -46,16 +46,9 @@ public class Stats : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        StatManager.Instance.LoadStats("KillsHighscore", KillsHighscore);
-        StatManager.Instance.LoadStats("ComboHighscore", ComboHighscore);
-        StatManager.Instance.LoadStats("RoomsHighscore", RoomsHighscore);
-        StatManager.Instance.LoadStats("CriticalsHighscore", CriticalsHighscore);
-        StatManager.Instance.LoadStats("BuffsHighscore", BuffsHighscore);
-        StatManager.Instance.LoadStats("TimePlayedHighscore", TimePlayedHighscore);
-        StatManager.Instance.LoadStats("BrutesKilledHighscore", BrutesKilledHighscore);
-        StatManager.Instance.LoadStats("BossesKilledHighscore", BossesKilledHighscore);
+       
 		
-        if (PlayerPrefs.GetInt("Adverts") == 0)
+        if (PlayerPrefs.GetInt("Adverts") == 0 && AdvertHandler.instance)
             AdvertHandler.instance.WatchAdvert();
     }
 
