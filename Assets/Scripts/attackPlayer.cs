@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class attackPlayer : MonoBehaviour
 {
     public Enemy EnemyType;
@@ -100,7 +101,7 @@ public class attackPlayer : MonoBehaviour
             BossIcon.SetActive(EnemyType.enemyType == Enemy.EnemyType.Boss);
 
         FindClosestPlayer();
-        RandomSwingTime = Random.Range(1.6f, 2.5f);
+       
 
         transform.position = new Vector3(transform.position.x + Random.Range(3, -3), transform.position.y + Random.Range(3, -3), transform.position.z);
         shootTime = 0;
@@ -320,6 +321,7 @@ public class attackPlayer : MonoBehaviour
                 if (shootTime >= RandomSwingTime)
                 {
                     MeleeAttack();
+                     RandomSwingTime = Random.Range(1.6f, 2.5f);
                 }
             }
             else if (EnemyType.enemyAttackType == Enemy.EnemyAttackType.Gun)
@@ -656,7 +658,8 @@ public class attackPlayer : MonoBehaviour
             Dead = true;
             rg2d.isKinematic = true;
             StartCoroutine(Death());
-            WaveManager.WM.RemoveEnemyFromList();
+            
+            WaveManager.WM.RemoveEnemyFromList(this.transform);
             return;
         }
     }

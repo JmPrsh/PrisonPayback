@@ -38,11 +38,9 @@ public class AdvertHandler : MonoBehaviour {
 #else
         if (Chartboost.hasInterstitial (CBLocation.GameScreen)) {
             Chartboost.showInterstitial (CBLocation.GameScreen);
-            Debug.Log ("watching ad");
         } else {
             // We don't have a cached video right now, but try to get one for next time
             Chartboost.cacheInterstitial (CBLocation.GameScreen);
-            Debug.Log ("no ad to be found");
         }
 #endif
 

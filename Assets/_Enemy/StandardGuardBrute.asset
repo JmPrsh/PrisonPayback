@@ -19,7 +19,7 @@ MonoBehaviour:
   Health: 200
   MoveSpeed: 3
   ShootRate: 1.4
-  AttackDistance: 5
+  AttackDistance: 1
   reloadtime: 4
   AimSpeed: 9
   bulletsinclip: 15

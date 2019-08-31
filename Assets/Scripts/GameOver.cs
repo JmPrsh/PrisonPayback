@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using ChartboostSDK;
 using EasyButtons;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,14 +26,15 @@ public class GameOver : MonoBehaviour {
 
     void Start () {
         GO = this;
-        PlayerPrefs.SetInt ("AreaProgress", 1);
-        if (CharacterStats.CS) {
-            CharacterStats.CS.Blur = true;
-        }
+        // PlayerPrefs.SetInt ("AreaProgress", 1);
+        // if (CharacterStats.CS) {
+        //     CharacterStats.CS.Blur = true;
+        // }
 
     }
 
     void OnEnable () {
+        Chartboost.cacheRewardedVideo (CBLocation.MainMenu);
         allowTransfer = true;
         adButton.gameObject.SetActive (true);
 
@@ -49,33 +51,36 @@ public class GameOver : MonoBehaviour {
     public bool testAdSuccess;
     // Update is called once per frame
     void Update () {
-        if (testAdSuccess) {
-            DoubleReward ();
-            testAdSuccess = false;
-        }
+        // if (testAdSuccess) {
+        //     DoubleReward ();
+        //     testAdSuccess = false;
+        // }
 
         if (CoinManager.Instance) {
             Cigs.text = CoinManager.Instance.Coins.ToString ("00");
         }
+        // }else{
+        // UpdateBonusCoins ();
+        // }
 
         Scoreboard.text = CharacterStats.Score.ToString ("000000");
         if (transfer) {
             StartCoroutine (AdjustScore ());
             transferCigs ();
         }
-        if (allowContinue) {
-            if (Input.GetButtonUp ("Cancel") && !quit) {
-                PlayerPrefs.SetString ("LevelToLoad", "Menu");
-                GetComponent<Animator> ().SetTrigger ("quit");
-                Invoke ("LoadScene", 2);
-                quit = true;
+        // if (allowContinue) {
+        //     if (Input.GetButtonUp ("Cancel") && !quit) {
+        //         PlayerPrefs.SetString ("LevelToLoad", "Menu");
+        //         GetComponent<Animator> ().SetTrigger ("quit");
+        //         Invoke ("LoadScene", 2);
+        //         quit = true;
 
-            }
-            if (Input.GetButton ("Submit")) {
-                PlayerPrefs.SetString ("LevelToLoad", "GameMode");
-                Invoke ("LoadScene", 2);
-            }
-        }
+        //     }
+        //     if (Input.GetButton ("Submit")) {
+        //         PlayerPrefs.SetString ("LevelToLoad", "GameMode");
+        //         Invoke ("LoadScene", 2);
+        //     }
+        // }
     }
 
     [Button]
@@ -89,6 +94,7 @@ public class GameOver : MonoBehaviour {
     [Button]
     public void WatchAd () {
         AdvertHandler.instance.SearchAgainUsingAdvert ();
+
     }
 
     [Button]
@@ -104,9 +110,9 @@ public class GameOver : MonoBehaviour {
     public void DoubleReward () {
         adButton.gameObject.SetActive (false);
         if (CoinManager.Instance)
-            CoinManager.Instance.AddCoins ((int) savedScore);
+            CoinManager.Instance.AddCoins ((int) TargetScore);
 
-        BonusText[0].GetComponent<Animator> ().SetTrigger ("Show");
+        // BonusText[0].GetComponent<Animator> ().SetTrigger ("Show");
     }
 
     public void LoadScene () {
@@ -121,8 +127,9 @@ public class GameOver : MonoBehaviour {
 
     }
     public void UpdateBonusCoins () {
+        
         BonusText[0].text = $"+{TargetScore}";
-        BonusText[0].gameObject.SetActive(true);
+        BonusText[0].gameObject.SetActive (true);
         BonusText[1].text = $"+{TargetScore}";
     }
     public float CoinsEarned;
@@ -130,26 +137,27 @@ public class GameOver : MonoBehaviour {
         if (transfer) {
             if (tempReward < TargetScore) {
                 tempReward += 1;
+                CoinsEarned += 1;
                 if (CoinManager.Instance) {
                     CoinManager.Instance.AddCoins (1);
-                    CoinsEarned += 1;
+
                 }
 
                 //              MoneyTick.clip = TickUp;
                 //              MoneyTick.GetComponent<AudioSource>().Play ();
             } else {
                 tempReward = TargetScore;
-                UpdateBonusCoins();
+
             }
         }
     }
 
-    void AllowContinue () {
-        foreach (GameObject buttons in Buttons) {
-            buttons.SetActive (true);
-        }
-        allowContinue = true;
-    }
+    // void AllowContinue () {
+    //     foreach (GameObject buttons in Buttons) {
+    //         buttons.SetActive (true);
+    //     }
+    //     allowContinue = true;
+    // }
 
     IEnumerator AdjustScore () {
         while (CharacterStats.Score != 0) {
@@ -160,9 +168,10 @@ public class GameOver : MonoBehaviour {
                 //				MoneyTick.GetComponent<AudioSource>().Play ();
             } else {
                 CharacterStats.Score = 0;
+
             }
             yield return null;
-
+            UpdateBonusCoins ();
         }
 
         Invoke ("AllowContinue", 1);
