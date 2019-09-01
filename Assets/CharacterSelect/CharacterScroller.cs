@@ -507,17 +507,8 @@ public class CharacterScroller : MonoBehaviour
     public void SelectButton()
     {
         CharacterManager.Instance.CurrentCharacterIndex = currentCharacter.GetComponent<Character>().characterSequenceNumber;
-        if (UIManager.levelID == 0)
-        {
-            UIManager.ZombieMode = false;
-        }
-        else
-        {
-            UIManager.ZombieMode = true;
-        }
-        PlayerPrefs.SetString("LevelToLoad", "GameMode");
-        SceneManager.LoadScene("LoadingScreen");
-        //        Exit();
+       
+                Exit();
     }
 
     public void Exit()

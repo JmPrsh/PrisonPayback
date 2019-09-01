@@ -427,10 +427,18 @@ public class UIManager : MonoBehaviour
 
     public static int levelID;
 
-    public void ShowCharacterSelectionScene(int i)
+    public void GoToGameScene(int i)
+    {
+
+            ZombieMode = i == 1;
+       
+        PlayerPrefs.SetString("LevelToLoad", "GameMode");
+        SceneManager.LoadScene("LoadingScreen");
+    }
+
+    public void ShowCharacterSelectionScene()
     {
         SceneManager.LoadScene("CharacterSelection");
-        levelID = i;
     }
 
     public void ShowUnlocksScene()

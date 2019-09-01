@@ -30,7 +30,7 @@ public class GameOver : MonoBehaviour {
         // if (CharacterStats.CS) {
         //     CharacterStats.CS.Blur = true;
         // }
-
+        Time.timeScale = 1;
     }
 
     void OnEnable () {
