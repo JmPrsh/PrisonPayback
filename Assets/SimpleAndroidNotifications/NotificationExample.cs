@@ -36,14 +36,14 @@ namespace Assets.SimpleAndroidNotifications
 
         public void OnApplicationQuit()
         {
-            ScheduleNormal();
+            ScheduleSimple();
         }
 
         public void OnApplicationPause(bool paused)
         {
             if (paused)
             {
-                ScheduleNormal();
+                ScheduleSimple();
             }else{
 //                ScheduleNormal();
             }
@@ -51,7 +51,7 @@ namespace Assets.SimpleAndroidNotifications
 
         public void ScheduleSimple()
         {
-            NotificationManager.Send(TimeSpan.FromHours(6), "Prison Payback", "Customize icon and color", new Color(1, 0.3f, 0.15f));
+            NotificationManager.SendWithAppIcon(TimeSpan.FromHours(6), "Prison Payback", "The guards need some payback! Ready to give some more?", new Color(1, 0.3f, 0.15f));
         }
 
         public void ScheduleNormal()

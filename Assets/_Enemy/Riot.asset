@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Riot
   m_EditorClassIdentifier: 
   CashToGive: 4
+  DifficultyWeight: 2
   enemyType: 0
   enemyAttackType: 0
   Damage: 6

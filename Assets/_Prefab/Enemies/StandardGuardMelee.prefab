@@ -1365,7 +1365,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &473306
 Transform:
   m_ObjectHideFlags: 0
@@ -1383,7 +1383,6 @@ Transform:
   - {fileID: 2903390823133353552}
   - {fileID: 452840}
   - {fileID: 439872}
-  - {fileID: 8596260844505217946}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1429,6 +1428,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   InPosition: 0
+  velocity: {x: 0, y: 0, z: 0}
   RandomSwingTime: 0
 --- !u!58 &5824022
 CircleCollider2D:
@@ -2457,53 +2457,6 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: 112.3, y: -9.27}
   m_UseGraphicAlpha: 1
---- !u!1 &3431408257146922029
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8596260844505217946}
-  - component: {fileID: 6898818293411937247}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8596260844505217946
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3431408257146922029}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.169, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 473306}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &6898818293411937247
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3431408257146922029}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.09
 --- !u!1001 &2636433282612499319
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2624,7 +2577,7 @@ PrefabInstance:
     - target: {fileID: 2805587571344875667, guid: f3fac69e0dfde46b0ada9194a1cf9c9d,
         type: 3}
       propertyPath: lastRebuildHash
-      value: 178067209
+      value: 380777441
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f3fac69e0dfde46b0ada9194a1cf9c9d, type: 3}

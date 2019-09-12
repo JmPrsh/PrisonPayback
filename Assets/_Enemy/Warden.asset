@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357ea14a322789a4a86b90c8c5f7bf06, type: 3}
   m_Name: Warden
   m_EditorClassIdentifier: 
-  CashToGive: 100
+  CashToGive: 300
+  DifficultyWeight: 1
   enemyType: 1
   enemyAttackType: 1
   Damage: 5
-  Health: 1000
+  Health: 6000
   MoveSpeed: 3
   ShootRate: 0.05
   AttackDistance: 6

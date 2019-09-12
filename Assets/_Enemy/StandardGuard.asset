@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: StandardGuard
   m_EditorClassIdentifier: 
   CashToGive: 1
+  DifficultyWeight: 2
   enemyType: 0
   enemyAttackType: 1
   Damage: 5
-  Health: 100
+  Health: 40
   MoveSpeed: 4
   ShootRate: 1
   AttackDistance: 5

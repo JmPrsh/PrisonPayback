@@ -4,32 +4,38 @@ using ChartboostSDK;
 using EasyButtons;
 using UnityEngine;
 
-namespace SgLib {
+namespace SgLib
+{
 
-    public class DailyRewardController : MonoBehaviour {
+    public class DailyRewardController : MonoBehaviour
+    {
         public static DailyRewardController Instance { get; private set; }
 
-        public DateTime NextRewardTime {
-            get {
-                return GetNextRewardTime ();
+        public DateTime NextRewardTime
+        {
+            get
+            {
+                return GetNextRewardTime();
             }
         }
 
-        public TimeSpan TimeUntilReward {
-            get {
-                return NextRewardTime.Subtract (DateTime.Now);
+        public TimeSpan TimeUntilReward
+        {
+            get
+            {
+                return NextRewardTime.Subtract(DateTime.Now);
             }
         }
 
-        [Header ("Check to disable Daily Reward Feature")]
+        [Header("Check to disable Daily Reward Feature")]
         public bool disable;
 
-        [Header ("Daily Reward Config")]
-        [Tooltip ("Number of hours between 2 rewards")]
+        [Header("Daily Reward Config")]
+        [Tooltip("Number of hours between 2 rewards")]
         public int rewardIntervalHours = 6;
-        [Tooltip ("Number of minues between 2 rewards")]
+        [Tooltip("Number of minues between 2 rewards")]
         public int rewardIntervalMinutes = 0;
-        [Tooltip ("Number of seconds between 2 rewards")]
+        [Tooltip("Number of seconds between 2 rewards")]
         public int rewardIntervalSeconds = 0;
         public int rareChance;
         public int minRewardvalueCurrent = 20;
@@ -37,14 +43,18 @@ namespace SgLib {
 
         private const string NextRewardTimePPK = "SGLIB_NEXT_DAILY_REWARD_TIME";
 
-        void Awake () {
-            if (Instance) {
-                Destroy (gameObject);
-            } else {
-                Instance = this;
-                DontDestroyOnLoad (gameObject);
+        void Awake()
+        {
+            if (Instance)
+            {
+                Destroy(gameObject);
             }
-            Chartboost.cacheInterstitial (CBLocation.Default);
+            else
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            Chartboost.cacheInterstitial(CBLocation.Default);
 
         }
 
@@ -52,7 +62,8 @@ namespace SgLib {
         /// Determines whether the waiting time has passed and can reward now.
         /// </summary>
         /// <returns><c>true</c> if this instance can reward now; otherwise, <c>false</c>.</returns>
-        public bool CanRewardNow () {
+        public bool CanRewardNow()
+        {
             return TimeUntilReward <= TimeSpan.Zero;
         }
 
@@ -60,29 +71,39 @@ namespace SgLib {
         /// Gets the random reward.
         /// </summary>
         /// <returns>The random reward.</returns>
-        public int GetRandomReward () {
-            if (UnityEngine.Random.Range (0, 20) == 5) {
+        public int GetRandomReward()
+        {
+            if (UnityEngine.Random.Range(0, 20) == 5)
+            {
                 reward = 300;
-            } else {
-                reward = UnityEngine.Random.Range (minRewardvalueCurrent, maxRewardvalueCurrent + 1);
             }
-            StartCoroutine (ShowAdThenReward ());
+            else
+            {
+                reward = UnityEngine.Random.Range(minRewardvalueCurrent, maxRewardvalueCurrent + 1);
+            }
+            if (PlayerPrefs.GetInt("Adverts") == 0)
+                StartCoroutine(ShowAdThenReward());
             return reward;
 
         }
-        public void ShowAd () {
-            StartCoroutine (ShowAdThenReward ());
+        public void ShowAd()
+        {
+            StartCoroutine(ShowAdThenReward());
         }
         int reward;
-        public IEnumerator ShowAdThenReward () {
-            yield return new WaitForEndOfFrame ();
-            if (Chartboost.hasInterstitial (CBLocation.Default)) {
-                Chartboost.showInterstitial (CBLocation.Default);
-                Debug.Log ("watching ad");
-            } else {
+        public IEnumerator ShowAdThenReward()
+        {
+            yield return new WaitForEndOfFrame();
+            if (Chartboost.hasInterstitial(CBLocation.Default))
+            {
+                Chartboost.showInterstitial(CBLocation.Default);
+                Debug.Log("watching ad");
+            }
+            else
+            {
                 // We don't have a cached video right now, but try to get one for next time
-                Chartboost.cacheInterstitial (CBLocation.Default);
-                Debug.Log ("no ad to be found");
+                Chartboost.cacheInterstitial(CBLocation.Default);
+                Debug.Log("no ad to be found");
             }
         }
 
@@ -91,21 +112,24 @@ namespace SgLib {
         /// </summary>
 
         [Button]
-        public void ResetNextRewardTime () {
-            DateTime next = DateTime.Now.Add (new TimeSpan (rewardIntervalHours, rewardIntervalMinutes, rewardIntervalSeconds));
-            StoreNextRewardTime (next);
+        public void ResetNextRewardTime()
+        {
+            DateTime next = DateTime.Now.Add(new TimeSpan(rewardIntervalHours, rewardIntervalMinutes, rewardIntervalSeconds));
+            StoreNextRewardTime(next);
         }
 
-        void StoreNextRewardTime (DateTime time) {
-            PlayerPrefs.SetString (NextRewardTimePPK, time.ToBinary ().ToString ());
-            PlayerPrefs.Save ();
+        void StoreNextRewardTime(DateTime time)
+        {
+            PlayerPrefs.SetString(NextRewardTimePPK, time.ToBinary().ToString());
+            PlayerPrefs.Save();
         }
 
-        DateTime GetNextRewardTime () {
-            string storedTime = PlayerPrefs.GetString (NextRewardTimePPK, string.Empty);
+        DateTime GetNextRewardTime()
+        {
+            string storedTime = PlayerPrefs.GetString(NextRewardTimePPK, string.Empty);
 
-            if (!string.IsNullOrEmpty (storedTime))
-                return DateTime.FromBinary (Convert.ToInt64 (storedTime));
+            if (!string.IsNullOrEmpty(storedTime))
+                return DateTime.FromBinary(Convert.ToInt64(storedTime));
             else
                 return DateTime.Now;
         }

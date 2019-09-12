@@ -44,12 +44,6 @@
 				android:name="unityplayer.UnityActivity"
 				android:value="true" />
 		</activity>
-		
-		<!-- Google Play Services -->
-		<meta-data
-			android:name="com.google.android.gms.version"
-			android:value="@integer/google_play_services_version" />
-
 
 		
 		<!-- Chartboost -->
@@ -60,6 +54,6 @@
 			android:hardwareAccelerated="true"
 			android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
 		<meta-data android:name="unityplayer.ForwardNativeEventsToDalvik" android:value="true" />
-
+    <meta-data android:name="unityplayer.SkipPermissionsDialog" android:value="true" />
 	</application>
 </manifest>

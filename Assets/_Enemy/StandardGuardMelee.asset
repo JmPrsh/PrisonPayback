@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: StandardGuardMelee
   m_EditorClassIdentifier: 
   CashToGive: 1
+  DifficultyWeight: 1
   enemyType: 0
   enemyAttackType: 0
   Damage: 5
-  Health: 100
+  Health: 40
   MoveSpeed: 4
   ShootRate: 1
   AttackDistance: 1

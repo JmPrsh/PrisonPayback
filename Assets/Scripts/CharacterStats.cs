@@ -19,6 +19,7 @@ public class CharacterStats : MonoBehaviour
     public float HealthStarting;
     public GameObject SteroidEffect;
     public Transform hittext;
+    public Transform coinText;
     // Ammo Script
     [HideInInspector]
     public AmmoScript ammo;
@@ -79,6 +80,7 @@ public class CharacterStats : MonoBehaviour
     public Transform AmmoCollectedText;
     public Transform HealthCollectedText;
     public Transform ScoreCollectedText;
+    public Transform CoinPrefab;
 
     public enum Ethnic
     {
@@ -186,7 +188,7 @@ public class CharacterStats : MonoBehaviour
         anim = GetComponent<Animator>();
         animGun = AimingGO.GetComponent<Animator>();
 
-        for (int i = 0; i < AimingGO.transform.GetChild(0).childCount-1; i++)
+        for (int i = 0; i < AimingGO.transform.GetChild(0).childCount - 1; i++)
         {
             Weapons.Add(AimingGO.transform.GetChild(0).GetChild(i).gameObject);
         }
@@ -206,6 +208,9 @@ public class CharacterStats : MonoBehaviour
 
     void Start()
     {
+        Score = 0;
+        Cash = 0;
+
         Stats.Kills = 0;
         Stats.Rooms = 0;
         Stats.Buffs = 0;
@@ -281,6 +286,7 @@ public class CharacterStats : MonoBehaviour
                     break;
 
             }
+            WeaponManager.WM.SetCurrentWeaponIndex(WhichWeapon);
         }
     }
 
@@ -393,7 +399,7 @@ public class CharacterStats : MonoBehaviour
 
             CheckSpecial();
 
-            WeaponChangeHandler();
+         
 
             PlayerModelHandler();
 
@@ -404,13 +410,17 @@ public class CharacterStats : MonoBehaviour
                 SteroidEffect.SetActive(true);
             }
 
-            TypeOfWeaponHandler();
-
             if (shootBurst)
             {
                 BurstFireHandler();
             }
         }
+    }
+
+    public void UpdateWeapon(int i)
+    {
+        WhichWeapon = i;
+        TypeOfWeaponHandler();
     }
 
     public void UpdateText()
@@ -650,6 +660,8 @@ public class CharacterStats : MonoBehaviour
 
     void TypeOfWeaponHandler()
     {
+        WeaponChangeHandler();
+
         // if type of weapon:
         if (TypeofWeapon == Weapon.Fist)
         {
@@ -764,6 +776,7 @@ public class CharacterStats : MonoBehaviour
             DamageToShow = "30 - 40"; // add critical hit chance
             Damage = Random.Range(30, 40);
         }
+       
         WeaponGUI = WeaponUIParent[WeaponID];
         // WeaponGUI.sprite = CurrentWeapon[WeaponID];
         for (int i = 0; i < Weapons.Count; i++)
@@ -782,6 +795,8 @@ public class CharacterStats : MonoBehaviour
             if (!WeaponUIParent[WeaponID].gameObject.activeInHierarchy)
                 WeaponUIParent[WeaponID].gameObject.SetActive(true);
         }
+
+     
     }
 
 
@@ -794,10 +809,10 @@ public class CharacterStats : MonoBehaviour
             temp.SetParent(PlayerCanvas);
             temp.GetComponent<RectTransform>().localPosition = new Vector3(0, 15, 0);
             //            WeaponsPickedUp.Add(hitInfo.transform.gameObject);
-            TypeofWeapon = Weapon.Knife;
             ShowKnife = true;
             Weapons[2].GetComponent<PickedUpCheck>().pickedUp = true;
-
+            WeaponManager.WM.SetCurrentWeaponIndex(2);
+            WeaponStoreManager.WSM.ShowText("+ Knife");
         }
     }
 
@@ -810,10 +825,10 @@ public class CharacterStats : MonoBehaviour
             temp.SetParent(PlayerCanvas);
             temp.GetComponent<RectTransform>().localPosition = new Vector3(0, 15, 0);
             //            WeaponsPickedUp.Add(hitInfo.transform.gameObject);
-            TypeofWeapon = Weapon.Pipe;
             ShowPipe = true;
             Weapons[1].GetComponent<PickedUpCheck>().pickedUp = true;
-
+            WeaponManager.WM.SetCurrentWeaponIndex(1);
+            WeaponStoreManager.WSM.ShowText("+ Pipe");
         }
     }
 
@@ -845,7 +860,8 @@ public class CharacterStats : MonoBehaviour
             //                    WeaponsPickedUp.Add(hitInfo.transform.gameObject);
             Weapons[3].GetComponent<PickedUpCheck>().pickedUp = true;
             ShowPistol = true;
-
+            WeaponManager.WM.SetCurrentWeaponIndex(3);
+            WeaponStoreManager.WSM.ShowText("+ Pistol");
         }
         else
         {
@@ -857,6 +873,7 @@ public class CharacterStats : MonoBehaviour
             temp.SetParent(PlayerCanvas);
             temp2.localScale = new Vector2(1, 1);
             temp.GetComponent<RectTransform>().localPosition = new Vector3(0, 15, 0);
+            WeaponStoreManager.WSM.ShowText("+ Pistol Ammo");
         }
     }
 
@@ -888,6 +905,8 @@ public class CharacterStats : MonoBehaviour
             //            WeaponsPickedUp.Add(hitInfo.transform.gameObject);
             Weapons[4].GetComponent<PickedUpCheck>().pickedUp = true;
             ShowMachineGun = true;
+            WeaponManager.WM.SetCurrentWeaponIndex(4);
+            WeaponStoreManager.WSM.ShowText("+ Assault Rifle");
         }
         else
         {
@@ -900,6 +919,7 @@ public class CharacterStats : MonoBehaviour
             temp.SetParent(PlayerCanvas);
             temp2.localScale = new Vector2(1, 1);
             temp.GetComponent<RectTransform>().localPosition = new Vector3(0, 15, 0);
+            WeaponStoreManager.WSM.ShowText("+ Assault Rifle Ammo");
         }
     }
 
@@ -931,6 +951,8 @@ public class CharacterStats : MonoBehaviour
             //            WeaponsPickedUp.Add(hitInfo.transform.gameObject);
             Weapons[5].GetComponent<PickedUpCheck>().pickedUp = true;
             ShowShotgun = true;
+            WeaponManager.WM.SetCurrentWeaponIndex(5);
+            WeaponStoreManager.WSM.ShowText("+ Shotgun");
         }
         else
         {
@@ -943,6 +965,7 @@ public class CharacterStats : MonoBehaviour
             temp.SetParent(PlayerCanvas);
             temp2.localScale = new Vector2(1, 1);
             temp.GetComponent<RectTransform>().localPosition = new Vector3(0, 15, 0);
+            WeaponStoreManager.WSM.ShowText("+ Shotgun Ammo");
         }
     }
 
@@ -974,6 +997,8 @@ public class CharacterStats : MonoBehaviour
             //            WeaponsPickedUp.Add(hitInfo.transform.gameObject);
             Weapons[6].GetComponent<PickedUpCheck>().pickedUp = true;
             ShowSniper = true;
+            WeaponManager.WM.SetCurrentWeaponIndex(6);
+            WeaponStoreManager.WSM.ShowText("+ Sniper");
         }
         else
         {
@@ -986,6 +1011,7 @@ public class CharacterStats : MonoBehaviour
             temp.SetParent(PlayerCanvas);
             temp2.localScale = new Vector2(1, 1);
             temp.GetComponent<RectTransform>().localPosition = new Vector3(0, 15, 0);
+            WeaponStoreManager.WSM.ShowText("+ Sniper Ammo");
         }
     }
 
@@ -1017,6 +1043,8 @@ public class CharacterStats : MonoBehaviour
             //            WeaponsPickedUp.Add(hitInfo.transform.gameObject);
             Weapons[7].GetComponent<PickedUpCheck>().pickedUp = true;
             ShowMinigun = true;
+            WeaponManager.WM.SetCurrentWeaponIndex(7);
+            WeaponStoreManager.WSM.ShowText("+ Minigun");
         }
         else
         {
@@ -1029,6 +1057,7 @@ public class CharacterStats : MonoBehaviour
             //            temp.SetParent(PlayerCanvas);
             //            temp2.localScale = new Vector2(1, 1);
             //            temp.GetComponent<RectTransform>().localPosition = new Vector3(0, PickUpGUIy, 0);
+            WeaponStoreManager.WSM.ShowText("+ Minigun Ammo");
         }
     }
 
@@ -1203,10 +1232,10 @@ public class CharacterStats : MonoBehaviour
                             WSanim.SetTrigger("Shoot");
                             GeneralMuzzle.SetTrigger("Shoot");
 
-                 
+
 
                             RevolverSecondGun.gameObject.SetActive(true);
-                            Transform tempBullet2 = bulletPrefab.Spawn(RevolverSecondGun.transform.GetChild(1).transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(180, Vector3.forward ) ); // 0 on z
+                            Transform tempBullet2 = bulletPrefab.Spawn(RevolverSecondGun.transform.GetChild(1).transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(180, Vector3.forward)); // 0 on z
                             RevolverSecondGun.transform.GetChild(0).GetComponent<Animator>().SetTrigger("Shoot");
                         }
                         if (TypeofWeapon == Weapon.PistolAgent)
@@ -1253,7 +1282,10 @@ public class CharacterStats : MonoBehaviour
             {
                 if (Stamina < 100)
                 {
-
+                    //if (Stamina < 10)
+                    //{
+                    //    yield return new WaitForSeconds(2f);
+                    //}
                     if (Stamina == 33)
                     {
                         yield return new WaitForSeconds(2f);
@@ -1354,9 +1386,6 @@ public class CharacterStats : MonoBehaviour
         allowMovement = true;
         anim.SetBool("Stunned", false);
     }
-
-
-
 
     void WeaponChangeHandler()
     {
@@ -1762,7 +1791,7 @@ public class CharacterStats : MonoBehaviour
 
             leftJoystickInput = new Vector3(xMovementLeftJoystick, zMovementLeftJoystick, 0);
             leftJoystickInput = transform.TransformDirection(-leftJoystickInput);
-            leftJoystickInput *= GeneralSpeed;
+            leftJoystickInput *= GeneralSpeed * 2;
 
             transform.Translate(leftJoystickInput * Time.fixedDeltaTime);
 

@@ -47,6 +47,11 @@ public class StatManager : MonoBehaviour
         BrutesHighscore = PlayerPrefs.GetInt("BrutesKilledHighscore");
         BossesHighscore = PlayerPrefs.GetInt("BossesKilledHighscore");
         ZombieKills = PlayerPrefs.GetInt("ZombiesKilled");
+
+        if(KillsHighscore > 9000)
+        {
+            AchievementHandler.WhichAchievement(9);
+        }
     }
 
     public void SaveStats(string saveName,int id)

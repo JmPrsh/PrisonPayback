@@ -924,7 +924,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &473306
 Transform:
   m_ObjectHideFlags: 0
@@ -989,6 +989,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   InPosition: 0
+  velocity: {x: 0, y: 0, z: 0}
   RandomSwingTime: 0
 --- !u!58 &5824022
 CircleCollider2D:
@@ -1194,7 +1195,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: 79742b635fb6b0a4bbf06bd7d06d5257, type: 3}
-  m_Color: {r: 1, g: 0.44313726, b: 0.03137255, a: 1}
+  m_Color: {r: 1, g: 0.44313726, b: 0.03137255, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -2304,7 +2305,7 @@ PrefabInstance:
     - target: {fileID: 2805587571369517011, guid: f3fac69e0dfde46b0ada9194a1cf9c9d,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 18.500174
+      value: 31.31
       objectReference: {fileID: 0}
     - target: {fileID: 2805587571369517011, guid: f3fac69e0dfde46b0ada9194a1cf9c9d,
         type: 3}
@@ -2346,10 +2347,30 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 2805587571369517013, guid: f3fac69e0dfde46b0ada9194a1cf9c9d,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 270
+      objectReference: {fileID: 0}
+    - target: {fileID: 2805587571369517013, guid: f3fac69e0dfde46b0ada9194a1cf9c9d,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 2805587571369517015, guid: f3fac69e0dfde46b0ada9194a1cf9c9d,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 270
+      objectReference: {fileID: 0}
+    - target: {fileID: 2805587571369517015, guid: f3fac69e0dfde46b0ada9194a1cf9c9d,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 2805587571344875667, guid: f3fac69e0dfde46b0ada9194a1cf9c9d,
         type: 3}
       propertyPath: lastRebuildHash
-      value: -215711885
+      value: -43655507
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f3fac69e0dfde46b0ada9194a1cf9c9d, type: 3}
@@ -2496,7 +2517,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11400004, guid: 92276cc9a99a3c74ba07a306ace911fc, type: 3}
       propertyPath: lastRebuildHash
-      value: -750351490
+      value: 234130100
       objectReference: {fileID: 0}
     - target: {fileID: 11400004, guid: 92276cc9a99a3c74ba07a306ace911fc, type: 3}
       propertyPath: effectFollow

@@ -7,7 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class Unlocks : MonoBehaviour {
 
-	public List<GameObject> Characters;
+    public List<GameObject> CharactersUnlocked;
+    public List<GameObject> Characters;
 	public Sprite[] LockedCharacters;
 	public Sprite[] UnlockedCharacters;
 	public int CharacterID;
@@ -29,11 +30,15 @@ public class Unlocks : MonoBehaviour {
 	public int CanvasID;
     public Vector3 offsetpos;
 
+    public Text UnlockedCount;
+
 	// Use this for initialization
 	void Start () {
 		R = SnapShotPosition.GetComponent<RectTransform> ();
 		A = SnapShotAchievementPosition.GetComponent<RectTransform> ();
 		eventSystem = GameObject.Find ("EventSystem").GetComponent<EventSystem> ();
+
+        UnlockedCount.text = $"{CharactersUnlocked.Count}/{Characters.Count}";
 	}
 
     public void GoToMenu(){

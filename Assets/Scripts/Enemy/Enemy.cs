@@ -6,6 +6,7 @@ using UnityEngine;
 public class Enemy : ScriptableObject
 {
     public float CashToGive;
+    public float DifficultyWeight;
     public enum EnemyType
     {
         Normal,

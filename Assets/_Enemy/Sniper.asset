@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: Sniper
   m_EditorClassIdentifier: 
   CashToGive: 6
+  DifficultyWeight: 3
   enemyType: 0
   enemyAttackType: 1
   Damage: 20
-  Health: 80
+  Health: 50
   MoveSpeed: 4
   ShootRate: 4
   AttackDistance: 9

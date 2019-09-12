@@ -73,6 +73,7 @@ public class Character : MonoBehaviour
             PlayerPrefs.Save();
             CoinManager.Instance.RemoveCoins(price);
             CharacterScroller.CS.UnlockedScreen.SetTrigger("Unlocked");
+            CharacterScroller.CS.CheckUnlocks();
             return true;
         }
 
@@ -86,26 +87,31 @@ public class Character : MonoBehaviour
             case 0:
                 // zombie objective
                 ObjectiveMax = 5000;
+                progress = StatManager.Instance.ZombieKills.ToString();
                 return StatManager.Instance.ZombieKills >= 5000;
 
             case 1:
                 // cyborg objective
                 ObjectiveMax = 50;
+                progress = StatManager.Instance.WavesCleared.ToString();
                 return StatManager.Instance.WavesCleared >= 50;
 
             case 2:
                 // gun slinger objective
                 ObjectiveMax = 100;
+                progress = StatManager.Instance.BrutesKilled.ToString();
                 return StatManager.Instance.BrutesKilled >= 100;
 
             case 3:
                 // agent objective
                 ObjectiveMax = 10;
+                progress = StatManager.Instance.BossesKilled.ToString();
                 return StatManager.Instance.BossesKilled >= 10;
 
             case 4:
                 // samurai objective
                 ObjectiveMax = 5000;
+                progress = StatManager.Instance.CriticalsHighscore.ToString();
                 return StatManager.Instance.CriticalsHighscore >= 5000;
 
         }

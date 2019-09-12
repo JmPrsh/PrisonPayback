@@ -1,45 +1,40 @@
 ﻿using UnityEngine;
 using System.Collections;
 using SgLib;
+using UnityEngine.UI;
 
 public class CoinController : MonoBehaviour
 {
-    private MeshCollider meshCollider;
-    private float speed;
-    private void OnTriggerEnter(Collider other)
+    Collider2D col;
+    public float Cash;
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
+            if(SoundManager.Instance)
             SoundManager.Instance.PlaySound(SoundManager.Instance.coin);
-            meshCollider.enabled = false;
-            CoinManager.Instance.AddCoins(1);
-            StartCoroutine(Up());
+            col.enabled = false;
+                CharacterStats.CS.Cash+= Cash;
+            Transform temp = CharacterStats.CS.coinText.Spawn(new Vector3(CharacterStats.CS.PlayerHUD.transform.position.x + Random.Range(-5f, 5f), CharacterStats.CS.PlayerHUD.transform.position.y + 0.8f, CharacterStats.CS.PlayerHUD.transform.position.z), transform.rotation);
+            temp.SetParent(CharacterStats.CS.PlayerHUD.transform, false);
+            temp.localPosition = Vector3.zero;
+            temp.GetChild(0).GetComponent<Text>().text = Cash.ToString();
+            temp.localScale = Vector3.one * 0.7f;
+            this.Recycle();
         }      
     }
-    // Use this for initialization
-    private void OnEnable()
+
+    void Awake()
     {
-        if (meshCollider == null)
-            meshCollider = GetComponent<MeshCollider>();
-        meshCollider.enabled = true;
-        speed = Random.Range(4f, 7f);
-        StartCoroutine(Rotate());
+        col = GetComponent<Collider2D>();
     }
 
-    IEnumerator Rotate()
-    {
-        while (true)
-        {
-            transform.Rotate(Vector3.up * speed);
-            yield return null;
-        }
-    }
     //Move up
     IEnumerator Up()
     {
-        float time = 1f;
+        float time = 0.2f;
         float startY = transform.position.y;
-        float endY = startY + 10f;
+        float endY = startY + 1f;
 
         float t = 0;
         while (t < time)
@@ -52,7 +47,7 @@ public class CoinController : MonoBehaviour
             transform.position = newPos;
             yield return null;
         }
-        gameObject.SetActive(false);
+        this.Recycle();
         transform.eulerAngles = Vector3.zero;
         transform.position = Vector3.zero;
     }

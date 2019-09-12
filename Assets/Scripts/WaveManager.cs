@@ -6,8 +6,17 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class WaveManager : MonoBehaviour {
+public class WaveManager : MonoBehaviour
+{
+
     public static WaveManager WM;
+
+    public int MaxEnemiesOnScreen;
+    public int maxEnemyDifficultyWeight = 20;
+    public int WeightUsed;
+
+    public List<Transform> EnemiesSpawnedForCount;
+
     public List<Transform> EnemiesSpawned;
     public bool bossWave;
     public bool SkipCountdown;
@@ -19,7 +28,7 @@ public class WaveManager : MonoBehaviour {
     public Image[] ThumbAreaHelpers;
     public Transform[] ItemsToSpawn;
     public int CurrentWave;
-    public int MaxEnemiesOnScreen;
+
     List<Transform> EnemiesToSpawn;
     public List<Transform> ZombieEnemies;
     public List<Transform> set1Enemies;
@@ -58,7 +67,9 @@ public class WaveManager : MonoBehaviour {
     public static bool SpawnBrute;
     public bool SpawnBoss;
 
-    Dictionary<float, GameObject> distDic = new Dictionary<float, GameObject> ();
+    public Animator CashAnim;
+
+    Dictionary<float, GameObject> distDic = new Dictionary<float, GameObject>();
 
     public static float DamageMultiplier = 1;
     public static float HealthMultiplier = 1;
@@ -85,7 +96,8 @@ public class WaveManager : MonoBehaviour {
 
     public int WavesCleared = 0;
 
-    void Awake () {
+    void Awake()
+    {
         WM = this;
 
         // if (UIManager.uim)
@@ -94,10 +106,18 @@ public class WaveManager : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Start () {
-
-        StartingtheGame ();
-        Player = GameObject.FindGameObjectWithTag ("Player").transform;
+    void Start()
+    {
+        if (ZombieMode)
+        {
+            CurrentWave = 1;
+        }
+        else if (ChosenWaveHandler.instance)
+        {
+            CurrentWave = ChosenWaveHandler.instance.startingWave;
+        }
+        StartingtheGame();
+        Player = GameObject.FindGameObjectWithTag("Player").transform;
         //		StageGO = GameObject.Find ("STAGE").GetComponent<Image> ();
         CountdownText.enabled = true;
         CountdownText.text = "NEXT WAVE STARTS IN...";
@@ -105,360 +125,558 @@ public class WaveManager : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update () {
+    void Update()
+    {
         EnemyCountBar.valueCurrent = EnemiesLeft;
-        EnemyCountBar.valueMax = spawnLimit;
+        EnemyCountBar.valueMax = EnemiesSpawnedForCount.Count;
 
-        if (Countdown) {
+        if (Countdown)
+        {
             countdownTimer -= Time.deltaTime;
 
-            CountdownText.text = Mathf.CeilToInt (countdownTimer).ToString ();
+            CountdownText.text = Mathf.CeilToInt(countdownTimer).ToString();
         }
-        if (!ZombieMode) {
+        if (!ZombieMode)
+        {
             EnemyHealth.text = $"x{HealthMultiplier}";
             EnemyStrength.text = $"x{DamageMultiplier}";
             ScoreText.text = $"x{ScoreMultiplier}";
         }
         WaveCounter.text = "Wave " + CurrentWave;
 
-        if (EnemiesLeft <= 5) {
-            EnemiesToKill.text = EnemiesLeft.ToString ();
-            EnemiesToKill.gameObject.SetActive (true);
-            EnemyCountBar.gameObject.SetActive (false);
-        } else {
-            EnemyCountBar.gameObject.SetActive (true);
-            EnemiesToKill.gameObject.SetActive (false);
+        if (EnemiesLeft <= 5)
+        {
+            EnemiesToKill.text = EnemiesLeft.ToString();
+            EnemiesToKill.gameObject.SetActive(true);
+            EnemyCountBar.gameObject.SetActive(false);
+        }
+        else
+        {
+            EnemyCountBar.gameObject.SetActive(true);
+            EnemiesToKill.gameObject.SetActive(false);
         }
 
-        if (spawn) {
-            if (EnemiesSpawned.Count < MaxEnemiesOnScreen && spawnCount < spawnLimit) {
-                FindFurthestSpawn ();
-                int randomEnemyFromList = Random.Range (0, EnemiesToSpawn.Count);
-                Transform temp = EnemiesToSpawn[randomEnemyFromList].Spawn (GeneralSpawnPosition.position, Quaternion.identity);
-                EnemiesSpawned.Add (temp);
-                // spawn from the enemytospawn list
-                // add to enemiesspawned list
-                spawnCount += 1;
-                if (SpawnBrute) {
-                    if (CurrentWave != 5 && CurrentWave != 15 && CurrentWave != 25 && CurrentWave != 35 && CurrentWave != 45) {
-                        EnemiesLeft += 1;
-                        Transform tempBrute = BruteEnemiesToSpawn.Spawn (GeneralSpawnPosition.position, Quaternion.identity);
-                        EnemiesSpawned.Add (tempBrute);
-                    }
-                    SpawnBrute = false;
-                }
-                if (SpawnBoss) {
-                    EnemiesLeft += 1;
-                    Transform tempBoss = BossEnemies[Random.Range (0, BossEnemies.Count)].Spawn (GeneralSpawnPosition.position, Quaternion.identity);
-                    EnemiesSpawned.Add (tempBoss);
-                    SpawnBoss = false;
-                }
-            }
+        if (spawn)
+        {
+            if (ZombieMode)
+                ZombieSpawning();
+            else
+                RiotSpawning();
+
+            EnemiesLeft = EnemiesSpawned.Count;
         }
         // ClosedWeaponScreen ()
-        if (EnemiesLeft <= 0) {
-            if (allowOpen) {
+        if (EnemiesLeft <= 0)
+        {
+            spawn = false;
+            if (allowOpen)
+            {
                 PlayerModel.PM.CheckState = true;
                 WaveCounter.enabled = false;
                 EnemiesToKill.enabled = false;
 
-                FinishedWave ();
+                FinishedWave();
 
-                if (PlayerPrefs.GetInt ("Adverts") == 0 && AdvertHandler.instance) {
+                if (PlayerPrefs.GetInt("Adverts") == 0 && AdvertHandler.instance)
+                {
                     WavesCleared++;
-                    if (WavesCleared > 4) {
-                        AdvertHandler.instance.WatchAdvert ();
+                    if (WavesCleared > 4)
+                    {
+                        AdvertHandler.instance.WatchAdvert();
                         WavesCleared = 0;
                     }
                 }
-                EnemiesLeftParent.SetActive (false);
-                spawn = false;
+                EnemiesLeftParent.SetActive(false);
+
                 allowOpen = false;
             }
         }
 
-        EnemiesSurroundPlayer ();
+        if (!ZombieMode)
+        {
+            if (!spawn)
+            {
+                for (int i = 0; i < EnemiesSpawned.Count; i++)
+                {
+                    if (EnemiesSpawned[i] != null)
+                    {
+                        if (i <= MaxEnemiesOnScreen)
+                        {
+                            EnemiesSpawned[i].gameObject.SetActive(true);
+                        }
+                        else
+                        {
+                            EnemiesSpawned[i].gameObject.SetActive(false);
+                        }
+                    }
+                }
+            }
+        }
+
+        EnemiesSurroundPlayer();
     }
 
-    void EnemiesSurroundPlayer () {
+    void RiotSpawning()
+    {
+        if (WeightUsed < (maxEnemyDifficultyWeight * PlayerCount))
+        {
+            FindFurthestSpawn();
+            int randomEnemyFromList = Random.Range(0, EnemiesToSpawn.Count);
+            Transform temp = EnemiesToSpawn[randomEnemyFromList].Spawn(GeneralSpawnPosition.position, Quaternion.identity);
+            WeightUsed += (int)temp.GetComponent<attackPlayer>().EnemyType.DifficultyWeight;
+            EnemiesSpawned.Add(temp);
+            EnemiesSpawnedForCount.Add(temp);
+            // spawn from the enemytospawn list
+            // add to enemiesspawned list
+            spawnCount += 1;
+            if (SpawnBrute)
+            {
+                if (CurrentWave != 5 && CurrentWave != 15 && CurrentWave != 25 && CurrentWave != 35 && CurrentWave != 45)
+                {
+                    EnemiesLeft += 1;
+                    Transform tempBrute = BruteEnemiesToSpawn.Spawn(GeneralSpawnPosition.position, Quaternion.identity);
+                    WeightUsed += (int)tempBrute.GetComponent<attackPlayer>().EnemyType.DifficultyWeight;
+                    EnemiesSpawned.Add(tempBrute);
+                    EnemiesSpawnedForCount.Add(tempBrute);
+                }
+                SpawnBrute = false;
+            }
+            if (SpawnBoss)
+            {
+                EnemiesLeft += 1;
+                Transform tempBoss = BossEnemies[Random.Range(0, BossEnemies.Count)].Spawn(GeneralSpawnPosition.position, Quaternion.identity);
+                EnemiesSpawned.Add(tempBoss);
+                EnemiesSpawnedForCount.Add(tempBoss);
+                SpawnBoss = false;
+            }
+        }
+        else
+        {
+            spawn = false;
+        }
+    }
+
+    void ZombieSpawning()
+    {
+        if (EnemiesSpawned.Count < MaxEnemiesOnScreen && spawnCount < spawnLimit)
+        {
+            FindFurthestSpawn();
+            int randomEnemyFromList = Random.Range(0, EnemiesToSpawn.Count);
+            Transform temp = EnemiesToSpawn[randomEnemyFromList].Spawn(GeneralSpawnPosition.position, Quaternion.identity);
+            WeightUsed += (int)temp.GetComponent<attackPlayer>().EnemyType.DifficultyWeight;
+            EnemiesSpawned.Add(temp);
+            EnemiesSpawnedForCount.Add(temp);
+            // spawn from the enemytospawn list
+            // add to enemiesspawned list
+            spawnCount += 1;
+            if (SpawnBrute)
+            {
+                if (CurrentWave != 5 && CurrentWave != 15 && CurrentWave != 25 && CurrentWave != 35 && CurrentWave != 45)
+                {
+                    EnemiesLeft += 1;
+                    Transform tempBrute = BruteEnemiesToSpawn.Spawn(GeneralSpawnPosition.position, Quaternion.identity);
+                    WeightUsed += (int)tempBrute.GetComponent<attackPlayer>().EnemyType.DifficultyWeight;
+                    EnemiesSpawned.Add(tempBrute);
+                    EnemiesSpawnedForCount.Add(tempBrute);
+                }
+                SpawnBrute = false;
+            }
+        }
+
+    }
+
+    void EnemiesSurroundPlayer()
+    {
 
         if (EnemiesSpawned.Count <= 0)
             return;
 
-        ChooseRandomPosition ();
+        ChooseRandomPosition();
 
     }
 
     [Button]
-    public void KillAllEnemies () {
-        attackPlayer[] enemies = GameObject.FindObjectsOfType<attackPlayer> ();
+    public void KillAllEnemies()
+    {
+        attackPlayer[] enemies = GameObject.FindObjectsOfType<attackPlayer>();
         foreach (attackPlayer enemy in enemies)
-            enemy.DamagedByPlayer (100000, false, false);
+            enemy.DamagedByPlayer(100000, false, false);
     }
 
-    void ChooseRandomPosition () {
-        for (int i = 0; i < EnemiesSpawned.Count; i++) {
-            if (EnemiesSpawned[i] != null) {
-                float rad = EnemiesSpawned[i].GetComponent<attackPlayer> ().EnemyType.AttackDistance;
+    void ChooseRandomPosition()
+    {
+        for (int i = 0; i < EnemiesSpawned.Count; i++)
+        {
+            if (EnemiesSpawned[i] != null)
+            {
+                float rad = EnemiesSpawned[i].GetComponent<attackPlayer>().EnemyType.AttackDistance;
 
                 //summon the enemies around this central GameObject
                 float radian = i * Mathf.PI / (EnemiesSpawned.Count / 2);
-                Vector3 ePosition = new Vector3 (rad * Mathf.Cos (radian), rad * Mathf.Sin (radian), transform.position.z);
+                Vector3 ePosition = new Vector3(rad * Mathf.Cos(radian), (rad * Mathf.Sin(radian)) - 1, transform.position.z);
                 // EnemiesSpawned[i].position = ePosition;
                 // print(ePosition);
-                if (!System.Single.IsNaN (ePosition.x) && !System.Single.IsNaN (ePosition.y)) {
-                    if (Random.Range (0, 10) == 0) {
-                        EnemiesSpawned[i].GetComponent<attackPlayer> ().targetPosition = Player.position + ePosition;
+                if (!System.Single.IsNaN(ePosition.x) && !System.Single.IsNaN(ePosition.y))
+                {
+                    if (Random.Range(0, 10) == 0)
+                    {
+                        EnemiesSpawned[i].GetComponent<attackPlayer>().targetPosition = Player.position + ePosition;
                     }
                 }
             }
         }
     }
 
-    public void FinishedWave () {
-
-        if (ZombieMode) {
-            if (CharacterStats.CS.Special) {
-                Invoke ("BeginNextWave", 2);
-            } else {
-                zombieWaveCounter += 1;
-                if (zombieWaveCounter >= 3) {
-                    Invoke ("ShowShopWindow", 2);
-                    zombieWaveCounter = 0;
-                } else {
-                    Invoke ("BeginNextWave", 2);
-                }
+    public void FinishedWave()
+    {
+        WeightUsed = 0;
+        EnemiesSpawnedForCount.Clear();
+        if (ZombieMode)
+        {
+            if(CurrentWave == 50)
+            {
+                AchievementHandler.WhichAchievement(6);
             }
-        } else {
-            WaveStats.gameObject.SetActive (false);
-            // normal mode
-            if (CurrentWave == 50) {
-                Invoke ("GameComplete", 2);
-            } else if (CurrentWave == 10 || CurrentWave == 20 || CurrentWave == 30 || CurrentWave == 40) {
-                // just beat the boss
-                Invoke ("ShowStageComplete", 2);
-            } else {
-                if (CharacterStats.CS.Special) {
-                    Invoke ("BeginNextWave", 2);
-                } else {
-                    Invoke ("ShowShopWindow", 2);
+            else if (CurrentWave == 100)
+            {
+                AchievementHandler.WhichAchievement(7);
+                AchievementHandler.completedallgameID[2] = 1;
+                AchievementHandler.CheckCompletedAllGame();
+            }
+
+            if (CharacterStats.CS.Special)
+            {
+                Invoke("BeginNextWave", 2);
+            }
+            else
+            {
+                zombieWaveCounter += 1;
+                if (zombieWaveCounter >= 3)
+                {
+                    Invoke("ShowShopWindow", 2);
+                    zombieWaveCounter = 0;
+                }
+                else
+                {
+                    Invoke("BeginNextWave", 2);
                 }
             }
         }
+        else
+        {
+            WaveStats.gameObject.SetActive(false);
+            // normal mode
+            if (CurrentWave == 50)
+            {
+                Invoke("GameComplete", 2);
+                AchievementHandler.WhichAchievement(5);
+                AchievementHandler.completedallgameID[1] = 1;
+                AchievementHandler.CheckCompletedAllGame();
+            }
+            else if (CurrentWave == 10 || CurrentWave == 20 || CurrentWave == 30 || CurrentWave == 40)
+            {
+                // just beat the boss
+                Invoke("ShowStageComplete", 2);
 
+                switch (CurrentWave)
+                {
+                    case 10:
+                        AchievementHandler.WhichAchievement(1);
+                        break;
+                    case 20:
+                        AchievementHandler.WhichAchievement(2);
+                        break;
+                    case 30:
+                        AchievementHandler.WhichAchievement(3);
+                        break;
+                    case 40:
+                        AchievementHandler.WhichAchievement(4);
+                        break;
+                }
+            }
+            else
+            {
+                if (CharacterStats.CS.Special)
+                {
+                    Invoke("BeginNextWave", 2);
+                }
+                else
+                {
+                    print("Hmmm");
+                    Invoke("ShowShopWindow", 2);
+                }
+            }
+        }
+        System.GC.Collect();
     }
 
-    public void ShowShopWindow () {
-        WeaponStoreGO.SetActive (true);
+    public void ShowShopWindow()
+    {
+        if (!CharacterStats.CS.Special)
+        {
+            WeaponStoreGO.SetActive(true);
+        }
+        else
+        {
+            Invoke("BeginNextWave", 2);
+        }
     }
 
-    void BeginNextWave () { // change the play button in shop window to use this instead
-        if (CurrentWave == 50) {
+    void BeginNextWave()
+    { // change the play button in shop window to use this instead
+        if (CurrentWave == 50)
+        {
             // COMPLETED GAME!
             // go to menu
-        } else {
+        }
+        else
+        {
             CurrentWave++;
-            WaveCheck (); // then check what wave it is
-            // start the new wave in 3 seconds ....
+            WaveCheck(); // then check what wave it is
+                         // start the new wave in 3 seconds ....
+            ItemSpawner.i.SpawnOutsideInmates();
         }
     }
 
-    void ShowStageComplete () {
+    void ShowStageComplete()
+    {
         // if we just beat the boss
         if (AdvertHandler.instance)
-            AdvertHandler.instance.WatchAdvert ();
+            AdvertHandler.instance.WatchAdvert();
 
-        StageCompleteGO.SetActive (true);
+        StageCompleteGO.SetActive(true);
     }
-    void GameComplete () {
+    void GameComplete()
+    {
         // if we just beat the boss
         if (AdvertHandler.instance)
-            AdvertHandler.instance.WatchAdvert ();
+            AdvertHandler.instance.WatchAdvert();
 
-        StageCompleteGO2.SetActive (true);
+        StageCompleteGO2.SetActive(true);
     }
 
-    public void ClosedWeaponScreen () {
-        BeginNextWave ();
-        WeaponStoreGO.SetActive (false);
+    public void ClosedWeaponScreen()
+    {
+        BeginNextWave();
+        WeaponStoreGO.SetActive(false);
     }
 
-    void StartingtheGame () {
-        WaveCheck ();
+    void StartingtheGame()
+    {
+        WaveCheck();
 
-        EnemiesSpawned.Clear ();
+        EnemiesSpawned.Clear();
     }
 
-    void AssignMultipliers () {
-        switch (CurrentWave) {
+    void AssignMultipliers()
+    {
+        switch (CurrentWave)
+        {
             case 1:
                 HealthMultiplier = 1f;
                 DamageMultiplier = 1f;
                 ScoreMultiplier = 1f;
                 break;
             case 11:
-                HealthMultiplier = 1.25f;
+                HealthMultiplier = 2f;
+                DamageMultiplier = 1f;
                 ScoreMultiplier = 1.25f;
                 break;
             case 21:
-                DamageMultiplier = 1.25f;
+                HealthMultiplier = 2f;
+                DamageMultiplier = 2f;
                 ScoreMultiplier = 1.5f;
                 break;
             case 31:
-                HealthMultiplier = 1.5f;
+                HealthMultiplier = 2.5f;
+                DamageMultiplier = 2f;
                 ScoreMultiplier = 1.75f;
                 break;
             case 41:
-                DamageMultiplier = 1.5f;
+                HealthMultiplier = 2.5f;
+                DamageMultiplier = 2.5f;
                 ScoreMultiplier = 2f;
                 break;
         }
     }
 
-    void NextWave () {
+    void NextWave()
+    {
         spawnCount = 0;
-        if (ZombieMode) {
-            HealthMultiplier += 0.1f;
+        if (ZombieMode)
+        {
+            HealthMultiplier += 0.35f;
         }
         if (!SkipCountdown)
-            StartCoroutine (StartWave ());
-        else {
-            StartRound ();
+            StartCoroutine(StartWave());
+        else
+        {
+            StartRound();
         }
 
+       
     }
 
-    IEnumerator StartWave () {
+    IEnumerator StartWave()
+    {
         CountdownText.enabled = true;
         CountdownText.text = "NEXT WAVE STARTS IN...";
-        ThumbAreaHelpers[0].enabled = true;
-        ThumbAreaHelpers[1].enabled = true;
+        //ThumbAreaHelpers[0].enabled = true;
+        //ThumbAreaHelpers[1].enabled = true;
 
-        yield return new WaitForSeconds (2);
-        ItemSpawner.i.Spawn ();
+        yield return new WaitForSeconds(2);
+        ItemSpawner.i.Spawn();
         Countdown = true;
         countdownTimer = 10;
-        CountDownTimer.Play ();
-        yield return new WaitForSeconds (1);
-        CountDownTimer.Play ();
-        yield return new WaitForSeconds (1);
-        CountDownTimer.Play ();
-        yield return new WaitForSeconds (1);
-        CountDownTimer.Play ();
-        yield return new WaitForSeconds (1);
-        CountDownTimer.Play ();
-        yield return new WaitForSeconds (1);
-        CountDownTimer.Play ();
-        yield return new WaitForSeconds (1);
-        CountDownTimer.Play ();
-        yield return new WaitForSeconds (1);
-        CountDownTimer.Play ();
-        yield return new WaitForSeconds (1);
-        CountDownTimer.Play ();
-        yield return new WaitForSeconds (1);
-        CountDownTimer.Play ();
-        yield return new WaitForSeconds (1);
-        StartRound ();
+        CountDownTimer.Play();
+        yield return new WaitForSeconds(1);
+        CountDownTimer.Play();
+        yield return new WaitForSeconds(1);
+        CountDownTimer.Play();
+        yield return new WaitForSeconds(1);
+        CountDownTimer.Play();
+        yield return new WaitForSeconds(1);
+        CountDownTimer.Play();
+        yield return new WaitForSeconds(1);
+        CountDownTimer.Play();
+        yield return new WaitForSeconds(1);
+        CountDownTimer.Play();
+        yield return new WaitForSeconds(1);
+        CountDownTimer.Play();
+        yield return new WaitForSeconds(1);
+        CountDownTimer.Play();
+        yield return new WaitForSeconds(1);
+        CountDownTimer.Play();
+        yield return new WaitForSeconds(1);
+        StartRound();
     }
 
-    void StartRound () {
-        CountDownTimer.Play ();
-        ThumbAreaHelpers[0].enabled = false;
-        ThumbAreaHelpers[1].enabled = false;
-        EnemiesLeftParent.SetActive (true);
+    void StartRound()
+    {
+        CountDownTimer.Play();
+        //ThumbAreaHelpers[0].enabled = false;
+        //ThumbAreaHelpers[1].enabled = false;
+        EnemiesLeftParent.SetActive(true);
         Countdown = false;
         CountdownText.enabled = false;
-        EnemiesToKill.gameObject.SetActive (true);
-        EnemyCountBar.gameObject.SetActive (true);
-        WaveHUDAnims[1].SetTrigger ("ShowWave");
-        Invoke ("SpawnEnemies", 2);
+        EnemiesToKill.gameObject.SetActive(true);
+        EnemyCountBar.gameObject.SetActive(true);
+        WaveHUDAnims[1].SetTrigger("ShowWave");
+        Invoke("SpawnEnemies", 2);
         allowOpen = true;
     }
 
-    void SpawnEnemies () {
+    void SpawnEnemies()
+    {
         spawn = true;
         WaveCounter.enabled = true;
         EnemiesToKill.enabled = true;
     }
 
-    public void RemoveEnemyFromList (Transform enemy) {
-        EnemiesSpawned.Remove (enemy);
-        EnemiesLeft -= 1;
+    public void RemoveEnemyFromList(Transform enemy)
+    {
+        EnemiesSpawned.Remove(enemy);
+        EnemiesLeft = EnemiesSpawned.Count;
     }
 
-    void FindFurthestSpawn () {
-        foreach (Transform spawnlocations in EnemySpawnLocations) {
-            float dist = Vector3.Distance (Player.position, spawnlocations.position);
+    void FindFurthestSpawn()
+    {
+        foreach (Transform spawnlocations in EnemySpawnLocations)
+        {
+            float dist = Vector3.Distance(Player.position, spawnlocations.position);
 
-            distDic.Add (dist, spawnlocations.gameObject);
+            distDic.Add(dist, spawnlocations.gameObject);
         }
 
-        List<float> distances = distDic.Keys.ToList ();
+        List<float> distances = distDic.Keys.ToList();
 
-        distances.Sort ();
+        distances.Sort();
 
-        GameObject furthestObj = distDic[distances[distances.Count - Random.Range (1, 4)]];
+        GameObject furthestObj = distDic[distances[distances.Count - Random.Range(1, 4)]];
         GeneralSpawnPosition = furthestObj.transform;
-        distDic.Clear ();
+        distDic.Clear();
         // Do something with furthestObj
     }
 
-    void WaveCheck () {
+    void WaveCheck()
+    {
 
-        if (!ZombieMode) {
+        if (!ZombieMode)
+        {
 
-            if (CurrentWave == 1 || CurrentWave == 11 || CurrentWave == 21 || CurrentWave == 31 || CurrentWave == 41) {
-                WaveStats.gameObject.SetActive (true);
-                AssignMultipliers ();
+            if (CurrentWave == 1 || CurrentWave == 11 || CurrentWave == 21 || CurrentWave == 31 || CurrentWave == 41)
+            {
+                WaveStats.gameObject.SetActive(true);
+                AssignMultipliers();
                 // print("SHOW STAGE STATS");
-                StageAnim.SetTrigger ("ShowAreaStage");
-                WaveStats.SetTrigger ("ShowStats");
+                StageAnim.SetTrigger("ShowAreaStage");
+                WaveStats.SetTrigger("ShowStats");
 
-                spawnLimit = 6 * PlayerCount;
+                spawnLimit = 15 * PlayerCount;
                 EnemiesToSpawn = set1Enemies;
                 BruteEnemiesToSpawn = BruteEnemies[1];
-            } else if (CurrentWave == 2 || CurrentWave == 12 || CurrentWave == 22 || CurrentWave == 32 || CurrentWave == 42) {
-                spawnLimit = 8 * PlayerCount;
+            }
+            else if (CurrentWave == 2 || CurrentWave == 12 || CurrentWave == 22 || CurrentWave == 32 || CurrentWave == 42)
+            {
+                AchievementHandler.WhichAchievement(0);
+                spawnLimit = 19 * PlayerCount;
                 EnemiesToSpawn = set2Enemies;
                 BruteEnemiesToSpawn = BruteEnemies[1];
-            } else if (CurrentWave == 3 || CurrentWave == 13 || CurrentWave == 23 || CurrentWave == 33 || CurrentWave == 43) {
-                spawnLimit = 10 * PlayerCount;
+            }
+            else if (CurrentWave == 3 || CurrentWave == 13 || CurrentWave == 23 || CurrentWave == 33 || CurrentWave == 43)
+            {
+                spawnLimit = 24 * PlayerCount;
                 EnemiesToSpawn = set3Enemies;
                 BruteEnemiesToSpawn = BruteEnemies[2];
-            } else if (CurrentWave == 4 || CurrentWave == 14 || CurrentWave == 24 || CurrentWave == 34 || CurrentWave == 44) {
-                spawnLimit = 12 * PlayerCount;
+            }
+            else if (CurrentWave == 4 || CurrentWave == 14 || CurrentWave == 24 || CurrentWave == 34 || CurrentWave == 44)
+            {
+                spawnLimit = 29 * PlayerCount;
                 EnemiesToSpawn = set4Enemies;
                 BruteEnemiesToSpawn = BruteEnemies[2];
-            } else if (CurrentWave == 5 || CurrentWave == 15 || CurrentWave == 25 || CurrentWave == 35 || CurrentWave == 45) {
+            }
+            else if (CurrentWave == 5 || CurrentWave == 15 || CurrentWave == 25 || CurrentWave == 35 || CurrentWave == 45)
+            {
                 // Dog Round
-                spawnLimit = 30 * PlayerCount;
+                spawnLimit = 34 * PlayerCount;
                 EnemiesToSpawn = set5Enemies;
                 BruteEnemiesToSpawn = BruteEnemies[2];
-            } else if (CurrentWave == 6 || CurrentWave == 16 || CurrentWave == 26 || CurrentWave == 36 || CurrentWave == 46) {
-                spawnLimit = 18 * PlayerCount;
+            }
+            else if (CurrentWave == 6 || CurrentWave == 16 || CurrentWave == 26 || CurrentWave == 36 || CurrentWave == 46)
+            {
+                spawnLimit = 39 * PlayerCount;
                 EnemiesToSpawn = set6Enemies;
                 BruteEnemiesToSpawn = BruteEnemies[3];
-            } else if (CurrentWave == 7 || CurrentWave == 17 || CurrentWave == 27 || CurrentWave == 37 || CurrentWave == 47) {
-                spawnLimit = 20 * PlayerCount;
+            }
+            else if (CurrentWave == 7 || CurrentWave == 17 || CurrentWave == 27 || CurrentWave == 37 || CurrentWave == 47)
+            {
+                spawnLimit = 44 * PlayerCount;
                 EnemiesToSpawn = set7Enemies;
                 BruteEnemiesToSpawn = BruteEnemies[3];
-            } else if (CurrentWave == 8 || CurrentWave == 18 || CurrentWave == 28 || CurrentWave == 38 || CurrentWave == 48) {
-                spawnLimit = 22 * PlayerCount;
+            }
+            else if (CurrentWave == 8 || CurrentWave == 18 || CurrentWave == 28 || CurrentWave == 38 || CurrentWave == 48)
+            {
+                spawnLimit = 49 * PlayerCount;
                 EnemiesToSpawn = set8Enemies;
                 BruteEnemiesToSpawn = BruteEnemies[4];
-            } else if (CurrentWave == 9 || CurrentWave == 19 || CurrentWave == 29 || CurrentWave == 39 || CurrentWave == 49) {
-                spawnLimit = 25 * PlayerCount;
+            }
+            else if (CurrentWave == 9 || CurrentWave == 19 || CurrentWave == 29 || CurrentWave == 39 || CurrentWave == 49)
+            {
+                spawnLimit = 54 * PlayerCount;
                 EnemiesToSpawn = set9Enemies;
                 BruteEnemiesToSpawn = BruteEnemies[4];
             }
-            if (CurrentWave == 10 || CurrentWave == 20 || CurrentWave == 30 || CurrentWave == 40 || CurrentWave == 50) {
+            if (CurrentWave == 10 || CurrentWave == 20 || CurrentWave == 30 || CurrentWave == 40 || CurrentWave == 50)
+            {
                 bossWave = true;
-                spawnLimit = 25 * PlayerCount;
+                spawnLimit = 54 * PlayerCount;
                 EnemiesToSpawn = set10Enemies;
                 BruteEnemiesToSpawn = BruteEnemies[4];
                 SpawnBoss = true;
             }
-        } else {
+        }
+        else
+        {
             SpawnCount += 2;
             spawnLimit = SpawnCount * PlayerCount;
             EnemiesToSpawn = ZombieEnemies;
@@ -466,8 +684,10 @@ public class WaveManager : MonoBehaviour {
         }
         EnemiesLeft = spawnLimit;
 
-        if (!ZombieMode) {
-            switch (CurrentWave) {
+        if (!ZombieMode)
+        {
+            switch (CurrentWave)
+            {
                 case 1:
                     StageGO.sprite = Stages[0];
                     break;
@@ -487,13 +707,14 @@ public class WaveManager : MonoBehaviour {
         }
         //		} // ADD HARDER CONDITIONS HERE /////////////////////////////////////
         //        WaveHUDAnims [0].SetTrigger ("ShowAreaStage");
-        Invoke ("NextWave", 3);
+        Invoke("NextWave", 3);
     }
 
-    public void LoadZombieLevel () {
+    public void LoadZombieLevel()
+    {
         UIManager.ZombieMode = true;
-        PlayerPrefs.SetString ("LevelToLoad", "GameMode");
-        SceneManager.LoadScene ("LoadingScreen");
+        PlayerPrefs.SetString("LevelToLoad", "GameMode");
+        SceneManager.LoadScene("LoadingScreen");
     }
 
 }

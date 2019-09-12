@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: SwatDemolition
   m_EditorClassIdentifier: 
   CashToGive: 6
+  DifficultyWeight: 3
   enemyType: 6
   enemyAttackType: 0
   Damage: 20
-  Health: 125
+  Health: 60
   MoveSpeed: 5
   ShootRate: 5
   AttackDistance: 6

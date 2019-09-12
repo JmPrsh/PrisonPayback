@@ -101,7 +101,7 @@ public class attackPlayer : MonoBehaviour
             BossIcon.SetActive(EnemyType.enemyType == Enemy.EnemyType.Boss);
 
         FindClosestPlayer();
-       
+
 
         transform.position = new Vector3(transform.position.x + Random.Range(3, -3), transform.position.y + Random.Range(3, -3), transform.position.z);
         shootTime = 0;
@@ -150,8 +150,10 @@ public class attackPlayer : MonoBehaviour
         }
         if (EnemyType.enemyType == Enemy.EnemyType.Boss)
         {
-            ChildSprite.transform.localScale = ChildSprite.transform.localScale * 1.5f;
-            ChildSprite.transform.position = new Vector2(ChildSprite.transform.position.x, ChildSprite.transform.position.y + 0.3f);
+            ChildSprite.transform.localScale = ChildSprite.transform.localScale * 2f;
+            ChildSprite.transform.position = new Vector2(ChildSprite.transform.position.x, ChildSprite.transform.position.y + 0.6f);
+            AimingGO.transform.localPosition = new Vector3(AimingGO.transform.localPosition.x, 0.383f, AimingGO.transform.localPosition.z);
+            AimingGO.transform.localScale = Vector3.one * 1.5f;
         }
     }
     void AssignMeleeCollider(int i)
@@ -177,16 +179,16 @@ public class attackPlayer : MonoBehaviour
         // print(ePosition);
         if (!System.Single.IsNaN(ePosition.x) && !System.Single.IsNaN(ePosition.y))
         {
-            // if (Random.Range(0, 10) == 0)
-            // {
-            targetPosition = Target.transform.position + ePosition;
-            // }
+            if (Random.Range(0, 4) == 0)
+            {
+                targetPosition = Target.transform.position + ePosition;
+            }
         }
     }
 
     void FixedUpdate()
     {
-
+        velocity = rg2d.velocity;
         if (!CharacterStats.CS)
             return;
 
@@ -194,7 +196,7 @@ public class attackPlayer : MonoBehaviour
 
         if (!CharacterStats.CS.Dead)
         {
-            if (!PauseMenu.isPaused && CharacterStats.allowMovement)
+            if (!PauseMenu.isPaused && !CharacterStats.CS.Dead)
             {
                 ChildSpriteRenderer.material.SetFloat("_GrayScale", greyAmount);
                 if (EnemyType.enemyType == Enemy.EnemyType.Dog)
@@ -282,88 +284,118 @@ public class attackPlayer : MonoBehaviour
             if (hit.transform != null)
             {
                 if (hit.collider.CompareTag("Wall"))
+                {
                     anim.SetBool("Walk", false);
+                }
             }
             else
+            {
                 anim.SetBool("Walk", true);
+            }
         }
     }
+
     public bool InPosition;
+    bool trigAnim;
     float randomMoveTimer = 0;
+    public Vector3 velocity;
+
     void CheckAttackDistance()
     {
-        if (randomMoveTimer > 0)
-        {
-            randomMoveTimer -= Time.deltaTime;
-        }
-        else
-        {
-            randomMoveTimer = 2;
-            ChooseRandomPosition();
-        }
+        //if (randomMoveTimer > 0)
+        //{
+        //    randomMoveTimer -= Time.deltaTime;
+        //}
+        //else
+        //{
+        //    randomMoveTimer = 2;
+        //    ChooseRandomPosition();
+        //}
 
         InPosition = Vector2.Distance(transform.position, targetPosition) <= 0.2f;
-        if (Vector2.Distance(transform.position, targetPosition) > 0.2f)
+        if (!InPosition)
         {
             float moveSpeed = Vector2.Distance(transform.position, Target.transform.position) > 16 ? EnemyType.MoveSpeed * 5 : EnemyType.MoveSpeed;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
-            CheckObstacle(false);
+
+            if (!trigAnim)
+            {
+                CheckObstacle(false);
+                trigAnim = true;
+            }
         }
         else
-            CheckObstacle(true);
-
-        if (Vector2.Distance(transform.position, Target.transform.position) <= (EnemyType.AttackDistance + 1.1f))
         {
-            shootTime += 1 * Time.deltaTime;
-
-            if (EnemyType.enemyAttackType == Enemy.EnemyAttackType.Melee)
+            if (trigAnim)
             {
-                if (shootTime >= RandomSwingTime)
-                {
-                    MeleeAttack();
-                     RandomSwingTime = Random.Range(1.6f, 2.5f);
-                }
+                CheckObstacle(true);
+                trigAnim = false;
             }
-            else if (EnemyType.enemyAttackType == Enemy.EnemyAttackType.Gun)
+        }
+
+        if (EnemyType.enemyType == Enemy.EnemyType.Zombie)
+        {
+            if (shootTime >= RandomSwingTime)
             {
-                // if gun enemy
-                if (shootTime >= EnemyType.ShootRate && !reload)
+                MeleeAttack();
+                RandomSwingTime = Random.Range(1.6f, 2.5f);
+            }
+        }
+        else
+        {
+            if (Vector2.Distance(transform.position, Target.transform.position) <= (EnemyType.AttackDistance + 1.1f))
+            {
+                shootTime += 1 * Time.deltaTime;
+
+                if (EnemyType.enemyAttackType == Enemy.EnemyAttackType.Melee)
                 {
-                    if (EnemyType.name == "StandardGuard" || EnemyType.name == "StandardGuardBrute")
+                    if (shootTime >= RandomSwingTime)
                     {
-                        PistolAttack();
+                        MeleeAttack();
+                        RandomSwingTime = Random.Range(1.6f, 2.5f);
                     }
-
-                    if (EnemyType.name == "Captain" || EnemyType.name == "CaptainBrute")
-                    {
-                        ShotgunAttack();
-                    }
-
-                    if (EnemyType.name == "Swat" || EnemyType.name == "SwatBrute")
-                    {
-                        MachineGunAttack();
-                    }
-
-                    if (EnemyType.name == "SwatDemolition")
-                    {
-                        GrenadeAttack();
-                    }
-
-                    if (EnemyType.name == "Sniper")
-                    {
-                        SniperAttack();
-                    }
-
-                    if (EnemyType.name == "Warden")
-                    {
-                        MiniGunAttack();
-                    }
-
-                    shootTime = 0;
-                    audiosource.Play();
-                    bulletsused += 1;
                 }
+                else if (EnemyType.enemyAttackType == Enemy.EnemyAttackType.Gun)
+                {
+                    // if gun enemy
+                    if (shootTime >= EnemyType.ShootRate && !reload)
+                    {
+                        if (EnemyType.name == "StandardGuard" || EnemyType.name == "StandardGuardBrute")
+                        {
+                            PistolAttack();
+                        }
 
+                        if (EnemyType.name == "Captain" || EnemyType.name == "CaptainBrute")
+                        {
+                            ShotgunAttack();
+                        }
+
+                        if (EnemyType.name == "Swat" || EnemyType.name == "SwatBrute")
+                        {
+                            MachineGunAttack();
+                        }
+
+                        if (EnemyType.name == "SwatDemolition")
+                        {
+                            GrenadeAttack();
+                        }
+
+                        if (EnemyType.name == "Sniper")
+                        {
+                            SniperAttack();
+                        }
+
+                        if (EnemyType.name == "Warden")
+                        {
+                            MiniGunAttack();
+                        }
+
+                        shootTime = 0;
+                        audiosource.Play();
+                        bulletsused += 1;
+                    }
+
+                }
             }
         }
     }
@@ -519,25 +551,27 @@ public class attackPlayer : MonoBehaviour
 
     IEnumerator Death()
     {
-        if (Random.Range(0, 10) == 1 )
+        if (Random.Range(0, 20) == 1)
             EnemyType.DroppedItem.Spawn(transform.position + (Vector3)Random.insideUnitCircle * 2);
-        CharacterStats.CS.Cash += EnemyType.CashToGive;
+        else if (Random.Range(0, 20) == 2)
+            ItemSpawner.i.Spawn(transform.position);
+
+
         if (EnemyType.enemyType == Enemy.EnemyType.Boss)
         {
             Stats.BossesKilled += 1;
-            CharacterStats.CS.Cash += 30;
         }
         else if (EnemyType.enemyType == Enemy.EnemyType.MiniBoss)
         {
             Stats.BrutesKilled += 1;
-            CharacterStats.CS.Cash += 10;
+
         }
 
         AimingGO.SetActive(false);
 
         if (EnemyType.AllowWeaponDrop && !CharacterStats.CS.Special)
         {
-            if (Random.Range(0, WeaponChanceMax) == 2 )
+            if (Random.Range(0, WeaponChanceMax) == 2)
             {
                 EnemyType.WeaponToSpawn.Spawn(transform.position, transform.rotation);
             }
@@ -546,14 +580,14 @@ public class attackPlayer : MonoBehaviour
         PlayerComboHandler();
         ColliderHandler();
 
-        BloodSplat.SetActive(true);
-        BloodSplat.GetComponentInChildren<SpriteRenderer>().sortingOrder = ChildSpriteRenderer.sortingOrder - 1;
+        //BloodSplat.SetActive(true);
+        //BloodSplat.GetComponentInChildren<SpriteRenderer>().sortingOrder = ChildSpriteRenderer.sortingOrder - 1;
         Shadow.SetActive(false);
         showgrey = true;
 
-        Transform temp = BloodStain.Spawn(transform.position, transform.rotation) as Transform;
-        temp.transform.rotation = Quaternion.AngleAxis(Random.Range(0, 360), Vector3.forward);
-        temp.localScale = temp.localScale * Random.Range(0.5f, 1);
+        //Transform temp = BloodStain.Spawn(transform.position, transform.rotation) as Transform;
+        //temp.transform.rotation = Quaternion.AngleAxis(Random.Range(0, 360), Vector3.forward);
+        //temp.localScale = temp.localScale * Random.Range(0.5f, 1);
 
         Stats.Kills += 1;
         yield return new WaitForSeconds(5);
@@ -578,7 +612,12 @@ public class attackPlayer : MonoBehaviour
         Scoretemp.SetParent(GameObject.Find("PlayersHUD").transform);
         Scoretemp.transform.localScale = new Vector2(1f, 1f);
         CharacterStats.Score += (int)ScoreGiven;
-        CharacterStats.CS.Cash += 1;
+
+        if (CharacterStats.CS.Special)
+            return;
+
+        Transform temp = CharacterStats.CS.CoinPrefab.Spawn(transform.position);
+        temp.GetComponent<CoinController>().Cash = EnemyType.CashToGive;
     }
 
     IEnumerator Reload()
@@ -658,7 +697,7 @@ public class attackPlayer : MonoBehaviour
             Dead = true;
             rg2d.isKinematic = true;
             StartCoroutine(Death());
-            
+
             WaveManager.WM.RemoveEnemyFromList(this.transform);
             return;
         }

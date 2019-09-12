@@ -22,6 +22,7 @@ public class GameOver : MonoBehaviour {
     bool allowTransfer;
     public Button adButton;
     float savedScore;
+    int gameFinished;
     // Use this for initialization
 
     void Start () {
@@ -38,11 +39,21 @@ public class GameOver : MonoBehaviour {
         allowTransfer = true;
         adButton.gameObject.SetActive (true);
 
-        savedScore = (Mathf.Ceil ((CharacterStats.Score * BonusManager.multiplier) / 100));
+        savedScore = (Mathf.Ceil ((CharacterStats.Score * BonusManager.multiplier) / 200));
         TargetScore = savedScore;
 
         Invoke ("TransferMoney", 5);
         Invoke ("ShowStats", 2);
+
+        if (CharacterManager.SpecialsUnlocked == 0)
+        {
+            gameFinished++;
+            if (gameFinished > 1)
+            {
+                PromoCanvas.instance.ShowPromo(0);
+                gameFinished = 0;
+            }
+        }
     }
 
     void ShowStats () {

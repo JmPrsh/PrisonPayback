@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: ZombieBrute
   m_EditorClassIdentifier: 
   CashToGive: 2
+  DifficultyWeight: 1
   enemyType: 4
   enemyAttackType: 0
   Damage: 35

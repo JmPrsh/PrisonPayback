@@ -98,62 +98,91 @@ public class MeleeWeapon : MonoBehaviour
                 break;
 
             case WhichHolder.Player:
-                if (CharacterStats.CS.stunned || !CharacterStats.CS.CanShoot)
-                    return;
-
-                if (Time.time >= MeleeTime)
+                if (!CharacterStats.CS.stunned && CharacterStats.CS.CanShoot)
                 {
-                    leftPunch = !leftPunch;
-                    swingAttack = Random.Range(1, 3);
-                    CollisionDetection();
-                    if (MeleeSounds.Length > 0)
-                    {
-                        audioSource.clip = MeleeSounds[Random.Range(4, 5)];
-                        audioSource.Play();
-                    }
 
-                    // attack here
-                    if (CharacterStats.CS.TypeofWeapon == CharacterStats.Weapon.Fist)
+
+                    if (Time.time >= MeleeTime)
                     {
-                        CharacterStats.CS.Stamina -= 5;
-                        if (CharacterStats.CS.Stamina > 5)
+                        leftPunch = !leftPunch;
+                        swingAttack = Random.Range(1, 3);
+                        CollisionDetection();
+                        if (MeleeSounds.Length > 0)
                         {
+                            audioSource.clip = MeleeSounds[Random.Range(4, 5)];
+                            audioSource.Play();
+                        }
 
-                            if (StaticVariables.MovementMultiply == 1)
+                        // attack here
+                        if (CharacterStats.CS.TypeofWeapon == CharacterStats.Weapon.Fist)
+                        {
+                            CharacterStats.CS.Stamina -= 5;
+                            if (CharacterStats.CS.Stamina > 5)
                             {
-                                MeleeInterval = 0.2f;
+
+                                if (StaticVariables.MovementMultiply == 1)
+                                {
+                                    MeleeInterval = 0.2f;
+                                }
+                                else
+                                {
+                                    MeleeInterval = 0.2f / StaticVariables.MovementMultiply;
+                                }
                             }
                             else
                             {
-                                MeleeInterval = 0.2f / StaticVariables.MovementMultiply;
+                                MeleeInterval = 1f;
+                            }
+                            switch (leftPunch)
+                            {
+
+                                case true:
+                                    animPipe.SetTrigger("rightHook");
+                                    break;
+                                case false:
+                                    animPipe.SetTrigger("leftHook");
+                                    break;
+                                    // case 3:
+                                    //     animPipe.SetTrigger("finalPunch");
+
+                                    //     break;
+
                             }
                         }
-                        else
+                        if (CharacterStats.CS.Stamina > 11)
                         {
-                            MeleeInterval = 1f;
+                            if (CharacterStats.CS.TypeofWeapon == CharacterStats.Weapon.Pipe)
+                            {
+                                CharacterStats.CS.Stamina -= 10;
+                                if (CharacterStats.CS.Stamina > 15)
+                                {
+                                    if (StaticVariables.MovementMultiply == 1)
+                                    {
+                                        MeleeInterval = 0.4f;
+                                    }
+                                    else
+                                    {
+                                        MeleeInterval = 0.4f / StaticVariables.MovementMultiply;
+                                    }
+                                }
+                            }
+                            if (CharacterStats.CS.TypeofWeapon == CharacterStats.Weapon.Knife)
+                            {
+                                CharacterStats.CS.Stamina -= 10;
+                                if (StaticVariables.MovementMultiply == 1)
+                                {
+                                    MeleeInterval = 0.4f;
+                                }
+                                else
+                                {
+                                    MeleeInterval = 0.4f / StaticVariables.MovementMultiply;
+                                }
+                            }
+                            animPipe.SetTrigger("Melee");
                         }
-                        switch (leftPunch)
+                        if (CharacterStats.CS.TypeofWeapon == CharacterStats.Weapon.ZombieHand)
                         {
-
-                            case true:
-                                animPipe.SetTrigger("rightHook");
-                                break;
-                            case false:
-                                animPipe.SetTrigger("leftHook");
-                                break;
-                                // case 3:
-                                //     animPipe.SetTrigger("finalPunch");
-
-                                //     break;
-
-                        }
-                    }
-
-                    if (CharacterStats.CS.TypeofWeapon == CharacterStats.Weapon.Pipe)
-                    {
-                        CharacterStats.CS.Stamina -= 10;
-                        if (CharacterStats.CS.Stamina > 5)
-                        {
+                            // CharacterStats.CS.Stamina -= 10;
                             if (StaticVariables.MovementMultiply == 1)
                             {
                                 MeleeInterval = 0.4f;
@@ -162,68 +191,26 @@ public class MeleeWeapon : MonoBehaviour
                             {
                                 MeleeInterval = 0.4f / StaticVariables.MovementMultiply;
                             }
+                            animPipe.SetTrigger("Melee");
                         }
-                        else
-                        {
-                            MeleeInterval = 1.2f;
-                        }
-                        animPipe.SetTrigger("Melee");
-                    }
-                    if (CharacterStats.CS.TypeofWeapon == CharacterStats.Weapon.Knife)
-                    {
-                        CharacterStats.CS.Stamina -= 10;
-                        if (StaticVariables.MovementMultiply == 1)
-                        {
-                            MeleeInterval = 0.4f;
-                        }
-                        else
-                        {
-                            MeleeInterval = 0.4f / StaticVariables.MovementMultiply;
-                        }
-                        animPipe.SetTrigger("Melee");
-                    }
-                    if (CharacterStats.CS.TypeofWeapon == CharacterStats.Weapon.ZombieHand)
-                    {
-                        // CharacterStats.CS.Stamina -= 10;
-                        if (StaticVariables.MovementMultiply == 1)
-                        {
-                            MeleeInterval = 0.4f;
-                        }
-                        else
-                        {
-                            MeleeInterval = 0.4f / StaticVariables.MovementMultiply;
-                        }
-                        animPipe.SetTrigger("Melee");
-                    }
-                    if (CharacterStats.CS.TypeofWeapon == CharacterStats.Weapon.Sword)
-                    {
-                        // CharacterStats.CS.Stamina -= 10;
-                        if (StaticVariables.MovementMultiply == 1)
-                        {
-                            MeleeInterval = 0.3f;
-                        }
-                        else
-                        {
-                            MeleeInterval = 0.3f / StaticVariables.MovementMultiply;
-                        }
-                        animPipe.SetTrigger("Melee");
-                    }
-                    if (CharacterStats.CS.TypeofWeapon == CharacterStats.Weapon.Knife)
-                    {
-                        CharacterStats.CS.Stamina -= 1;
-                        if (StaticVariables.MovementMultiply == 1)
-                        {
-                            MeleeInterval = 0.4f;
-                        }
-                        else
-                        {
-                            MeleeInterval = 0.4f / StaticVariables.MovementMultiply;
-                        }
-                        animPipe.SetTrigger("Melee");
-                    }
-                    MeleeTime = Time.time + MeleeInterval;
-                }
 
+                        if (CharacterStats.CS.TypeofWeapon == CharacterStats.Weapon.Sword)
+                        {
+                            // CharacterStats.CS.Stamina -= 10;
+                            if (StaticVariables.MovementMultiply == 1)
+                            {
+                                MeleeInterval = 0.3f;
+                            }
+                            else
+                            {
+                                MeleeInterval = 0.3f / StaticVariables.MovementMultiply;
+                            }
+                            animPipe.SetTrigger("Melee");
+                        }
+
+                        MeleeTime = Time.time + MeleeInterval;
+                    }
+                }
                 break;
 
         }
@@ -404,7 +391,7 @@ public class MeleeWeapon : MonoBehaviour
                         enemyScript.flipped = true;
                     }
                 }
-                hitsLimit ++;
+                hitsLimit++;
             }
 
         }

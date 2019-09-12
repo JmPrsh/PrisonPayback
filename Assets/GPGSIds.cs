@@ -24,8 +24,18 @@
 
 public static class GPGSIds
 {
-        public const string leaderboard_riot_high_scores = "CgkI9OO2ssgEEAIQAA"; // <GPGSID>
+        public const string achievement_finished_wave_1 = "CgkI9OO2ssgEEAIQAw"; // <GPGSID>
+        public const string achievement_completed_stage_2 = "CgkI9OO2ssgEEAIQBQ"; // <GPGSID>
+        public const string achievement_completed_stage_1 = "CgkI9OO2ssgEEAIQBA"; // <GPGSID>
+        public const string achievement_over_9000 = "CgkI9OO2ssgEEAIQDA"; // <GPGSID>
+        public const string achievement_dead_man_walking = "CgkI9OO2ssgEEAIQCg"; // <GPGSID>
+        public const string achievement_brainssss = "CgkI9OO2ssgEEAIQCQ"; // <GPGSID>
+        public const string achievement_completed_stage_3 = "CgkI9OO2ssgEEAIQBg"; // <GPGSID>
         public const string leaderboard_undead_high_scores = "CgkI9OO2ssgEEAIQAQ"; // <GPGSID>
+        public const string achievement_payback_given = "CgkI9OO2ssgEEAIQCw"; // <GPGSID>
+        public const string leaderboard_riot_high_scores = "CgkI9OO2ssgEEAIQAA"; // <GPGSID>
+        public const string achievement_completed_stage_5 = "CgkI9OO2ssgEEAIQCA"; // <GPGSID>
+        public const string achievement_completed_stage_4 = "CgkI9OO2ssgEEAIQBw"; // <GPGSID>
 
 }
 

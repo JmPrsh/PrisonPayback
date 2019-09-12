@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: SwatBrute
   m_EditorClassIdentifier: 
   CashToGive: 7
+  DifficultyWeight: 4
   enemyType: 2
   enemyAttackType: 1
   Damage: 13
-  Health: 250
+  Health: 150
   MoveSpeed: 4
   ShootRate: 0.5
   AttackDistance: 6

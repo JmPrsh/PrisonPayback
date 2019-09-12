@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: RiotBrute
   m_EditorClassIdentifier: 
   CashToGive: 5
+  DifficultyWeight: 3
   enemyType: 2
   enemyAttackType: 0
   Damage: 13
-  Health: 400
+  Health: 300
   MoveSpeed: 3
   ShootRate: 1.2
   AttackDistance: 1

@@ -8,6 +8,9 @@ using SgLib;
 public class CharacterScroller : MonoBehaviour
 {
     public static CharacterScroller CS;
+
+    Character[] characters;
+
     public Animator UnlockedScreen;
     [Header("Scroller Config")]
     public float minScale = 1f;
@@ -53,8 +56,27 @@ public class CharacterScroller : MonoBehaviour
     void Awake()
     {
         CS = this;
+        characters = transform.GetComponentsInChildren<Character>();
     }
 
+    public void CheckUnlocks()
+    {
+        if (allUnlocked())
+        {
+            AchievementHandler.completedallgameID[0] = 1;
+            AchievementHandler.CheckCompletedAllGame();
+        }
+    }
+
+    bool allUnlocked()
+    {
+        foreach (Character c in characters)
+        {
+            if (c.Unlocked == false)
+                return false;
+        }
+        return true;
+    }
 
 
     void Start()
@@ -97,6 +119,8 @@ public class CharacterScroller : MonoBehaviour
         currentCharacter.transform.position += moveForwardAmount * Vector3.forward;
         lastCurrentCharacter = null;
         StartRotateCurrentCharacter();
+
+        CheckUnlocks();
     }
 
     // Update is called once per frame
@@ -208,7 +232,7 @@ public class CharacterScroller : MonoBehaviour
             }
             else
             {
-                priceText.text = $"{charData.Objective} \n{charData.progress}/{charData.ObjectiveMax}" ;
+                priceText.text = $"{charData.Objective} \n{charData.progress}/{charData.ObjectiveMax}";
                 priceText.gameObject.SetActive(true);
             }
             priceImg.gameObject.SetActive(false);
@@ -507,8 +531,8 @@ public class CharacterScroller : MonoBehaviour
     public void SelectButton()
     {
         CharacterManager.Instance.CurrentCharacterIndex = currentCharacter.GetComponent<Character>().characterSequenceNumber;
-       
-                Exit();
+
+        Exit();
     }
 
     public void Exit()

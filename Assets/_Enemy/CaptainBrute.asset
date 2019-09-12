@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: CaptainBrute
   m_EditorClassIdentifier: 
   CashToGive: 3
+  DifficultyWeight: 4
   enemyType: 2
   enemyAttackType: 1
   Damage: 14
-  Health: 300
+  Health: 120
   MoveSpeed: 3
   ShootRate: 2.8
   AttackDistance: 4

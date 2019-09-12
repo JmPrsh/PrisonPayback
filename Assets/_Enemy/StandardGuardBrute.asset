@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: StandardGuardBrute
   m_EditorClassIdentifier: 
   CashToGive: 2
+  DifficultyWeight: 3
   enemyType: 2
   enemyAttackType: 0
   Damage: 10
-  Health: 200
+  Health: 80
   MoveSpeed: 3
   ShootRate: 1.4
   AttackDistance: 1

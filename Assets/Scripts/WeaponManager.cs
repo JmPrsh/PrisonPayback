@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 public class WeaponManager : MonoBehaviour
 {
+    public static WeaponManager WM;
 
 	enum WeaponType
 	{
@@ -23,13 +24,19 @@ public class WeaponManager : MonoBehaviour
 	CharacterStats CS;
 	public int currentWeaponIndex = 0;
 
-	void Start ()
+	void Awake ()
 	{
+        WM = this;
 		CS = GetComponent<CharacterStats> ();
+       
+    }
 
-	}
+    private void Start()
+    {
+        SetCurrentWeaponIndex(0);
+    }
 
-	public void PreviousWeaponButton(){
+    public void PreviousWeaponButton(){
 		if (CS.ammo.reloading) {
             cancelReload();
         }
@@ -56,7 +63,7 @@ public class WeaponManager : MonoBehaviour
 		
 	}
 
-	void  NextWeapon ()
+	void NextWeapon ()
 	{
 		currentWeaponIndex += 1;
 		if (currentWeaponIndex >= CS.Weapons.Count) {
@@ -69,10 +76,10 @@ public class WeaponManager : MonoBehaviour
 			}
 
 		}
-        CS.WhichWeapon = currentWeaponIndex;
+        CS.UpdateWeapon(currentWeaponIndex);
     }
 
-	void  PreviousWeapon ()
+	void PreviousWeapon ()
 	{
 		currentWeaponIndex -= 1;
 		if (currentWeaponIndex < 0) {
@@ -85,7 +92,12 @@ public class WeaponManager : MonoBehaviour
 			}
 
 		}
-        CS.WhichWeapon = currentWeaponIndex;
+        CS.UpdateWeapon(currentWeaponIndex);
     }
 
+    public void SetCurrentWeaponIndex(int i)
+    {
+        currentWeaponIndex = i;
+        CS.UpdateWeapon(currentWeaponIndex);
+    }
 }

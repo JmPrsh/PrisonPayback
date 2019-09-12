@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: RiotStun
   m_EditorClassIdentifier: 
   CashToGive: 4
+  DifficultyWeight: 1
   enemyType: 5
   enemyAttackType: 0
   Damage: 5
-  Health: 250
+  Health: 200
   MoveSpeed: 3
   ShootRate: 4
   AttackDistance: 1

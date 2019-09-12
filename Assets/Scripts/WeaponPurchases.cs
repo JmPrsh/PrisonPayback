@@ -87,6 +87,10 @@ public class WeaponPurchases : MonoBehaviour {
             CostText.text = ((int)cost).ToString();
             CheckWeapon();
         }
+        else
+        {
+            WaveManager.WM.CashAnim.SetTrigger("Error");
+        }
 	}
 
     void CheckWeapon(){

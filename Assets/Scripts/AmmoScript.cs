@@ -208,6 +208,10 @@ public class AmmoScript : MonoBehaviour
 
         if (!reloading)
         {
+            if (GeneralClipLeft <= 0)
+            {
+                StartReloading();
+            }
             reloadTimer = 0;
             ReloadGUI.SetActive(false);
             ReloadGUI.GetComponent<EnergyBar>().valueCurrent= 0;
@@ -226,6 +230,8 @@ public class AmmoScript : MonoBehaviour
         else
         {
             //ReloadGUI.GetComponent<EnergyBar>().valueCurrent= ReloadGUI.GetComponent<EnergyBar>().valueMax;
+          
+            ReloadGUI.SetActive(true);
             if (reloadTimer < ReloadGUI.GetComponent<EnergyBar>().valueMax)
             {
                 reloadTimer += 1 * Time.deltaTime * 60;
@@ -247,7 +253,7 @@ public class AmmoScript : MonoBehaviour
         { // if pressed x and the clip is smaller than the max
             StartCoroutine(Reload());
             reloading = true;
-            ReloadGUI.SetActive(true);
+      
             XButton.SetActive(false);
         }
     }

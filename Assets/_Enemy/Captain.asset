@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: Captain
   m_EditorClassIdentifier: 
   CashToGive: 2
+  DifficultyWeight: 3
   enemyType: 0
   enemyAttackType: 1
   Damage: 7
-  Health: 150
+  Health: 70
   MoveSpeed: 4
   ShootRate: 2.5
   AttackDistance: 4

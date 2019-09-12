@@ -19,8 +19,10 @@ public class SpriteRenderingOrderSystem : MonoBehaviour
             SpriteRenderer[] renderers = FindObjectsOfType<SpriteRenderer>();
 
             foreach (SpriteRenderer renderer in renderers)
+            {
+                if(!renderer.GetComponent<IgnoreSpriteOrder>())
                 renderer.sortingOrder = (int)(renderer.transform.position.y * -100);
-
+            }
             timer = Time.time + tempTimer;
         }
     }
