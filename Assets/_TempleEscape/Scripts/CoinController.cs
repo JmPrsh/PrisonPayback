@@ -29,6 +29,14 @@ public class CoinController : MonoBehaviour
         col = GetComponent<Collider2D>();
     }
 
+    private void Update()
+    {
+        if(Vector2.Distance(CharacterStats.CS.transform.position,transform.position) < 5 || WaveManager.WaveComplete)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, CharacterStats.CS.transform.position, 10 * Time.deltaTime);
+        }
+    }
+
     //Move up
     IEnumerator Up()
     {

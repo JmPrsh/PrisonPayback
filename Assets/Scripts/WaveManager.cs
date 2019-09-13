@@ -10,7 +10,7 @@ public class WaveManager : MonoBehaviour
 {
 
     public static WaveManager WM;
-
+    public static bool WaveComplete;
     public int MaxEnemiesOnScreen;
     public int maxEnemyDifficultyWeight = 20;
     public int WeightUsed;
@@ -25,6 +25,7 @@ public class WaveManager : MonoBehaviour
     public GameObject WeaponStoreGO;
     public GameObject StageCompleteGO;
     public GameObject StageCompleteGO2;
+    public GameObject HideShopButton;
     public Image[] ThumbAreaHelpers;
     public Transform[] ItemsToSpawn;
     public int CurrentWave;
@@ -305,22 +306,22 @@ public class WaveManager : MonoBehaviour
 
     void ChooseRandomPosition()
     {
-        for (int i = 0; i < EnemiesSpawned.Count; i++)
+        for (int i = 0; i < EnemiesLeft; i++)
         {
             if (EnemiesSpawned[i] != null)
             {
                 float rad = EnemiesSpawned[i].GetComponent<attackPlayer>().EnemyType.AttackDistance;
-
+                float division = 5;
                 //summon the enemies around this central GameObject
-                float radian = i * Mathf.PI / (EnemiesSpawned.Count / 2);
+                float radian = i * Mathf.PI / (EnemiesLeft/ division) + division;
                 Vector3 ePosition = new Vector3(rad * Mathf.Cos(radian), (rad * Mathf.Sin(radian)) - 1, transform.position.z);
                 // EnemiesSpawned[i].position = ePosition;
                 // print(ePosition);
                 if (!System.Single.IsNaN(ePosition.x) && !System.Single.IsNaN(ePosition.y))
                 {
-                    if (Random.Range(0, 10) == 0)
+                    if (Random.Range(0, 100) == 0)
                     {
-                        EnemiesSpawned[i].GetComponent<attackPlayer>().targetPosition = Player.position + ePosition;
+                        EnemiesSpawned[i].GetComponent<attackPlayer>().targetPosition = (Player.position + ((Vector3)Random.insideUnitCircle * 1.1f)) + ePosition;
                     }
                 }
             }
@@ -329,19 +330,23 @@ public class WaveManager : MonoBehaviour
 
     public void FinishedWave()
     {
+        WaveComplete = true;
         WeightUsed = 0;
         EnemiesSpawnedForCount.Clear();
         if (ZombieMode)
         {
-            if(CurrentWave == 50)
+            if (!CharacterStats.CS.Special)
             {
-                AchievementHandler.WhichAchievement(6);
-            }
-            else if (CurrentWave == 100)
-            {
-                AchievementHandler.WhichAchievement(7);
-                AchievementHandler.completedallgameID[2] = 1;
-                AchievementHandler.CheckCompletedAllGame();
+                if (CurrentWave == 50)
+                {
+                    AchievementHandler.WhichAchievement(6);
+                }
+                else if (CurrentWave == 100)
+                {
+                    AchievementHandler.WhichAchievement(7);
+                    AchievementHandler.completedallgameID[2] = 1;
+                    AchievementHandler.CheckCompletedAllGame();
+                }
             }
 
             if (CharacterStats.CS.Special)
@@ -354,6 +359,7 @@ public class WaveManager : MonoBehaviour
                 if (zombieWaveCounter >= 3)
                 {
                     Invoke("ShowShopWindow", 2);
+                    HideShopButton.SetActive(true);
                     zombieWaveCounter = 0;
                 }
                 else
@@ -369,29 +375,34 @@ public class WaveManager : MonoBehaviour
             if (CurrentWave == 50)
             {
                 Invoke("GameComplete", 2);
-                AchievementHandler.WhichAchievement(5);
-                AchievementHandler.completedallgameID[1] = 1;
-                AchievementHandler.CheckCompletedAllGame();
+                if (!CharacterStats.CS.Special)
+                {
+                    AchievementHandler.WhichAchievement(5);
+                    AchievementHandler.completedallgameID[1] = 1;
+                    AchievementHandler.CheckCompletedAllGame();
+                }
             }
             else if (CurrentWave == 10 || CurrentWave == 20 || CurrentWave == 30 || CurrentWave == 40)
             {
                 // just beat the boss
                 Invoke("ShowStageComplete", 2);
-
-                switch (CurrentWave)
+                if (!CharacterStats.CS.Special)
                 {
-                    case 10:
-                        AchievementHandler.WhichAchievement(1);
-                        break;
-                    case 20:
-                        AchievementHandler.WhichAchievement(2);
-                        break;
-                    case 30:
-                        AchievementHandler.WhichAchievement(3);
-                        break;
-                    case 40:
-                        AchievementHandler.WhichAchievement(4);
-                        break;
+                    switch (CurrentWave)
+                    {
+                        case 10:
+                            AchievementHandler.WhichAchievement(1);
+                            break;
+                        case 20:
+                            AchievementHandler.WhichAchievement(2);
+                            break;
+                        case 30:
+                            AchievementHandler.WhichAchievement(3);
+                            break;
+                        case 40:
+                            AchievementHandler.WhichAchievement(4);
+                            break;
+                    }
                 }
             }
             else
@@ -402,7 +413,6 @@ public class WaveManager : MonoBehaviour
                 }
                 else
                 {
-                    print("Hmmm");
                     Invoke("ShowShopWindow", 2);
                 }
             }
@@ -415,6 +425,7 @@ public class WaveManager : MonoBehaviour
         if (!CharacterStats.CS.Special)
         {
             WeaponStoreGO.SetActive(true);
+            HideShopButton.SetActive(true);
         }
         else
         {
@@ -424,6 +435,8 @@ public class WaveManager : MonoBehaviour
 
     void BeginNextWave()
     { // change the play button in shop window to use this instead
+        HideShopButton.SetActive(false);
+        WaveComplete = false;
         if (CurrentWave == 50)
         {
             // COMPLETED GAME!
@@ -618,7 +631,10 @@ public class WaveManager : MonoBehaviour
             }
             else if (CurrentWave == 2 || CurrentWave == 12 || CurrentWave == 22 || CurrentWave == 32 || CurrentWave == 42)
             {
-                AchievementHandler.WhichAchievement(0);
+                if (!CharacterStats.CS.Special)
+                {
+                    AchievementHandler.WhichAchievement(0);
+                }
                 spawnLimit = 19 * PlayerCount;
                 EnemiesToSpawn = set2Enemies;
                 BruteEnemiesToSpawn = BruteEnemies[1];

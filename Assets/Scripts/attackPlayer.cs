@@ -10,6 +10,7 @@ public class attackPlayer : MonoBehaviour
     public Enemy EnemyType;
     [HideInInspector]
     public Vector3 targetPosition = new Vector3();
+    public Transform TargetPos;
     public Animator anim;
     [HideInInspector]
     public bool seenPlayer = true;
@@ -34,7 +35,7 @@ public class attackPlayer : MonoBehaviour
     int WeaponID;
     Animator WSanim;
     Collider2D MeleeCollider;
-    Animator WMFanim;
+    public Animator MuzzleFlashAnim;
     public GameObject Shadow;
     bool showgrey;
     public GameObject DyingGO;
@@ -118,7 +119,8 @@ public class attackPlayer : MonoBehaviour
         Damage = EnemyType.Damage + Random.Range((EnemyType.Damage - EnemyType.Damage / 10), (EnemyType.Damage + EnemyType.Damage / 10)) * WaveManager.DamageMultiplier;
         ChildSpriteRenderer.sprite = EnemyType.EnemySprite[Random.Range(0, EnemyType.EnemySprite.Length)];
         DyingGO.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = ChildSpriteRenderer.sprite;
-        WMFanim = ChosenWeapon.GetComponent<Animator>();
+       
+      
         ShootFrom = EnemyType.enemyAttackType == Enemy.EnemyAttackType.Melee || EnemyType.enemyType == Enemy.EnemyType.Demolition
         || EnemyType.name == "StandardGuardBrute" || EnemyType.name == "SwatDemolition" || EnemyType.name == "RiotBrute" ? null : ChosenWeapon.transform.GetChild(1);
 
@@ -166,6 +168,7 @@ public class attackPlayer : MonoBehaviour
     void Start()
     {
         StaticVariables.EnemySpeed = 1;
+        //ChooseRandomPosition();
     }
 
     void ChooseRandomPosition()
@@ -179,15 +182,14 @@ public class attackPlayer : MonoBehaviour
         // print(ePosition);
         if (!System.Single.IsNaN(ePosition.x) && !System.Single.IsNaN(ePosition.y))
         {
-            if (Random.Range(0, 4) == 0)
-            {
-                targetPosition = Target.transform.position + ePosition;
-            }
+            targetPosition = Target.transform.position + ePosition;
         }
     }
 
     void FixedUpdate()
     {
+        if (TargetPos)
+            TargetPos.position = targetPosition;
         velocity = rg2d.velocity;
         if (!CharacterStats.CS)
             return;
@@ -256,7 +258,6 @@ public class attackPlayer : MonoBehaviour
     void ResetEnemy()
     {
         CharacterAngle = 0;
-        startDeath = false;
         AimingGO.SetActive(true);
         BloodSplat.SetActive(false);
         Col.enabled = true;
@@ -323,6 +324,7 @@ public class attackPlayer : MonoBehaviour
                 CheckObstacle(false);
                 trigAnim = true;
             }
+            //ChooseRandomPosition();
         }
         else
         {
@@ -335,6 +337,7 @@ public class attackPlayer : MonoBehaviour
 
         if (EnemyType.enemyType == Enemy.EnemyType.Zombie)
         {
+            shootTime += 1 * Time.deltaTime;
             if (shootTime >= RandomSwingTime)
             {
                 MeleeAttack();
@@ -420,30 +423,26 @@ public class attackPlayer : MonoBehaviour
         EnemyType.BulletCasing.Spawn(new Vector3(transform.position.x + Random.Range(-0.2f, 0.2f), transform.position.y + Random.Range(-0.2f, 0.2f), transform.position.z), transform.rotation);
 
         WSanim.SetTrigger("Shoot");
-        WMFanim.SetTrigger("Shoot");
+        if (MuzzleFlashAnim)
+            MuzzleFlashAnim.SetTrigger("Shoot");
     }
 
     void ShotgunAttack()
     {
-        EnemyBullet temp = EnemyType.bulletPrefab.Spawn(ShootFrom.transform.position, ShootFrom.transform.rotation * Quaternion.AngleAxis(60, Vector3.forward)); // -30 on z
-        EnemyBullet temp2 = EnemyType.bulletPrefab.Spawn(ShootFrom.transform.position, ShootFrom.transform.rotation * Quaternion.AngleAxis(75, Vector3.forward)); // -30 on z
-        EnemyBullet temp3 = EnemyType.bulletPrefab.Spawn(ShootFrom.transform.position, ShootFrom.transform.rotation * Quaternion.AngleAxis(90, Vector3.forward)); // 0 on z
-        EnemyBullet temp4 = EnemyType.bulletPrefab.Spawn(ShootFrom.transform.position, ShootFrom.transform.rotation * Quaternion.AngleAxis(105, Vector3.forward)); // 15 on z
-        EnemyBullet temp5 = EnemyType.bulletPrefab.Spawn(ShootFrom.transform.position, ShootFrom.transform.rotation * Quaternion.AngleAxis(120, Vector3.forward)); // 30 on z
-        temp.Damage = Damage;
-        temp2.Damage = Damage;
-        temp3.Damage = Damage;
-        temp4.Damage = Damage;
-        temp5.Damage = Damage;
-        temp.spriterenderer.sprite = EnemyType.BulletSprite;
-        temp2.spriterenderer.sprite = EnemyType.BulletSprite;
-        temp3.spriterenderer.sprite = EnemyType.BulletSprite;
-        temp4.spriterenderer.sprite = EnemyType.BulletSprite;
-        temp5.spriterenderer.sprite = EnemyType.BulletSprite;
+        int offset = 150;
+        for (int i = 0; i < 5; i++)
+        {
+            EnemyBullet tempBullet = EnemyType.bulletPrefab.Spawn(ShootFrom.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(offset, Vector3.forward));
+            tempBullet.Damage = Damage;
+            tempBullet.spriterenderer.sprite = EnemyType.BulletSprite;
+            offset += 15;
+        }
+
         EnemyType.BulletCasing.Spawn(new Vector3(transform.position.x + Random.Range(-0.2f, 0.2f), transform.position.y + Random.Range(-0.2f, 0.2f), transform.position.z), transform.rotation);
 
         WSanim.SetTrigger("Shoot");
-        WMFanim.SetTrigger("Shoot");
+        if (MuzzleFlashAnim)
+            MuzzleFlashAnim.SetTrigger("Shoot");
         audiosource.clip = EnemyType.AttackSound;
     }
 
@@ -470,7 +469,8 @@ public class attackPlayer : MonoBehaviour
         EnemyType.BulletCasing.Spawn(new Vector3(transform.position.x + Random.Range(-0.2f, 0.2f), transform.position.y + Random.Range(-0.2f, 0.2f), transform.position.z), transform.rotation);
 
         WSanim.SetTrigger("Shoot");
-        WMFanim.SetTrigger("Shoot");
+        if (MuzzleFlashAnim)
+            MuzzleFlashAnim.SetTrigger("Shoot");
         audiosource.clip = EnemyType.AttackSound;
     }
 
@@ -482,7 +482,8 @@ public class attackPlayer : MonoBehaviour
         EnemyType.BulletCasing.Spawn(new Vector3(transform.position.x + Random.Range(-0.2f, 0.2f), transform.position.y + Random.Range(-0.2f, 0.2f), transform.position.z), transform.rotation);
 
         WSanim.SetTrigger("Shoot");
-        WMFanim.SetTrigger("Shoot");
+        if (MuzzleFlashAnim)
+            MuzzleFlashAnim.SetTrigger("Shoot");
         audiosource.clip = EnemyType.AttackSound;
     }
 
@@ -511,7 +512,8 @@ public class attackPlayer : MonoBehaviour
 
                         bursttimer = 0.2f;
                         WSanim.SetTrigger("Shoot");
-                        WMFanim.SetTrigger("Shoot");
+                        if (MuzzleFlashAnim)
+                            MuzzleFlashAnim.SetTrigger("Shoot");
                     }
                 }
                 else
@@ -522,8 +524,6 @@ public class attackPlayer : MonoBehaviour
         }
 
     }
-
-    bool startDeath;
 
     void CheckifAlive()
     {
@@ -556,15 +556,16 @@ public class attackPlayer : MonoBehaviour
         else if (Random.Range(0, 20) == 2)
             ItemSpawner.i.Spawn(transform.position);
 
-
-        if (EnemyType.enemyType == Enemy.EnemyType.Boss)
+        if (!CharacterStats.CS.Special)
         {
-            Stats.BossesKilled += 1;
-        }
-        else if (EnemyType.enemyType == Enemy.EnemyType.MiniBoss)
-        {
-            Stats.BrutesKilled += 1;
-
+            if (EnemyType.enemyType == Enemy.EnemyType.Boss)
+            {
+                Stats.BossesKilled += 1;
+            }
+            else if (EnemyType.enemyType == Enemy.EnemyType.MiniBoss)
+            {
+                Stats.BrutesKilled += 1;
+            }
         }
 
         AimingGO.SetActive(false);
@@ -589,7 +590,8 @@ public class attackPlayer : MonoBehaviour
         //temp.transform.rotation = Quaternion.AngleAxis(Random.Range(0, 360), Vector3.forward);
         //temp.localScale = temp.localScale * Random.Range(0.5f, 1);
 
-        Stats.Kills += 1;
+        if (!CharacterStats.CS.Special)
+            Stats.Kills += 1;
         yield return new WaitForSeconds(5);
         this.Recycle();
     }
@@ -602,6 +604,8 @@ public class attackPlayer : MonoBehaviour
 
     void PlayerComboHandler()
     {
+        if (CharacterStats.CS.Special)
+            return;
         CharacterStats.CS.ComboTimer = 40;
 
         CharacterStats.Combo++;
@@ -613,8 +617,7 @@ public class attackPlayer : MonoBehaviour
         Scoretemp.transform.localScale = new Vector2(1f, 1f);
         CharacterStats.Score += (int)ScoreGiven;
 
-        if (CharacterStats.CS.Special)
-            return;
+
 
         Transform temp = CharacterStats.CS.CoinPrefab.Spawn(transform.position);
         temp.GetComponent<CoinController>().Cash = EnemyType.CashToGive;
@@ -689,10 +692,13 @@ public class attackPlayer : MonoBehaviour
                     BossIcon.SetActive(BossIcon.activeInHierarchy);
                 }
             }
-            if (WaveManager.WM.ZombieMode)
+            if (!CharacterStats.CS.Special)
             {
-                StatManager.Instance.ZombieKills += 1;
-                PlayerPrefs.SetInt("ZombiesKilled", StatManager.Instance.ZombieKills);
+                if (WaveManager.WM.ZombieMode)
+                {
+                    StatManager.Instance.ZombieKills += 1;
+                    PlayerPrefs.SetInt("ZombiesKilled", StatManager.Instance.ZombieKills);
+                }
             }
             Dead = true;
             rg2d.isKinematic = true;

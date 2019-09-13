@@ -820,6 +820,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnemyType: {fileID: 11400000, guid: 10356315ca0b0487ab69aff33bceb930, type: 2}
   targetPosition: {x: 0, y: 0, z: 0}
+  TargetPos: {fileID: 0}
   anim: {fileID: 9592648}
   seenPlayer: 0
   health: 100
@@ -829,6 +830,7 @@ MonoBehaviour:
   reload: 0
   bulletsused: 0
   bursttimer: 0.2
+  MuzzleFlashAnim: {fileID: 9578198}
   Shadow: {fileID: 127974}
   DyingGO: {fileID: 163998}
   BloodSplat: {fileID: 165632}

@@ -13,7 +13,8 @@ public class bullet : MonoBehaviour
     public bool SniperBullet;
     int peopleHit;
     public SpriteRenderer spriterenderer;
-
+    public float damage;
+    public Vector2 DeathPosition;
     void Awake()
     {
         spriterenderer = GetComponent<SpriteRenderer>();
@@ -26,6 +27,8 @@ public class bullet : MonoBehaviour
     void OnEnable()
     {
         Invoke("removego", 2);
+
+        print(DeathPosition);
     }
 
     // Use this for initialization
@@ -84,10 +87,9 @@ public class bullet : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-
-
-
-
+        damage -= damage > 0 ? Time.deltaTime : 0;
+        if (Vector2.Distance(transform.position, DeathPosition) < 0.2f)
+            this.Recycle();
     }
 
     void removego()
@@ -97,13 +99,13 @@ public class bullet : MonoBehaviour
 
     void Update()
     {
-		int targetAmt = CharacterStats.CS.agent ? 6 : 3;
+        int targetAmt = CharacterStats.CS.agent ? 6 : 3;
         if (peopleHit >= targetAmt)
         {
             this.Recycle();
         }
         float MoveSpeed = CharacterStats.CS.cyborg || CharacterStats.CS.agent ? 10 : 30;
-        transform.Translate(Vector3.up * MoveSpeed * Time.deltaTime);
+        transform.Translate(Vector3.up * MoveSpeed * Time.deltaTime/2);
 
         RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.right, 0.5f, 1 << LayerMask.NameToLayer("Enemy"));
         if (hitInfo.collider != null)
@@ -160,7 +162,7 @@ public class bullet : MonoBehaviour
                         EnemyScript.flipped = true;
                     }
                 }
-				// CharacterStats.Combo += 1;
+                // CharacterStats.Combo += 1;
             }
 
 

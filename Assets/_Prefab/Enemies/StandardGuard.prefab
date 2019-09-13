@@ -1481,6 +1481,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnemyType: {fileID: 11400000, guid: c63f5e43859c23844a38a2f7d7e16d57, type: 2}
   targetPosition: {x: 0, y: 0, z: 0}
+  TargetPos: {fileID: 0}
   anim: {fileID: 9592648}
   seenPlayer: 1
   health: 100
@@ -1490,6 +1491,7 @@ MonoBehaviour:
   reload: 0
   bulletsused: 0
   bursttimer: 0.2
+  MuzzleFlashAnim: {fileID: 9501364}
   Shadow: {fileID: 127974}
   DyingGO: {fileID: 163998}
   BloodSplat: {fileID: 165632}
@@ -2658,7 +2660,7 @@ PrefabInstance:
     - target: {fileID: 2805587571344875667, guid: f3fac69e0dfde46b0ada9194a1cf9c9d,
         type: 3}
       propertyPath: lastRebuildHash
-      value: 380777441
+      value: -1150995059
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f3fac69e0dfde46b0ada9194a1cf9c9d, type: 3}

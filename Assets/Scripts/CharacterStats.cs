@@ -70,7 +70,7 @@ public class CharacterStats : MonoBehaviour
     public int WhichWeapon;
     public List<GameObject> Weapons;
     public GameObject[] Controls;
-    public int Stamina;
+    public float Stamina;
     EnergyBar LivesGOEB;
     int Lives;
     // Dodge
@@ -160,8 +160,8 @@ public class CharacterStats : MonoBehaviour
     public SpriteRenderer Aiming;
     public Button DodgeButton;
     int tempAmmoCount;
-    float shootdelay = 0;
     public int ControlType;
+    float bulletLife;
     public static float xAmount;
     public float MoveForce;
     [HideInInspector]
@@ -265,23 +265,28 @@ public class CharacterStats : MonoBehaviour
 
                 case 40:
                     WhichWeapon = 8;
+                    Aiming.transform.localPosition = new Vector3(0, 0.3f, 0);
                     zombie = true; // done
                     break;
                 case 41:
                     WhichWeapon = 9;
+                    Aiming.transform.localPosition = new Vector3(0, 1.5f, 0);
                     cyborg = true; // done
                     Shield.gameObject.SetActive(true);
                     break;
                 case 42:
                     WhichWeapon = 10;
+                    Aiming.transform.localPosition = new Vector3(0, 1.2f, 0);
                     gunslinger = true;
                     break;
                 case 43:
                     WhichWeapon = 11;
+                    Aiming.transform.localPosition = new Vector3(0, 1.5f, 0);
                     agent = true;
                     break;
                 case 44:
                     WhichWeapon = 12;
+                    Aiming.transform.localPosition = new Vector3(0, 0.3f, 0);
                     samurai = true;
                     break;
 
@@ -399,7 +404,7 @@ public class CharacterStats : MonoBehaviour
 
             CheckSpecial();
 
-         
+
 
             PlayerModelHandler();
 
@@ -582,6 +587,8 @@ public class CharacterStats : MonoBehaviour
             if (bursttimer <= 0)
             {
                 Transform temp = bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(1, Vector3.forward));
+                temp.GetComponent<bullet>().damage = Damage;
+                temp.GetComponent<bullet>().DeathPosition = Aiming.transform.position;
 
                 if (StaticVariables.MovementMultiply == 1)
                 {
@@ -668,29 +675,33 @@ public class CharacterStats : MonoBehaviour
             WeaponID = 0;
             DamageToShow = "5 - 15";
             Damage = Random.Range(5, 15);
+            Aiming.transform.localPosition = new Vector3(0, 0.3f, 0);
         }
         if (TypeofWeapon == Weapon.Pipe)
         {
             WeaponID = 1;
             DamageToShow = "10 - 15";
             Damage = Random.Range(10, 15);
+            Aiming.transform.localPosition = new Vector3(0, 0.3f, 0);
         }
         if (TypeofWeapon == Weapon.Knife)
         {
             WeaponID = 2;
             DamageToShow = "15 - 20";
             Damage = Random.Range(15, 20);
+            Aiming.transform.localPosition = new Vector3(0, 0.3f, 0);
         }
 
         if (TypeofWeapon == Weapon.Pistol)
         {
             chosenCasing = 0;
             WeaponID = 3;
-            shotInterval = 0.2f;
+            shotInterval = 0.5f;
             DamageToShow = "15 - 20";
             Damage = Random.Range(15, 20);
             WSanim = WeaponShoot[0];
             GeneralMuzzle = animMuzzle[3];
+            Aiming.transform.localPosition = new Vector3(0, 1.5f, 0);
         }
         if (TypeofWeapon == Weapon.MachineGun)
         {
@@ -701,6 +712,7 @@ public class CharacterStats : MonoBehaviour
             Damage = Random.Range(15, 25);
             WSanim = WeaponShoot[1];
             GeneralMuzzle = animMuzzle[4];
+            Aiming.transform.localPosition = new Vector3(0, 2f, 0);
         }
         if (TypeofWeapon == Weapon.Shotgun)
         {
@@ -711,6 +723,7 @@ public class CharacterStats : MonoBehaviour
             Damage = Random.Range(25, 30);
             WSanim = WeaponShoot[2];
             GeneralMuzzle = animMuzzle[5];
+            Aiming.transform.localPosition = new Vector3(0, 1.25f, 0);
         }
         if (TypeofWeapon == Weapon.Sniper)
         {
@@ -721,6 +734,7 @@ public class CharacterStats : MonoBehaviour
             Damage = Random.Range(40, 50);
             WSanim = WeaponShoot[3];
             GeneralMuzzle = animMuzzle[6];
+            Aiming.transform.localPosition = new Vector3(0, 3f, 0);
         }
         if (TypeofWeapon == Weapon.Minigun)
         {
@@ -731,7 +745,7 @@ public class CharacterStats : MonoBehaviour
             Damage = Random.Range(15, 20);
             WSanim = WeaponShoot[4];
             GeneralMuzzle = animMuzzle[7];
-
+            Aiming.transform.localPosition = new Vector3(0, 1.8f, 0);
         }
         if (TypeofWeapon == Weapon.ZombieHand)
         {
@@ -776,7 +790,7 @@ public class CharacterStats : MonoBehaviour
             DamageToShow = "30 - 40"; // add critical hit chance
             Damage = Random.Range(30, 40);
         }
-       
+
         WeaponGUI = WeaponUIParent[WeaponID];
         // WeaponGUI.sprite = CurrentWeapon[WeaponID];
         for (int i = 0; i < Weapons.Count; i++)
@@ -796,7 +810,7 @@ public class CharacterStats : MonoBehaviour
                 WeaponUIParent[WeaponID].gameObject.SetActive(true);
         }
 
-     
+
     }
 
 
@@ -1079,8 +1093,9 @@ public class CharacterStats : MonoBehaviour
                         {
                             if (ammo.PistolClipLeft > 0)
                             {
-                                bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation);
-
+                                Transform temp = bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation);
+                                temp.GetComponent<bullet>().damage = Damage;
+                                temp.GetComponent<bullet>().DeathPosition = Aiming.transform.position;
                                 if (StaticVariables.MovementMultiply == 1)
                                 {
                                     shootTime = Time.time + shotInterval;
@@ -1116,13 +1131,15 @@ public class CharacterStats : MonoBehaviour
                         {
                             if (ammo.ShotgunClipLeft > 0)
                             {
-
-                                bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(-16, Vector3.forward)); // -30 on z
-                                bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(-7, Vector3.forward)); // -30 on z
-                                bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(1, Vector3.forward)); // 0 on z
-                                bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(7, Vector3.forward)); // 15 on z
-                                bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(16, Vector3.forward)); // 30 on z
-                                //										
+                                int offset = -16;
+                                for(int i = 0; i < 5; i++)
+                                {
+                                    Transform tempBullet = bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(offset, Vector3.forward));
+                                    tempBullet.GetComponent<bullet>().damage = Damage;
+                                    tempBullet.GetComponent<bullet>().DeathPosition = Aiming.transform.position;
+                                    offset += 8;
+                                }
+                              
                                 if (StaticVariables.MovementMultiply == 1)
                                 {
                                     shootTime = Time.time + shotInterval;
@@ -1149,9 +1166,9 @@ public class CharacterStats : MonoBehaviour
                             {
 
                                 Transform tempBullet = bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(1, Vector3.forward)); // 0 on z
-
+                                tempBullet.GetComponent<bullet>().damage = Damage;
                                 tempBullet.GetComponent<bullet>().SniperBullet = true;
-
+                                tempBullet.GetComponent<bullet>().DeathPosition = Aiming.transform.position;
                                 if (StaticVariables.MovementMultiply == 1)
                                 {
                                     shootTime = Time.time + shotInterval;
@@ -1178,7 +1195,9 @@ public class CharacterStats : MonoBehaviour
 
                             if (ammo.MinigunClipLeft > 0)
                             {
-                                bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation);
+                                Transform temp = bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation);
+                                temp.GetComponent<bullet>().damage = Damage;
+                                temp.GetComponent<bullet>().DeathPosition = Aiming.transform.position;
 
                                 if (StaticVariables.MovementMultiply == 1)
                                 {
@@ -1201,6 +1220,8 @@ public class CharacterStats : MonoBehaviour
                         if (TypeofWeapon == Weapon.Cannon)
                         {
                             Transform tempBullet = bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(1, Vector3.forward)); // 0 on z
+                            tempBullet.GetComponent<bullet>().damage = Damage;
+                            tempBullet.GetComponent<bullet>().DeathPosition = Aiming.transform.position;
 
                             if (StaticVariables.MovementMultiply == 1)
                             {
@@ -1218,6 +1239,8 @@ public class CharacterStats : MonoBehaviour
                         if (TypeofWeapon == Weapon.Revolver)
                         {
                             Transform tempBullet = bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(1, Vector3.forward)); // 0 on z
+                            tempBullet.GetComponent<bullet>().damage = Damage;
+                            tempBullet.GetComponent<bullet>().DeathPosition = Aiming.transform.position;
 
                             if (StaticVariables.MovementMultiply == 1)
                             {
@@ -1236,12 +1259,17 @@ public class CharacterStats : MonoBehaviour
 
                             RevolverSecondGun.gameObject.SetActive(true);
                             Transform tempBullet2 = bulletPrefab.Spawn(RevolverSecondGun.transform.GetChild(1).transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(180, Vector3.forward)); // 0 on z
+                            tempBullet2.GetComponent<bullet>().damage = Damage;
+                            tempBullet2.GetComponent<bullet>().DeathPosition = Aiming.transform.position;
+
                             RevolverSecondGun.transform.GetChild(0).GetComponent<Animator>().SetTrigger("Shoot");
                         }
                         if (TypeofWeapon == Weapon.PistolAgent)
                         {
                             Transform tempBullet = bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(1, Vector3.forward)); // 0 on z
                             tempBullet.GetComponent<bullet>().SniperBullet = true;
+                            tempBullet.GetComponent<bullet>().DeathPosition = Aiming.transform.position;
+
                             if (StaticVariables.MovementMultiply == 1)
                             {
                                 shootTime = Time.time + shotInterval;
@@ -1297,7 +1325,7 @@ public class CharacterStats : MonoBehaviour
                     }
                     if (Stamina < 99)
                     {
-                        Stamina++;
+                        Stamina+= Time.deltaTime*60;
                     }
 
                 }
@@ -1339,28 +1367,33 @@ public class CharacterStats : MonoBehaviour
 
     void PostScores()
     {
-        if (WaveManager.WM.ZombieMode)
+        if (!Special)
         {
-            // post score to zombie scoreboard
-            if (Score > HighScoreZombie)
+            if (WaveManager.WM.ZombieMode)
             {
-                HighScoreZombie = Score;
-                // post
                 if (Social.localUser.authenticated)
-                    Social.ReportScore((int)HighScoreZombie, "CgkI9OO2ssgEEAIQAQ", (bool success) => { });
-                PlayerPrefs.SetFloat("HighScoreZombie", HighScoreZombie);
+                    Social.ReportScore((int)Score, "CgkI9OO2ssgEEAIQAQ", (bool success) => { });
+                // post score to zombie scoreboard
+                if (Score > HighScoreZombie)
+                {
+                    HighScoreZombie = Score;
+                    // post
+
+                    PlayerPrefs.SetFloat("HighScoreZombie", HighScoreZombie);
+                }
             }
-        }
-        else
-        {
-            // post score to normal scoreboard
-            if (Score > HighScoreNormal)
+            else
             {
-                HighScoreNormal = Score;
-                // post
                 if (Social.localUser.authenticated)
-                    Social.ReportScore((int)HighScoreNormal, "CgkI9OO2ssgEEAIQAA", (bool success) => { });
-                PlayerPrefs.SetFloat("HighScoreNormal", HighScoreNormal);
+                    Social.ReportScore((int)Score, "CgkI9OO2ssgEEAIQAA", (bool success) => { });
+                // post score to normal scoreboard
+                if (Score > HighScoreNormal)
+                {
+                    HighScoreNormal = Score;
+                    // post
+
+                    PlayerPrefs.SetFloat("HighScoreNormal", HighScoreNormal);
+                }
             }
         }
     }
@@ -1485,7 +1518,7 @@ public class CharacterStats : MonoBehaviour
             }
 
             // Stamina
-            StaminaGO.GetComponent<EnergyBar>().valueCurrent = Stamina;
+            StaminaGO.GetComponent<EnergyBar>().valueCurrent = (int)Stamina;
             if (StaticVariables.infStamina)
             {
                 Stamina = 99;
@@ -1693,13 +1726,12 @@ public class CharacterStats : MonoBehaviour
             if (rightJoystickInput == Vector3.zero)
             {
                 //            Debug.Log("Cant Shoot " + rightJoystickInput);
-                Aiming.enabled = false;
+                //Aiming.enabled = false;
                 CanShoot = false;
-                shootdelay = 0;
             }
             else
             {
-                Aiming.enabled = true;
+                //Aiming.enabled = true;
                 CanShoot = true;
             }
         }

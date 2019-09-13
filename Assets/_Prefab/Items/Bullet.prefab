@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -259.38626, y: -896.945, z: 0}
-  m_LocalScale: {x: 0.4, y: -0.4, z: 1}
+  m_LocalScale: {x: 1, y: -1, z: 1}
   m_Children:
   - {fileID: 447916}
   m_Father: {fileID: 0}
@@ -149,6 +149,8 @@ MonoBehaviour:
   hittext: {fileID: 22463120, guid: 75797f9ceb170084caed62f604a38aff, type: 3}
   SniperBullet: 0
   spriterenderer: {fileID: 21230438}
+  damage: 0
+  DeathPosition: {x: 0, y: 0}
 --- !u!82 &8268108
 AudioSource:
   m_ObjectHideFlags: 0
@@ -285,7 +287,7 @@ TrailRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 174696}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1

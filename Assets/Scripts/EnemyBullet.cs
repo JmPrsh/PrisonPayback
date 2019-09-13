@@ -54,14 +54,14 @@ public class EnemyBullet : MonoBehaviour
             {
                 rb2.AddForce(Vector2.up * 350);
             }
-            if (transform.position.x < Target.x)
-            {
-                flip = true;
-            }
-            else
-            {
-                flip = false;
-            }
+            //if (transform.position.x < Target.x)
+            //{
+            //    flip = true;
+            //}
+            //else
+            //{
+            //    flip = false;
+            //}
         } 
     }
 
@@ -148,7 +148,7 @@ public class EnemyBullet : MonoBehaviour
             {
                 timer += 1 * Time.deltaTime;
             }
-            transform.Translate(Vector3.up * -0.2f);
+            transform.Translate(Vector3.up * -0.1f);
         }
         else
         {
