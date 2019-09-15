@@ -10,6 +10,7 @@ public class GameOver : MonoBehaviour {
     bool quit;
     public GameObject[] Buttons;
     public Text Scoreboard;
+    public Text TotalScore;
     public Text Cigs;
     public Text[] BonusText;
     public GameObject Stats;
@@ -54,6 +55,7 @@ public class GameOver : MonoBehaviour {
                 gameFinished = 0;
             }
         }
+
     }
 
     void ShowStats () {
@@ -75,6 +77,7 @@ public class GameOver : MonoBehaviour {
         // }
 
         Scoreboard.text = CharacterStats.Score.ToString ("000000");
+        TotalScore.text = WaveManager.ScoreTotal.ToString("000000");
         if (transfer) {
             StartCoroutine (AdjustScore ());
             transferCigs ();

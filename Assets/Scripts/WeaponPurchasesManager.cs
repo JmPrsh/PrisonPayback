@@ -13,6 +13,11 @@ public class WeaponPurchasesManager : MonoBehaviour {
     public float shotgunCost;
     public float sniperCost;
     public float minigunCost;
+    public float needleCost;
+    public float pillsCost;
+    public float milkCost;
+    public float powderCost;
+
 
     public Sprite[] weapons;
 

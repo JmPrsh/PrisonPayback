@@ -148,7 +148,7 @@ public class EnemyBullet : MonoBehaviour
             {
                 timer += 1 * Time.deltaTime;
             }
-            transform.Translate(Vector3.up * -0.1f);
+            transform.Translate(Vector3.up * -10f * Time.deltaTime);
         }
         else
         {

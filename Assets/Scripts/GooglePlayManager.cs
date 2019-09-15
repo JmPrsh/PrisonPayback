@@ -29,7 +29,7 @@ public class GooglePlayManager : MonoBehaviour
             if (success)
             {
                 Social.ReportScore((int)PlayerPrefs.GetFloat("HighScoreZombie"), "CgkI9OO2ssgEEAIQAQ", (bool success2) => { });
-                Social.ReportScore((int)PlayerPrefs.GetFloat("HighScoreNormal"), "CgkI9OO2ssgEEAIQAA", (bool success2) => { });
+                Social.ReportScore((int)PlayerPrefs.GetInt("HighScoreNormal"), "CgkI9OO2ssgEEAIQAA", (bool success2) => { });
             }
 
 

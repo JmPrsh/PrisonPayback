@@ -24,22 +24,22 @@ public class CopyStats : MonoBehaviour {
 	void OnEnable () {
         switch(whichstat){
             case WhichStat.kills:
-                t.text = StatManager.Instance.KillsHighscore.ToString();
+                t.text = StatManager.KillsTotal.ToString();
                 break;
             case WhichStat.combos:
                 t.text = StatManager.Instance.ComboHighscore.ToString();
                 break;
             case WhichStat.criticals:
-                t.text = StatManager.Instance.CriticalsHighscore.ToString();
+                t.text = StatManager.criticalsTotal.ToString();
                 break;
             case WhichStat.buffs:
                 t.text = StatManager.Instance.BuffsHighscore.ToString();
                 break;
             case WhichStat.brutes:
-                t.text = StatManager.Instance.BrutesHighscore.ToString();
+                t.text = StatManager.brutesKilledTotal.ToString();
                 break;
             case WhichStat.bosses:
-                t.text = StatManager.Instance.BossesHighscore.ToString();
+                t.text = StatManager.bossesKilledTotal.ToString();
                 break;
             case WhichStat.wavesCleared:
                 t.text = StatManager.Instance.WavesCleared.ToString();

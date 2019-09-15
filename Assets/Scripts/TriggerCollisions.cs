@@ -70,29 +70,29 @@ public class TriggerCollisions : MonoBehaviour {
             }
 
             if (hitInfo.transform.tag == "Milk") {
-                if (CharacterStats.CS.DPB.Milk < 5) {
-                    CharacterStats.CS.DPB.Milk += 1;
+                if (DPadButtons.Milk < 5) {
+                    DPadButtons.Milk += 1;
                     SpawnText (CharacterStats.CS.AmmoCollectedText, transform.position, CharacterStats.CS.PickUpGUI[8], "+1");
                 }
             }
 
             if (hitInfo.transform.tag == "Needle") {
-                if (CharacterStats.CS.DPB.Needles < 5) {
-                    CharacterStats.CS.DPB.Needles += 1;
+                if (DPadButtons.Needles < 5) {
+                    DPadButtons.Needles += 1;
                     SpawnText (CharacterStats.CS.AmmoCollectedText, transform.position, CharacterStats.CS.PickUpGUI[8], "+1");
                 }
             }
 
             if (hitInfo.transform.tag == "Pills") {
-                if (CharacterStats.CS.DPB.Pills < 5) {
-                    CharacterStats.CS.DPB.Pills += 1;
+                if (DPadButtons.Pills < 5) {
+                    DPadButtons.Pills += 1;
                     SpawnText (CharacterStats.CS.AmmoCollectedText, transform.position, CharacterStats.CS.PickUpGUI[8], "+1");
                 }
             }
 
             if (hitInfo.transform.tag == "Powder") {
-                if (CharacterStats.CS.DPB.Powder < 5) {
-                    CharacterStats.CS.DPB.Powder += 1;
+                if (DPadButtons.Powder < 5) {
+                    DPadButtons.Powder += 1;
                     SpawnText (CharacterStats.CS.AmmoCollectedText, transform.position, CharacterStats.CS.PickUpGUI[8], "+1");
                 }
             }

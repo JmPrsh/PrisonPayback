@@ -7,6 +7,7 @@ public class StatManager : MonoBehaviour
 {
     public static StatManager Instance;
 
+    
     public int KillsHighscore;
     public int ComboHighscore;
  
@@ -19,9 +20,13 @@ public class StatManager : MonoBehaviour
     public int ZombieKills;
     public int BrutesKilled;
     public int BossesKilled;
-       public int WavesCleared;
+    public int WavesCleared;
 
-
+    public static int criticalsTotal;
+    public static int KillsTotal;
+    public static int brutesKilledTotal;
+    public static int bossesKilledTotal;
+    public static int zombiesKilledTotal;
 
     void Awake()
     {
@@ -48,7 +53,13 @@ public class StatManager : MonoBehaviour
         BossesHighscore = PlayerPrefs.GetInt("BossesKilledHighscore");
         ZombieKills = PlayerPrefs.GetInt("ZombiesKilled");
 
-        if(KillsHighscore > 9000)
+        criticalsTotal = PlayerPrefs.GetInt("criticalsTotal");
+        KillsTotal = PlayerPrefs.GetInt("KillsTotal");
+        brutesKilledTotal = PlayerPrefs.GetInt("brutesKilledTotal");
+        bossesKilledTotal = PlayerPrefs.GetInt("bossesKilledTotal");
+        zombiesKilledTotal = PlayerPrefs.GetInt("zombiesKilledTotal");
+
+        if (KillsTotal > 9000)
         {
             AchievementHandler.WhichAchievement(9);
         }
@@ -62,6 +73,15 @@ public class StatManager : MonoBehaviour
     public void LoadStats(string saveName,int id)
     {
         id = PlayerPrefs.GetInt(saveName);
+    }
+
+    public void SaveTotals()
+    {
+        PlayerPrefs.SetInt("criticalsTotal", criticalsTotal);
+        PlayerPrefs.SetInt("KillsTotal", KillsTotal);
+        PlayerPrefs.SetInt("brutesKilledTotal", brutesKilledTotal);
+        PlayerPrefs.SetInt("bossesKilledTotal", bossesKilledTotal);
+        PlayerPrefs.SetInt("zombiesKilledTotal", zombiesKilledTotal);
     }
 }
 

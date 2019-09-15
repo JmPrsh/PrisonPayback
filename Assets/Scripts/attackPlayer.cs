@@ -551,7 +551,7 @@ public class attackPlayer : MonoBehaviour
 
     IEnumerator Death()
     {
-        if (Random.Range(0, 20) == 1)
+        if (Random.Range(0, 40) == 1)
             EnemyType.DroppedItem.Spawn(transform.position + (Vector3)Random.insideUnitCircle * 2);
         else if (Random.Range(0, 20) == 2)
             ItemSpawner.i.Spawn(transform.position);
@@ -561,10 +561,12 @@ public class attackPlayer : MonoBehaviour
             if (EnemyType.enemyType == Enemy.EnemyType.Boss)
             {
                 Stats.BossesKilled += 1;
+                StatManager.bossesKilledTotal += 1;
             }
             else if (EnemyType.enemyType == Enemy.EnemyType.MiniBoss)
             {
                 Stats.BrutesKilled += 1;
+                StatManager.brutesKilledTotal += 1;
             }
         }
 
@@ -591,7 +593,10 @@ public class attackPlayer : MonoBehaviour
         //temp.localScale = temp.localScale * Random.Range(0.5f, 1);
 
         if (!CharacterStats.CS.Special)
+        {
             Stats.Kills += 1;
+            StatManager.KillsTotal += 1;
+        }
         yield return new WaitForSeconds(5);
         this.Recycle();
     }
@@ -616,7 +621,7 @@ public class attackPlayer : MonoBehaviour
         Scoretemp.SetParent(GameObject.Find("PlayersHUD").transform);
         Scoretemp.transform.localScale = new Vector2(1f, 1f);
         CharacterStats.Score += (int)ScoreGiven;
-
+        WaveManager.ScoreTotal += (int)ScoreGiven;
 
 
         Transform temp = CharacterStats.CS.CoinPrefab.Spawn(transform.position);
@@ -698,6 +703,7 @@ public class attackPlayer : MonoBehaviour
                 {
                     StatManager.Instance.ZombieKills += 1;
                     PlayerPrefs.SetInt("ZombiesKilled", StatManager.Instance.ZombieKills);
+                    StatManager.zombiesKilledTotal += 1;
                 }
             }
             Dead = true;

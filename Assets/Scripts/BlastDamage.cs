@@ -57,7 +57,7 @@ public class BlastDamage : MonoBehaviour
                     // CharacterStats.Combo += 1;
                     int ScoreGiven = 10 * CharacterStats.Combo;
                     CharacterStats.Score += ScoreGiven;
-
+                    WaveManager.ScoreTotal += ScoreGiven;
                     if (this.transform.position.x > other.transform.position.x)
                     {
                         Time.timeScale = 0.3f;

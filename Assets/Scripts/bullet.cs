@@ -88,8 +88,8 @@ public class bullet : MonoBehaviour
     void FixedUpdate()
     {
         damage -= damage > 0 ? Time.deltaTime : 0;
-        if (Vector2.Distance(transform.position, DeathPosition) < 0.2f)
-            this.Recycle();
+        //if (Vector2.Distance(transform.position, DeathPosition) < 0.2f)
+        //    this.Recycle();
     }
 
     void removego()
@@ -130,6 +130,7 @@ public class bullet : MonoBehaviour
                 if (criticalHit == 1)
                 {
                     Stats.Criticals += 1;
+                    StatManager.criticalsTotal += 1;
                     if (EnemyScript.health < 1)
                     {
                         Time.timeScale = 0.3f;

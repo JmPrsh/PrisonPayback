@@ -50,7 +50,7 @@ public class Stats : MonoBehaviour {
     }
 
     void OnEnable () {
-        Rooms = WaveManager.WM.WavesCleared;
+        Rooms = WaveManager.WM.CurrentWave;
         TimePlayed = (int) CharacterStats.timeplayed;
         UpdateStats ();
     }
@@ -60,11 +60,11 @@ public class Stats : MonoBehaviour {
         //		if (TutorialCompleted == 1) {
         KillAmount.text = Kills.ToString ();
         HighestComboAmount.text = Combo.ToString ();
-        if (Rooms > 0) {
-            RoomsClearedAmount.text = Rooms.ToString ();
-        } else {
-            RoomsClearedAmount.text = "0";
-        }
+        //if (Rooms > 0) {
+        //    RoomsClearedAmount.text = Rooms.ToString ();
+        //} else {
+        //    RoomsClearedAmount.text = "0";
+        //}
         CriticalHitsAmount.text = Criticals.ToString ();
         BuffsUsedAmount.text = Buffs.ToString ();
 
@@ -80,6 +80,7 @@ public class Stats : MonoBehaviour {
                 KillNew.SetActive (true);
                 // show (new) gameobject
                 StatManager.Instance.SaveStats ("KillsHighscore", KillsHighscore);
+                StatManager.Instance.SaveStats("KillsTotal", KillsHighscore);
             }
             if (Combo > ComboHighscore) {
                 ComboHighscore = Combo;
@@ -87,12 +88,9 @@ public class Stats : MonoBehaviour {
                 // show (new) gameobject
                 StatManager.Instance.SaveStats ("ComboHighscore", ComboHighscore);
             }
-            if (Rooms > RoomsHighscore) {
-                RoomsHighscore = Rooms;
-                RoomsNew.SetActive (true);
-                // show (new) gameobject
-                StatManager.Instance.SaveStats ("RoomsHighscore", RoomsHighscore);
-            }
+           
+                
+            
             if (Criticals > CriticalsHighscore) {
                 CriticalsHighscore = Criticals;
                 CriticallNew.SetActive (true);
@@ -123,6 +121,10 @@ public class Stats : MonoBehaviour {
                 // show (new) gameobject
                 StatManager.Instance.SaveStats ("BossesKilledHighscore", BossesKilledHighscore);
             }
+
+            StatManager.Instance.SaveStats("RoomsHighscore", WaveManager.WM.CurrentWave);
+
+            StatManager.Instance.SaveTotals();
 
             StatManager.Instance.UpdateStats ();
         }

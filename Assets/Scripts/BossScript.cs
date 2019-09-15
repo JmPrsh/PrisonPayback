@@ -356,6 +356,7 @@ public class BossScript : MonoBehaviour
 			Scoretemp.GetComponentInChildren<Text> ().text = ScoreGiven.ToString ();
 			Scoretemp.GetComponentInChildren<Text> ().color = Color.white;
 			CharacterStats.Score += ScoreGiven;
+            WaveManager.ScoreTotal += ScoreGiven;
 			
 		}
 

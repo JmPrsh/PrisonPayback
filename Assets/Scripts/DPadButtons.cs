@@ -31,10 +31,10 @@ public class DPadButtons : MonoBehaviour
     }
 
     public ItemSelected ItemToUse;
-    public int Milk;
-    public int Needles;
-    public int Pills;
-    public int Powder;
+    public static int Milk;
+    public static int Needles;
+    public static int Pills;
+    public static int Powder;
     public Text[] text;
     public bool consumed;
     public bool ReadyForNextConsume = true;

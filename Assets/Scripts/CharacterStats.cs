@@ -430,8 +430,8 @@ public class CharacterStats : MonoBehaviour
 
     public void UpdateText()
     {
-        ScoreText.text = Score.ToString("000000");
-        CashText.text = Cash.ToString();
+        ScoreText.text = ((int)Score).ToString("000000");
+        CashText.text = ((int)Cash).ToString();
     }
 
     void ComboHandler()
@@ -1385,15 +1385,15 @@ public class CharacterStats : MonoBehaviour
             else
             {
                 if (Social.localUser.authenticated)
-                    Social.ReportScore((int)Score, "CgkI9OO2ssgEEAIQAA", (bool success) => { });
-                // post score to normal scoreboard
-                if (Score > HighScoreNormal)
-                {
-                    HighScoreNormal = Score;
-                    // post
+                    Social.ReportScore(WaveManager.ScoreTotal, "CgkI9OO2ssgEEAIQAA", (bool success) => { });
+                //// post score to normal scoreboard
+                //if (Score > HighScoreNormal)
+                //{
+                //    HighScoreNormal = Score;
+                //    // post
 
-                    PlayerPrefs.SetFloat("HighScoreNormal", HighScoreNormal);
-                }
+                    PlayerPrefs.SetInt("HighScoreNormal", WaveManager.ScoreTotal);
+                //}
             }
         }
     }

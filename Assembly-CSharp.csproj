@@ -336,6 +336,7 @@
     <Compile Include="Assets\MF2D\Plugins\Tile.cs" />
     <Compile Include="Assets\MF2D\Plugins\TileMap.cs" />
     <Compile Include="Assets\PromoCanvas.cs" />
+    <Compile Include="Assets\RotateSelf.cs" />
     <Compile Include="Assets\Scripts\$VirtualJoystickRegion.cs" />
     <Compile Include="Assets\Scripts\AchievementManager.cs" />
     <Compile Include="Assets\Scripts\Aim.cs" />

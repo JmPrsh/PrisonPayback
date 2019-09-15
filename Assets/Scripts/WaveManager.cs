@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class WaveManager : MonoBehaviour
 {
-
+    public static int ScoreTotal;
     public static WaveManager WM;
     public static bool WaveComplete;
     public int MaxEnemiesOnScreen;
@@ -123,6 +123,7 @@ public class WaveManager : MonoBehaviour
         CountdownText.enabled = true;
         CountdownText.text = "NEXT WAVE STARTS IN...";
         allowOpen = true;
+        ScoreTotal = 0;
     }
 
     // Update is called once per frame

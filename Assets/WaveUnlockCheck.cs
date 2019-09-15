@@ -12,7 +12,8 @@ public class WaveUnlockCheck : MonoBehaviour
     {
         t = GetComponent<Button>();
         StageID = transform.GetSiblingIndex() * 10;
-        t.interactable = StatManager.Instance.WavesCleared >= StageID;
+        t.interactable = PlayerPrefs.GetInt("RoomsHighscore") >= StageID;
+
 
     }
     // Start is called before the first frame update
@@ -20,7 +21,11 @@ public class WaveUnlockCheck : MonoBehaviour
     {
        
     }
-
+    private void Update()
+    {
+  
+      
+    }
     public void ChooseWave()
     {
         int WaveSection = StageID;

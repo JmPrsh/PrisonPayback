@@ -87,7 +87,7 @@ public class AchievementManager
 
     public static void CheckingAchievements()
     {
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
         if (Achievements[0] == 1)
         {
 
