@@ -8,7 +8,7 @@ using UnityEngine.SocialPlatforms;
 
 public class GooglePlayManager : MonoBehaviour
 {
-
+#if !UNITY_EDITOR
     public static GooglePlayManager Instance;
 
 
@@ -62,6 +62,6 @@ public class GooglePlayManager : MonoBehaviour
             LogIn();
         }
     }
-
+#endif
 }
 

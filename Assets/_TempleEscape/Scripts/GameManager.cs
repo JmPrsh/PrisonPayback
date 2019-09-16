@@ -190,8 +190,8 @@ public class GameManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        // Initial setup
         Application.targetFrameRate = targetFrameRate;
+
         ScoreManager.Instance.Reset();
 
     }

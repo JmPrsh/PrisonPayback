@@ -12,16 +12,15 @@ labels:
 - fire
 - stereo
 - FPS
-timeCreated: 1444217261
-licenseType: Pro
 AudioImporter:
+  externalObjects: {}
   serializedVersion: 6
   defaultSettings:
     loadType: 2
-    sampleRateSetting: 0
+    sampleRateSetting: 1
     sampleRateOverride: 0
-    compressionFormat: 0
-    quality: 0
+    compressionFormat: 1
+    quality: 0.65
     conversionMode: 0
   platformSettingOverrides: {}
   forceToMono: 0
