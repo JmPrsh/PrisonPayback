@@ -16,8 +16,14 @@ public class Settings : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        MusicBar.GetComponent<Slider>().value = PlayerPrefs.GetFloat("Volume");
-        SoundFXBar.GetComponent<Slider>().value = PlayerPrefs.GetFloat("SoundFXVolume");
+        if (PlayerPrefs.HasKey("Volume"))
+        {
+            MusicBar.GetComponent<Slider>().value = PlayerPrefs.GetFloat("Volume");
+            SoundFXBar.GetComponent<Slider>().value = PlayerPrefs.GetFloat("SoundFXVolume");
+        }
+
+        MusicBar.GetComponent<Slider>().value = 1;
+        SoundFXBar.GetComponent<Slider>().value = 1;
 
         musicBar.valueCurrent = (int)MusicBar.GetComponent<Slider>().value;
         soundBar.valueCurrent = (int)SoundFXBar.GetComponent<Slider>().value;
