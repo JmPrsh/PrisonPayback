@@ -8,13 +8,15 @@ using UnityEngine.SocialPlatforms;
 
 public class GooglePlayManager : MonoBehaviour
 {
-#if UNITY_ANDROID
+
     public static GooglePlayManager Instance;
 
 
     void Awake()
     {
+#if UNITY_ANDROID
         PlayGamesPlatform.Activate();
+#endif
     }
 
     void Start()
@@ -60,6 +62,6 @@ public class GooglePlayManager : MonoBehaviour
             LogIn();
         }
     }
-#endif
+
 }
 
