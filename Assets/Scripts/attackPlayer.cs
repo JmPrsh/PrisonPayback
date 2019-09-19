@@ -551,7 +551,7 @@ public class attackPlayer : MonoBehaviour
 
     IEnumerator Death()
     {
-        if (Random.Range(0, 40) == 1)
+        if (Random.Range(0, 20) == 1)
             EnemyType.DroppedItem.Spawn(transform.position + (Vector3)Random.insideUnitCircle * 2);
         else if (Random.Range(0, 20) == 2)
             ItemSpawner.i.Spawn(transform.position);

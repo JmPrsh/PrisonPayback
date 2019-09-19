@@ -29,9 +29,9 @@ public class ItemSpawner : MonoBehaviour
         for (int j = 0; j < Amt; j++)
         {
             if(pos == Vector3.zero)
-            Items[Random.Range(0, Items.Length)].Spawn(transform.position + (Vector3)Random.insideUnitCircle * 5, Quaternion.identity);
+            Items[Random.Range(5, Items.Length)].Spawn(transform.position + (Vector3)Random.insideUnitCircle * 5, Quaternion.identity);
             else
-                Items[Random.Range(0, Items.Length)].Spawn(pos + (Vector3)Random.insideUnitCircle * 5, Quaternion.identity);
+                Items[Random.Range(5, Items.Length)].Spawn(pos + (Vector3)Random.insideUnitCircle * 5, Quaternion.identity);
         }
         // PlayerPrefs.SetInt("ItemAmount",ItemAmount);
     }

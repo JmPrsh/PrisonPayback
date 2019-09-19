@@ -1132,14 +1132,14 @@ public class CharacterStats : MonoBehaviour
                             if (ammo.ShotgunClipLeft > 0)
                             {
                                 int offset = -16;
-                                for(int i = 0; i < 5; i++)
+                                for (int i = 0; i < 5; i++)
                                 {
                                     Transform tempBullet = bulletPrefab.Spawn(bulletSpawn.transform.position, AimingGO.transform.rotation * Quaternion.AngleAxis(offset, Vector3.forward));
                                     tempBullet.GetComponent<bullet>().damage = Damage;
                                     tempBullet.GetComponent<bullet>().DeathPosition = Aiming.transform.position;
                                     offset += 8;
                                 }
-                              
+
                                 if (StaticVariables.MovementMultiply == 1)
                                 {
                                     shootTime = Time.time + shotInterval;
@@ -1325,7 +1325,7 @@ public class CharacterStats : MonoBehaviour
                     }
                     if (Stamina < 99)
                     {
-                        Stamina+= Time.deltaTime*60;
+                        Stamina += Time.deltaTime * 60;
                     }
 
                 }
@@ -1392,7 +1392,7 @@ public class CharacterStats : MonoBehaviour
                 //    HighScoreNormal = Score;
                 //    // post
 
-                    PlayerPrefs.SetInt("HighScoreNormal", WaveManager.ScoreTotal);
+                PlayerPrefs.SetInt("HighScoreNormal", WaveManager.ScoreTotal);
                 //}
             }
         }
@@ -1505,7 +1505,12 @@ public class CharacterStats : MonoBehaviour
     {
         if (!Dead && allowMovement)
         {
+#if UNITY_EDITOR
+            KeyboardMovement();
+#endif
             TestAnalogs();
+
+
             if (cooldownTimer > 0)
             {
                 cooldownTimer -= Time.deltaTime;
@@ -1545,6 +1550,49 @@ public class CharacterStats : MonoBehaviour
         }
     }
 
+    void KeyboardMovement()
+    {
+        Vector2 movingVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        if (movingVector.x != 0 || movingVector.y != 0)
+        {
+            smokeTimer += Time.deltaTime;
+            if (smokeTimer > 0.1f)
+            {
+                Transform temp = DodgeHorizontal.Spawn(new Vector2(transform.position.x, transform.position.y - 0.4f), transform.rotation) as Transform;
+                smokeTimer = 0;
+            }
+            if (!evading)
+            {
+
+                if (StaticVariables.MovementMultiply == 1)
+                {
+                    anim.SetBool("Walk", true);
+                    animGun.SetBool("Walk", true);
+                }
+                else if (StaticVariables.MovementMultiply == 2)
+                {
+                    anim.SetBool("FastWalk", true);
+                    animGun.SetBool("FastWalk", true);
+                }
+            }
+        }
+        else
+        {
+            anim.SetBool("Walk", false);
+            animGun.SetBool("Walk", false);
+            smokeTimer = 0;
+        }
+
+        if (WeaponID != 0 && WeaponID != 1 && WeaponID != 2)
+            AimingGO.transform.rotation = Quaternion.AngleAxis(90.0f, Vector3.forward);
+        else
+        {
+            AimingGO.transform.rotation = Quaternion.AngleAxis(-180.0f, Vector3.forward);
+        }
+
+        r.AddForce(movingVector * Time.deltaTime * (MoveForce * 1000));
+    }
+
     void TestAnalogs()
     {
         float GeneralSpeed = samurai ? PlayerSettings.MoveSpeed * 3 : PlayerSettings.MoveSpeed;
@@ -1567,6 +1615,7 @@ public class CharacterStats : MonoBehaviour
 
         xAmount = xMovementRightJoystick;
 
+#if !UNITY_EDITOR
         if (leftJoystickInput != Vector3.zero)
         {
             smokeTimer += Time.deltaTime;
@@ -1614,46 +1663,10 @@ public class CharacterStats : MonoBehaviour
             {
                 AimingGO.transform.rotation = Quaternion.AngleAxis(-180.0f, Vector3.forward);
             }
-
-            // move the player
-
             r.AddForce(leftJoystickInput * Time.deltaTime * (MoveForce * 1000));
-            //            r.velocity = new Vector2(Mathf.Clamp(r.velocity.x, -10, 10), Mathf.Clamp(r.velocity.y, -10, 10));
-            //            print(r.velocity);
-            //            transform.Translate(leftJoystickInput * Time.deltaTime  * MoveForce);
         }
 
-        // if there is only input from the right joystick
-        if (leftJoystickInput == Vector3.zero && rightJoystickInput != Vector3.zero)
-        {
-            if (ControlType == 1)
-            {
-                //            CanShoot = true;
-                // calculate the player's direction based on angle
-                float tempAngle = Mathf.Atan2(zMovementRightJoystick, xMovementRightJoystick);
-                xMovementRightJoystick *= Mathf.Abs(Mathf.Cos(tempAngle));
-                zMovementRightJoystick *= Mathf.Abs(Mathf.Sin(tempAngle));
-                zMovementRightJoystick = -zMovementRightJoystick;
-
-                // Joystick Aiming
-                //          var x = Input.GetAxis("Xbox360ControllerRightX");
-                var x = xMovementRightJoystick;
-                //          var y = Input.GetAxis("Xbox360ControllerRightY");
-                var y = zMovementRightJoystick;
-                if (x != 0.0f || y != 0.0f)
-                {
-                    var angle = Mathf.Atan2(y, x) * Mathf.Rad2Deg;
-                    AimingGO.transform.rotation = Quaternion.AngleAxis(-90.0f - angle, Vector3.forward);
-                }
-                else
-                {
-                    AimingGO.transform.rotation = Quaternion.AngleAxis(-180.0f, Vector3.forward);
-                }
-
-            }
-
-        }
-
+        
         // if there is input from both joysticks (Left And Right)
         if (leftJoystickInput != Vector3.zero && rightJoystickInput != Vector3.zero)
         {
@@ -1711,6 +1724,55 @@ public class CharacterStats : MonoBehaviour
             //            transform.Translate(leftJoystickInput * Time.deltaTime * MoveForce);
         }
 
+        
+        if (leftJoystickInput == Vector3.zero)
+        {
+            if (StaticVariables.MovementMultiply == 1)
+            {
+                anim.SetBool("Walk", false);
+                animGun.SetBool("Walk", false);
+            }
+            else if (StaticVariables.MovementMultiply == 2)
+            {
+                anim.SetBool("FastWalk", false);
+                animGun.SetBool("FastWalk", false);
+            }
+        }
+
+        
+
+#endif
+        // if there is only input from the right joystick
+        if (leftJoystickInput == Vector3.zero && rightJoystickInput != Vector3.zero)
+        {
+            if (ControlType == 1)
+            {
+                //            CanShoot = true;
+                // calculate the player's direction based on angle
+                float tempAngle = Mathf.Atan2(zMovementRightJoystick, xMovementRightJoystick);
+                xMovementRightJoystick *= Mathf.Abs(Mathf.Cos(tempAngle));
+                zMovementRightJoystick *= Mathf.Abs(Mathf.Sin(tempAngle));
+                zMovementRightJoystick = -zMovementRightJoystick;
+
+                // Joystick Aiming
+                //          var x = Input.GetAxis("Xbox360ControllerRightX");
+                var x = xMovementRightJoystick;
+                //          var y = Input.GetAxis("Xbox360ControllerRightY");
+                var y = zMovementRightJoystick;
+                if (x != 0.0f || y != 0.0f)
+                {
+                    var angle = Mathf.Atan2(y, x) * Mathf.Rad2Deg;
+                    AimingGO.transform.rotation = Quaternion.AngleAxis(-90.0f - angle, Vector3.forward);
+                }
+                else
+                {
+                    AimingGO.transform.rotation = Quaternion.AngleAxis(-180.0f, Vector3.forward);
+                }
+
+            }
+
+        }
+
         if (leftJoystickInput == Vector3.zero && rightJoystickInput == Vector3.zero)
         {
             if (WeaponID != 0 && WeaponID != 1 && WeaponID != 2)
@@ -1725,29 +1787,14 @@ public class CharacterStats : MonoBehaviour
         {
             if (rightJoystickInput == Vector3.zero)
             {
-                //            Debug.Log("Cant Shoot " + rightJoystickInput);
-                //Aiming.enabled = false;
                 CanShoot = false;
             }
             else
             {
-                //Aiming.enabled = true;
                 CanShoot = true;
             }
         }
-        if (leftJoystickInput == Vector3.zero)
-        {
-            if (StaticVariables.MovementMultiply == 1)
-            {
-                anim.SetBool("Walk", false);
-                animGun.SetBool("Walk", false);
-            }
-            else if (StaticVariables.MovementMultiply == 2)
-            {
-                anim.SetBool("FastWalk", false);
-                animGun.SetBool("FastWalk", false);
-            }
-        }
+
     }
 
     public void ShootButton(bool pushed)

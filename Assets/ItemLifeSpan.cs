@@ -21,7 +21,7 @@ public class ItemLifeSpan : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        if (Vector2.Distance(CharacterStats.CS.transform.position, transform.position) < 5 || WaveManager.WaveComplete)
+        if (Vector2.Distance(CharacterStats.CS.transform.position, transform.position) < 5 )
         {
             transform.position = Vector2.MoveTowards(transform.position, CharacterStats.CS.transform.position, 10 * Time.deltaTime);
         }

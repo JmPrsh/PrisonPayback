@@ -96,6 +96,7 @@ public class WaveManager : MonoBehaviour
     int zombieWaveCounter;
 
     public int WavesCleared = 0;
+    public bool CheckAllowed;
 
     void Awake()
     {
@@ -166,31 +167,36 @@ public class WaveManager : MonoBehaviour
                 RiotSpawning();
 
             EnemiesLeft = EnemiesSpawned.Count;
+            Invoke("turnOnCheckAllow", 1);
         }
         // ClosedWeaponScreen ()
-        if (EnemiesLeft <= 0)
+        if (CheckAllowed)
         {
-            spawn = false;
-            if (allowOpen)
+            if (EnemiesLeft <= 0)
             {
-                PlayerModel.PM.CheckState = true;
-                WaveCounter.enabled = false;
-                EnemiesToKill.enabled = false;
 
-                FinishedWave();
-
-                if (PlayerPrefs.GetInt("Adverts") == 0 && AdvertHandler.instance)
+                if (allowOpen)
                 {
-                    WavesCleared++;
-                    if (WavesCleared > 4)
-                    {
-                        AdvertHandler.instance.WatchAdvert();
-                        WavesCleared = 0;
-                    }
-                }
-                EnemiesLeftParent.SetActive(false);
+                    PlayerModel.PM.CheckState = true;
+                    WaveCounter.enabled = false;
+                    EnemiesToKill.enabled = false;
 
-                allowOpen = false;
+                    FinishedWave();
+
+                    if (PlayerPrefs.GetInt("Adverts") == 0 && AdvertHandler.instance)
+                    {
+                        WavesCleared++;
+                        if (WavesCleared > 4)
+                        {
+                            AdvertHandler.instance.WatchAdvert();
+                            WavesCleared = 0;
+                        }
+                    }
+                    EnemiesLeftParent.SetActive(false);
+
+                    allowOpen = false;
+                }
+                spawn = false;
             }
         }
 
@@ -216,6 +222,11 @@ public class WaveManager : MonoBehaviour
         }
 
         EnemiesSurroundPlayer();
+    }
+
+    void turnOnCheckAllow()
+    {
+        CheckAllowed = true;
     }
 
     void RiotSpawning()
@@ -419,6 +430,7 @@ public class WaveManager : MonoBehaviour
             }
         }
         System.GC.Collect();
+        CheckAllowed = false;
     }
 
     public void ShowShopWindow()
